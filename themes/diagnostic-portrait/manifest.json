@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0",
+  "id": "diagnostic-portrait",
+  "name": "竖版诊断测试",
+  "author": "Seein",
+  "canvas": { "width": 462, "height": 1920 },
+  "orientation": "portraitClockwise",
+  "frameRate": 6,
+  "jpegQuality": 88,
+  "backgroundColor": "#0B0E14",
+  "layers": [
+    { "id": "title", "type": "text", "x": 36, "y": 42, "width": 390, "height": 36, "z": 1, "format": "SEEIN PANEL", "style": { "fontSize": 25, "color": "#EDF3FA" } },
+    { "id": "subtitle", "type": "text", "x": 36, "y": 82, "width": 390, "height": 24, "z": 1, "format": "VERTICAL DIAGNOSTICS", "style": { "fontSize": 15, "color": "#687487" } },
+
+    { "id": "cpu-label", "type": "text", "x": 36, "y": 154, "width": 140, "height": 28, "z": 1, "format": "CPU", "style": { "fontSize": 20, "color": "#8290A6" } },
+    { "id": "cpu-temp", "type": "metric", "x": 36, "y": 188, "width": 225, "height": 72, "z": 1, "binding": "cpu.package.temp", "format": "0'°C'", "style": { "fontSize": 54, "color": "#F4F7FB" } },
+    { "id": "cpu-load-ring", "type": "ring", "x": 288, "y": 160, "width": 130, "height": 130, "z": 1, "binding": "cpu.total.load", "style": { "min": 0, "max": 100, "strokeWidth": 11, "color": "#40D2BE", "trackColor": "#27303C" } },
+    { "id": "cpu-load", "type": "metric", "x": 311, "y": 205, "width": 100, "height": 42, "z": 2, "binding": "cpu.total.load", "format": "0'%'", "style": { "fontSize": 27, "color": "#DDE5EE" } },
+    { "id": "cpu-power-label", "type": "text", "x": 36, "y": 310, "width": 190, "height": 25, "z": 1, "format": "PACKAGE POWER", "style": { "fontSize": 15, "color": "#687487" } },
+    { "id": "cpu-power", "type": "metric", "x": 36, "y": 338, "width": 190, "height": 40, "z": 1, "binding": "cpu.package.power", "format": "0' W'", "style": { "fontSize": 29, "color": "#F4F7FB" } },
+    { "id": "cpu-history", "type": "sparkline", "x": 36, "y": 420, "width": 382, "height": 86, "z": 1, "binding": "cpu.package.temp", "style": { "min": 25, "max": 100, "strokeWidth": 3, "color": "#40D2BE" } },
+
+    { "id": "gpu-label", "type": "text", "x": 36, "y": 584, "width": 140, "height": 28, "z": 1, "format": "GPU", "style": { "fontSize": 20, "color": "#8290A6" } },
+    { "id": "gpu-temp", "type": "metric", "x": 36, "y": 618, "width": 225, "height": 72, "z": 1, "binding": "gpu.core.temp", "format": "0'°C'", "style": { "fontSize": 54, "color": "#F4F7FB" } },
+    { "id": "gpu-load-ring", "type": "ring", "x": 288, "y": 590, "width": 130, "height": 130, "z": 1, "binding": "gpu.core.load", "style": { "min": 0, "max": 100, "strokeWidth": 11, "color": "#619BFF", "trackColor": "#27303C" } },
+    { "id": "gpu-load", "type": "metric", "x": 311, "y": 635, "width": 100, "height": 42, "z": 2, "binding": "gpu.core.load", "format": "0'%'", "style": { "fontSize": 27, "color": "#DDE5EE" } },
+    { "id": "gpu-power-label", "type": "text", "x": 36, "y": 740, "width": 190, "height": 25, "z": 1, "format": "BOARD POWER", "style": { "fontSize": 15, "color": "#687487" } },
+    { "id": "gpu-power", "type": "metric", "x": 36, "y": 768, "width": 190, "height": 40, "z": 1, "binding": "gpu.board.power", "format": "0' W'", "style": { "fontSize": 29, "color": "#F4F7FB" } },
+    { "id": "gpu-history", "type": "sparkline", "x": 36, "y": 850, "width": 382, "height": 86, "z": 1, "binding": "gpu.core.temp", "style": { "min": 25, "max": 100, "strokeWidth": 3, "color": "#619BFF" } },
+
+    { "id": "power-label", "type": "text", "x": 36, "y": 1030, "width": 320, "height": 28, "z": 1, "format": "估算整机功耗", "style": { "fontSize": 20, "color": "#8290A6" } },
+    { "id": "power", "type": "metric", "x": 36, "y": 1064, "width": 360, "height": 72, "z": 1, "binding": "power.system.estimated.w", "format": "0' W'", "style": { "fontSize": 55, "color": "#FFCB6B" } },
+    { "id": "session-label", "type": "text", "x": 36, "y": 1174, "width": 180, "height": 24, "z": 1, "format": "本次开机", "style": { "fontSize": 15, "color": "#687487" } },
+    { "id": "session", "type": "metric", "x": 36, "y": 1202, "width": 260, "height": 40, "z": 1, "binding": "power.session.wh", "format": "0.0' Wh'", "style": { "fontSize": 29, "color": "#F4F7FB" } },
+    { "id": "today-label", "type": "text", "x": 36, "y": 1280, "width": 180, "height": 24, "z": 1, "format": "今日累计", "style": { "fontSize": 15, "color": "#687487" } },
+    { "id": "today", "type": "metric", "x": 36, "y": 1308, "width": 260, "height": 40, "z": 1, "binding": "power.today.wh", "format": "0.0' Wh'", "style": { "fontSize": 29, "color": "#F4F7FB" } },
+
+    { "id": "memory-label", "type": "text", "x": 36, "y": 1420, "width": 160, "height": 24, "z": 1, "format": "MEMORY", "style": { "fontSize": 16, "color": "#8290A6" } },
+    { "id": "memory", "type": "metric", "x": 36, "y": 1450, "width": 160, "height": 42, "z": 1, "binding": "memory.load", "format": "0'%'", "style": { "fontSize": 31, "color": "#F4F7FB" } },
+    { "id": "memory-bar", "type": "bar", "x": 36, "y": 1503, "width": 382, "height": 12, "z": 1, "binding": "memory.load", "style": { "min": 0, "max": 100, "radius": 6, "color": "#B37CFF", "trackColor": "#27303C" } },
+    { "id": "fps-label", "type": "text", "x": 36, "y": 1605, "width": 200, "height": 24, "z": 1, "format": "PRESENTMON FPS", "style": { "fontSize": 16, "color": "#8290A6" } },
+    { "id": "fps", "type": "metric", "x": 36, "y": 1635, "width": 270, "height": 48, "z": 1, "binding": "game.fps", "format": "0' FPS'", "style": { "fontSize": 37, "color": "#F4F7FB" } },
+    { "id": "network-label", "type": "text", "x": 36, "y": 1745, "width": 260, "height": 24, "z": 1, "format": "NETWORK  ·  B/s", "style": { "fontSize": 16, "color": "#8290A6" } },
+    { "id": "network-down", "type": "metric", "x": 36, "y": 1778, "width": 360, "height": 34, "z": 1, "binding": "network.down.bps", "format": "0' DOWN'", "style": { "fontSize": 22, "color": "#40D2BE" } },
+    { "id": "network-up", "type": "metric", "x": 36, "y": 1830, "width": 360, "height": 34, "z": 1, "binding": "network.up.bps", "format": "0' UP'", "style": { "fontSize": 22, "color": "#619BFF" } }
+  ]
+}
+

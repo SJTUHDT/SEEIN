@@ -1,0 +1,8 @@
+<UserControl x:Class="Seein.Tray.RouterControlView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Foreground="{DynamicResource TextBrush}">
+    <Grid>
+        <Border Background="{DynamicResource PanelBrush}" ClipToBounds="True"><Grid x:Name="BrowserHost"/></Border>
+        <Border x:Name="ErrorPanel" Style="{StaticResource CardStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="480" Visibility="Collapsed">
+            <StackPanel><TextBlock x:Name="StateText" TextWrapping="Wrap" Margin="0,0,0,12"/><TextBlock Text="路由器管理地址" Margin="0,0,0,5"/><TextBox x:Name="RouterAddress" MinWidth="300" AutomationProperties.Name="路由器管理地址" Margin="0,0,0,12"/><Button Content="保存地址并连接" Click="Connect_Click" HorizontalAlignment="Left"/></StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

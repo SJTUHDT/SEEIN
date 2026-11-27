@@ -1,0 +1,1 @@
+<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><AssemblyName>Seein.PackageTool</AssemblyName></PropertyGroup><ItemGroup><ProjectReference Include="../Seein.Modularity/Seein.Modularity.csproj"/><PackageReference Include="System.Security.Cryptography.ProtectedData" Version="8.0.0"/></ItemGroup></Project>

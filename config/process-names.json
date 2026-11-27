@@ -1,0 +1,96 @@
+{
+  "main": {
+    "path": "Seein.Tray.exe",
+    "owner": "login",
+    "legacy": []
+  },
+  "display": {
+    "path": "seedisplay.exe",
+    "owner": "main",
+    "legacy": []
+  },
+  "service": {
+    "path": "seeservice.exe",
+    "owner": "services",
+    "legacy": [
+      "Seein.Service.exe"
+    ]
+  },
+  "capture": {
+    "path": "tools/snow/seeshot.exe",
+    "owner": "main",
+    "legacy": [
+      "snow_shot.exe"
+    ]
+  },
+  "efficiency": {
+    "path": "tools/pane/seewin.exe",
+    "owner": "main",
+    "legacy": [
+      "Pane.App.exe"
+    ]
+  },
+  "index": {
+    "path": "tools/everything/seeeverything.exe",
+    "owner": "main",
+    "legacy": [
+      "Everything.exe"
+    ]
+  },
+  "pet": {
+    "path": "seepet.exe",
+    "owner": "main",
+    "legacy": [
+      "Seein.PetHost.exe"
+    ]
+  },
+  "webPet": {
+    "path": "dsh-pet/seepetweb.exe",
+    "owner": "main",
+    "legacy": [
+      "dsh-pet.exe"
+    ]
+  },
+  "rgb": {
+    "path": "rgb-engine/seergb.exe",
+    "owner": "service",
+    "legacy": [
+      "Seein.RgbEngine.exe"
+    ]
+  },
+  "fps": {
+    "path": "tools/seefps.exe",
+    "owner": "service",
+    "legacy": [
+      "PresentMon.exe"
+    ]
+  },
+  "crash": {
+    "path": "tools/snow/seecrash.exe",
+    "owner": "capture",
+    "legacy": [
+      "crashpad_handler.exe"
+    ]
+  },
+  "ocr": {
+    "path": "tools/snow/seeocr.exe",
+    "owner": "capture",
+    "legacy": [
+      "snow-ocr-process.exe"
+    ]
+  },
+  "updater": {
+    "path": "tools/snow/seeupdate.exe",
+    "owner": "capture",
+    "legacy": [
+      "snow-shot-updater.exe"
+    ]
+  },
+  "theme": {
+    "path": "seetheme.exe",
+    "owner": "build",
+    "legacy": [
+      "Seein.ThemeTool.exe"
+    ]
+  }
+}

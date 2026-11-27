@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+ <PropertyGroup><OutputType>WinExe</OutputType><UseWPF>true</UseWPF><IsPackable>false</IsPackable></PropertyGroup>
+ <ItemGroup><ProjectReference Include="../../src/Modules/Display/Desktop/Seein.Desktop.Display.csproj"/></ItemGroup>
+</Project>

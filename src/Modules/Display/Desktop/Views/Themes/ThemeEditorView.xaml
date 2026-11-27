@@ -1,0 +1,76 @@
+<UserControl x:Class="Seein.Tray.ThemeEditorView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:local="clr-namespace:Seein.Tray" Background="{DynamicResource WindowBrush}" Foreground="{DynamicResource TextBrush}">
+ <UserControl.Resources>
+  <Style TargetType="TabControl">
+   <Setter Property="Background" Value="Transparent"/><Setter Property="BorderThickness" Value="0"/>
+   <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="TabControl">
+    <Grid KeyboardNavigation.TabNavigation="Local"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition/></Grid.RowDefinitions>
+     <Border Background="{DynamicResource PanelAltBrush}" CornerRadius="6" Padding="3" Margin="0,0,0,8"><TabPanel IsItemsHost="True"/></Border>
+     <Border Grid.Row="1" Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource CardStrokeBrush}" BorderThickness="1" CornerRadius="8"><ContentPresenter ContentSource="SelectedContent"/></Border>
+    </Grid>
+   </ControlTemplate></Setter.Value></Setter>
+  </Style>
+  <Style TargetType="TabItem">
+   <Setter Property="Foreground" Value="{DynamicResource MutedTextBrush}"/><Setter Property="FontSize" Value="12"/><Setter Property="Padding" Value="9,7"/>
+   <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="TabItem"><Border x:Name="TabChrome" Background="Transparent" CornerRadius="4" Padding="{TemplateBinding Padding}"><ContentPresenter ContentSource="Header" HorizontalAlignment="Center"/></Border><ControlTemplate.Triggers>
+    <Trigger Property="IsSelected" Value="True"><Setter TargetName="TabChrome" Property="Background" Value="{DynamicResource PanelBrush}"/><Setter Property="Foreground" Value="{DynamicResource TextBrush}"/><Setter Property="FontWeight" Value="SemiBold"/></Trigger>
+    <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="TabChrome" Property="Background" Value="{DynamicResource HoverBrush}"/></Trigger>
+   </ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter>
+  </Style>
+ </UserControl.Resources>
+ <Grid>
+  <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+  <WrapPanel Margin="0,0,0,8">
+   <Button Content="新建" Click="New_Click" Margin="0,0,6,6"/><Button Content="打开工程" Click="Open_Click" Margin="0,0,6,6"/>
+   <Button Content="恢复草稿" Click="Recover_Click" Margin="0,0,6,6"/><Button Content="保存" Click="Save_Click" Margin="0,0,6,6"/>
+   <Button Content="导出 .jptheme" Click="Export_Click" Margin="0,0,6,6"/><Button x:Name="ApplyThemeButton" Content="保存并应用" Click="Apply_Click" Style="{StaticResource AccentButtonStyle}" Margin="0,0,14,6"/>
+   <Button x:Name="UndoButton" Content="撤销" Click="Undo_Click" Margin="0,0,6,6"/><Button x:Name="RedoButton" Content="重做" Click="Redo_Click" Margin="0,0,14,6"/>
+   <Button Content="适合画布" Click="Fit_Click" Margin="0,0,6,6"/><Button Content="−" Click="ZoomOut_Click" Margin="0,0,6,6"/><Button Content="＋" Click="ZoomIn_Click" Margin="0,0,6,6"/>
+   <Button Content="元素栏" Click="ToggleLeft_Click" Margin="0,0,6,6"/><Button Content="属性栏" Click="ToggleRight_Click" Margin="0,0,6,6"/>
+  </WrapPanel>
+  <WrapPanel Grid.Row="1" Margin="0,0,0,10">
+   <TextBox x:Name="ThemeName" Width="190" ToolTip="主题名称" LostKeyboardFocus="ThemeName_Commit" Margin="0,0,8,6"/>
+   <ComboBox x:Name="OrientationBox" Width="155" SelectionChanged="Orientation_Changed" Margin="0,0,8,6">
+    <ComboBoxItem Content="竖屏 · 顺时针"/><ComboBoxItem Content="竖屏 · 逆时针"/><ComboBoxItem Content="横屏"/>
+   </ComboBox>
+   <ComboBox x:Name="DataMode" Width="115" SelectedIndex="0" SelectionChanged="DataMode_Changed" Margin="0,0,8,6"><ComboBoxItem Content="模拟数据"/><ComboBoxItem Content="实时数据"/></ComboBox>
+   <CheckBox x:Name="PauseAnimation" Content="暂停动画" Checked="PreviewOption_Changed" Unchecked="PreviewOption_Changed" Margin="6,0,12,6" VerticalAlignment="Center"/>
+   <CheckBox x:Name="SnapOption" Content="吸附" IsChecked="True" Checked="PreviewOption_Changed" Unchecked="PreviewOption_Changed" Margin="0,0,12,6" VerticalAlignment="Center"/>
+   <CheckBox x:Name="GridOption" Content="网格" IsChecked="True" Checked="PreviewOption_Changed" Unchecked="PreviewOption_Changed" Margin="0,0,12,6" VerticalAlignment="Center"/>
+  </WrapPanel>
+  <Grid Grid.Row="2" x:Name="Workspace">
+   <Grid.ColumnDefinitions><ColumnDefinition x:Name="LeftColumn" Width="220"/><ColumnDefinition/><ColumnDefinition x:Name="RightColumn" Width="255"/></Grid.ColumnDefinitions>
+   <TabControl x:Name="LeftPanel" Margin="0,0,8,0">
+    <TabItem Header="元素"><ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel Margin="10">
+     <TextBlock Text="添加到画布" FontWeight="SemiBold" Margin="0,0,0,10"/>
+     <WrapPanel x:Name="ElementButtons"/>
+     <Separator Margin="0,12"/><TextBlock Text="排版" FontWeight="SemiBold" Margin="0,0,0,8"/><WrapPanel x:Name="AlignButtons"/>
+     <Separator Margin="0,12"/><TextBlock Text="背景" FontWeight="SemiBold" Margin="0,0,0,8"/>
+     <Button Content="选择图片／GIF／视频" Click="Background_Click" Margin="0,0,0,8"/><Button Content="移除背景" Click="ClearBackground_Click" Margin="0,0,0,8"/>
+     <Button Content="创建示例面板" Click="Example_Click"/>
+    </StackPanel></ScrollViewer></TabItem>
+    <TabItem Header="数据"><Grid Margin="8"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+     <ComboBox x:Name="MetricStyle" SelectedIndex="0" Margin="0,0,0,8"><ComboBoxItem Content="数字读数" Tag="metric"/><ComboBoxItem Content="进度条" Tag="bar"/><ComboBoxItem Content="圆环" Tag="ring"/><ComboBoxItem Content="指针仪表" Tag="gauge"/><ComboBoxItem Content="趋势图" Tag="sparkline"/></ComboBox>
+     <TextBox x:Name="MetricSearch" Grid.Row="1" TextChanged="MetricSearch_Changed" ToolTip="搜索监测项目" Margin="0,0,0,8"/>
+     <ListBox x:Name="MetricList" Grid.Row="2" MouseDoubleClick="AddMetric_Click"/>
+     <StackPanel Grid.Row="3"><Button Content="添加监测组件" Click="AddMetric_Click" Margin="0,8,0,0"/><Button Content="添加组合卡片" Click="AddMetricCard_Click" Margin="0,6,0,0"/></StackPanel>
+    </Grid></TabItem>
+    <TabItem Header="素材"><StackPanel Margin="8"><Button Content="导入图片" Click="Image_Click" Margin="0,0,0,8"/><Button Content="导入字体" Click="Font_Click" Margin="0,0,0,8"/><Button Content="保存组件预设" Click="SavePreset_Click" Margin="0,0,0,8"/><Button Content="添加组件预设" Click="LoadPreset_Click"/><TextBlock Text="素材随工程保存，导出后无需引用原文件。" TextWrapping="Wrap" Margin="0,16,0,8"/><ListBox x:Name="AssetList" MaxHeight="230"/></StackPanel></TabItem>
+    <TabItem Header="图层"><Grid Margin="8"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition/></Grid.RowDefinitions><WrapPanel>
+     <Button Content="上移" Click="Forward_Click" Margin="0,0,4,6"/><Button Content="下移" Click="Backward_Click" Margin="0,0,4,6"/><Button Content="组合" Click="Group_Click" Margin="0,0,4,6"/><Button Content="拆分" Click="Ungroup_Click" Margin="0,0,4,6"/>
+     <Button Content="锁定／解锁" Click="Lock_Click" Margin="0,0,4,6"/><Button Content="显示／隐藏" Click="Visibility_Click" Margin="0,0,4,6"/><Button Content="复制" Click="Duplicate_Click" Margin="0,0,4,6"/><Button Content="删除" Click="Delete_Click" Margin="0,0,4,6"/>
+    </WrapPanel><ListBox x:Name="LayerList" Grid.Row="1" SelectionMode="Extended" SelectionChanged="LayerList_Changed" DisplayMemberPath="Label"/></Grid></TabItem>
+   </TabControl>
+   <Border Grid.Column="1" Background="{DynamicResource PanelAltBrush}" CornerRadius="8" BorderBrush="{DynamicResource CardStrokeBrush}" BorderThickness="1" Padding="10" ClipToBounds="True">
+    <ScrollViewer x:Name="CanvasScroll" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="Canvas_MouseWheel" SizeChanged="Canvas_SizeChanged">
+     <local:ThemeEditorCanvas x:Name="Canvas" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    </ScrollViewer>
+   </Border>
+   <Border x:Name="RightPanel" Grid.Column="2" Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource CardStrokeBrush}" BorderThickness="1" CornerRadius="8" Margin="8,0,0,0" Padding="12">
+    <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel x:Name="Properties"/></ScrollViewer>
+   </Border>
+  </Grid>
+  <TextBlock x:Name="EditorStatus" Grid.Row="3" Text="就绪" TextWrapping="Wrap" Foreground="{DynamicResource MutedTextBrush}" FontSize="12" Margin="0,10,0,0"/>
+ </Grid>
+</UserControl>

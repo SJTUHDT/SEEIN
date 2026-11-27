@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><AssemblyName>seetheme</AssemblyName><AssemblyTitle>seetheme</AssemblyTitle></PropertyGroup>
+  <ItemGroup><ProjectReference Include="../Modules/Display/Seein.Modules.Display.csproj" /></ItemGroup>
+</Project>
+

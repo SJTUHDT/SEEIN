@@ -1,0 +1,141 @@
+<Window x:Class="Seein.Tray.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Seein.Tray" xmlns:shared="clr-namespace:Seein.Tray;assembly=Seein.Desktop.Shared"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        Title="SEEIN · 桌面控制台" Width="1240" Height="840" MinWidth="1024" MinHeight="700"
+        Icon="pack://application:,,,/Seein.Tray;component/Assets/seein.ico"
+        Background="{DynamicResource WindowBrush}" Foreground="{DynamicResource TextBrush}"
+        FontFamily="{DynamicResource UiFontFamily}" FontSize="{DynamicResource TypeBodySize}"
+        WindowStartupLocation="CenterScreen" UseLayoutRounding="True"
+        WindowStyle="None" ResizeMode="CanResize" StateChanged="Window_StateChanged">
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="0" ResizeBorderThickness="6" GlassFrameThickness="0" UseAeroCaptionButtons="False" />
+    </shell:WindowChrome.WindowChrome>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="SidebarColumn" Width="196" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Border x:Name="SidebarPanel" Background="{DynamicResource SidebarBrush}" BorderBrush="{DynamicResource BorderBrush}"
+                BorderThickness="0,0,1,0" Padding="7,14,7,14">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <ScrollViewer x:Name="NavigationScrollViewer" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel>
+                    <Grid Margin="0,0,0,14">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition x:Name="SidebarHeaderColumn" Width="Auto" />
+                            <ColumnDefinition x:Name="SidebarBrandColumn" Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="SidebarToggle" Width="32" Height="32" Click="SidebarToggle_Click"
+                                Style="{StaticResource WindowCommandButtonStyle}"
+                                Content="&#xE700;" ToolTip="收起 / 展开侧边栏" AutomationProperties.Name="收起或展开导航栏" />
+                        <StackPanel x:Name="BrandPanel" Grid.Column="1" Orientation="Horizontal"
+                                    VerticalAlignment="Center" Margin="8,0,0,0">
+                            <TextBlock Text="SEEIN" FontSize="17" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel x:Name="NavigationItems">
+                    <Button x:Name="OverviewNav" Click="Overview_Click" ToolTip="仪表盘"
+                            Style="{StaticResource SidebarNavigationButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="OverviewIcon" Text="&#xE80F;" Style="{StaticResource NavigationGlyphStyle}" />
+                            <TextBlock x:Name="OverviewLabel" Text="仪表盘" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="EnergyNav" Click="Energy_Click" ToolTip="耗能统计"
+                            Style="{StaticResource SidebarNavigationButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="EnergyIcon" Text="&#xE9D2;" Style="{StaticResource NavigationGlyphStyle}" />
+                            <TextBlock x:Name="EnergyLabel" Text="耗能统计" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="AppSettingsNav" Content="应用设置" Click="AppSettings_Click" Style="{StaticResource SidebarNavigationButtonStyle}"/>
+                    </StackPanel>
+                </StackPanel>
+                </ScrollViewer>
+
+                <Border x:Name="PreferencesCard" Grid.Row="1" Background="{DynamicResource PanelBrush}"
+                        BorderBrush="{DynamicResource CardStrokeBrush}" BorderThickness="1" CornerRadius="8" Padding="12">
+                    <StackPanel>
+                        <TextBlock Text="桌面偏好" FontSize="{DynamicResource TypeCaptionSize}" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource MutedTextBrush}" Margin="0,0,0,10" />
+                        <TextBlock Text="界面外观" FontSize="{DynamicResource TypeCaptionSize}" Margin="0,0,0,5" />
+                        <ComboBox x:Name="ThemeSelector" SelectionChanged="ThemeSelector_SelectionChanged"
+                                  SelectedIndex="0" Style="{StaticResource SidebarThemeSelectorStyle}" Margin="0,0,0,8"
+                                  AutomationProperties.Name="界面外观">
+                            <ComboBoxItem Content="跟随系统" Tag="System" />
+                            <ComboBoxItem Content="深色" Tag="Dark" />
+                            <ComboBoxItem Content="浅色" Tag="Light" />
+                        </ComboBox>
+                        <Border Height="1" Background="{DynamicResource BorderBrush}" Margin="0,0,0,10" />
+                        <Grid>
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                            <TextBlock Text="后台服务" FontSize="{DynamicResource TypeCaptionSize}" VerticalAlignment="Center" />
+                            <TextBlock Grid.Column="1" Text="独立运行" FontSize="{DynamicResource TypeCaptionSize}"
+                                       Foreground="{DynamicResource AccentBrush}" VerticalAlignment="Center" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+                <StackPanel x:Name="VersionFooter" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center"
+                            Margin="0,3,0,0">
+                    <TextBlock x:Name="VersionLabel" Foreground="{DynamicResource MutedTextBrush}"
+                               FontSize="{DynamicResource TypeCaptionSize}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    <Button x:Name="VersionHelpButton" Click="VersionHelp_Click" Content="&#xE897;"
+                            Width="20" Height="20" MinWidth="0" MinHeight="0" FontSize="9" Margin="4,0,0,0"
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Style="{StaticResource WindowCommandButtonStyle}"
+                            ToolTip="版本更新说明" AutomationProperties.Name="版本更新说明" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Column="1" Margin="28,20,28,16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Margin="0,0,0,14">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel MouseLeftButtonDown="WindowHeader_MouseLeftButtonDown">
+                    <TextBlock x:Name="PageTitle" Text="仪表盘" Style="{StaticResource PageTitleStyle}" AutomationProperties.HeadingLevel="Level1" />
+                    <TextBlock x:Name="PageSubtitle" Text="桌面管理与能耗记录。" Style="{StaticResource PageSubtitleStyle}" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+                    <Button Content="&#xE921;" ToolTip="最小化" AutomationProperties.Name="最小化窗口" Click="MinimizeWindow_Click" Style="{StaticResource WindowCommandButtonStyle}" />
+                    <Button x:Name="MaximizeWindowButton" Content="&#xE922;" ToolTip="最大化" AutomationProperties.Name="最大化或还原窗口" Click="ToggleWindowState_Click" Style="{StaticResource WindowCommandButtonStyle}" />
+                    <Button Content="&#xE8BB;" ToolTip="关闭到托盘" AutomationProperties.Name="关闭到系统托盘" Click="CloseWindow_Click" Style="{StaticResource WindowCloseButtonStyle}" />
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                <Border x:Name="GroupTabs" Style="{StaticResource SegmentedHostStyle}" HorizontalAlignment="Left" Margin="0,0,0,16" Visibility="Collapsed"><WrapPanel x:Name="ModuleTabs"/></Border>
+                <Grid x:Name="PageRegion" Grid.Row="1">
+                  <local:OverviewView x:Name="OverviewPage"/>
+                  <local:EnergyHistoryWindow x:Name="EnergyHistoryPage" Visibility="Collapsed"/>
+                </Grid>
+</Grid>
+
+            <Border Grid.Row="2" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0"
+                    Margin="0,12,0,0" Padding="0,9,0,0">
+                <TextBlock x:Name="StatusText" AutomationProperties.LiveSetting="Polite" Text="正在启动控制台…" Foreground="{DynamicResource MutedTextBrush}"
+                           FontSize="{DynamicResource TypeCaptionSize}" TextTrimming="CharacterEllipsis" />
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
+

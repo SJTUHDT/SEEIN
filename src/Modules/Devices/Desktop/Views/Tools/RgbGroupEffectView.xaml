@@ -1,0 +1,151 @@
+<UserControl x:Class="Seein.Tray.RgbGroupEffectView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <WrapPanel Margin="0,0,0,8">
+            <Button Content="重新扫描" Click="Refresh_Click" Margin="0,0,10,6" />
+            <CheckBox x:Name="EnableToggle" Content="启用灯效与开机恢复" VerticalAlignment="Center"
+                      Checked="Enable_Changed" Unchecked="Enable_Changed" Margin="0,0,0,6" />
+        </WrapPanel>
+        <DockPanel Grid.Row="1" Margin="0,0,0,10">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                <Button x:Name="SaveButton" Content="保存配置" Click="Save_Click" Margin="0,0,8,0" />
+                <Button x:Name="LoadButton" Content="载入配置" Click="Load_Click" />
+            </StackPanel>
+            <TextBlock Text="灯效" VerticalAlignment="Center" Style="{StaticResource SectionTitleStyle}"
+                       AutomationProperties.HeadingLevel="Level3" />
+        </DockPanel>
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="14" />
+                    <ColumnDefinition Width="2*" MinWidth="185" />
+                </Grid.ColumnDefinitions>
+                <ListBox x:Name="EffectList" SelectionChanged="Effect_Changed" VerticalAlignment="Top"
+                         AutomationProperties.Name="整设备灯效" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate><UniformGrid Columns="3" /></ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Height="56" HorizontalAlignment="Stretch">
+                                <TextBlock Text="{Binding Icon}" FontSize="22" HorizontalAlignment="Center"
+                                           Foreground="{DynamicResource AccentBrush}" />
+                                <TextBlock Text="{Binding Name}" FontSize="12" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
+                                           HorizontalAlignment="Center" Margin="0,3,0,0" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <StackPanel Grid.Column="2">
+                    <TextBlock x:Name="EffectTitle" Style="{StaticResource SectionTitleStyle}" Margin="0,0,0,10" />
+                    <CheckBox x:Name="RainbowPalette" Content="使用彩虹配色" Margin="0,0,0,8"
+                              Checked="Parameter_Changed" Unchecked="Parameter_Changed" />
+                    <CheckBox x:Name="UseCalibration" Content="使用分区颜色校正" Margin="0,0,0,8" IsChecked="True"
+                              ToolTip="关闭后，显卡和机箱使用相同的整机配色。"
+                              Checked="Parameter_Changed" Unchecked="Parameter_Changed" Visibility="Collapsed" />
+                    <TextBlock x:Name="MusicHint" Text="播放声音后，灯光会跟随默认播放设备的音量起伏。" TextWrapping="Wrap"
+                               Style="{StaticResource CardCaptionStyle}" Margin="0,0,0,8" Visibility="Collapsed" />
+                    <StackPanel x:Name="PrimaryRow" Margin="0,0,0,8">
+                        <TextBlock x:Name="PrimaryLabel" Style="{StaticResource CardCaptionStyle}" Margin="0,0,0,4" />
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="PrimaryPicker" Click="Color_Click" Tag="primary" AutomationProperties.Name="选择主颜色"
+                                    Width="32" Padding="5" Margin="0,0,6,0">
+                                <Border x:Name="PrimarySwatch" Width="15" Height="15" CornerRadius="3" />
+                            </Button>
+                            <TextBox x:Name="PrimaryColor" TextChanged="Parameter_Changed" Width="88" MaxLength="7"
+                                     Style="{StaticResource HexTextBoxStyle}"
+                                     AutomationProperties.Name="主颜色 HEX" />
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel x:Name="SecondaryRow" Margin="0,0,0,8">
+                        <TextBlock x:Name="SecondaryLabel" Style="{StaticResource CardCaptionStyle}" Margin="0,0,0,4" />
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="SecondaryPicker" Click="Color_Click" Tag="secondary" AutomationProperties.Name="选择第二颜色"
+                                    Width="32" Padding="5" Margin="0,0,6,0">
+                                <Border x:Name="SecondarySwatch" Width="15" Height="15" CornerRadius="3" />
+                            </Button>
+                            <TextBox x:Name="SecondaryColor" TextChanged="Parameter_Changed" Width="88" MaxLength="7"
+                                     Style="{StaticResource HexTextBoxStyle}"
+                                     AutomationProperties.Name="第二颜色 HEX" />
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel x:Name="ThirdRow" Margin="0,0,0,8">
+                        <TextBlock x:Name="ThirdLabel" Text="颜色 3" Style="{StaticResource CardCaptionStyle}" Margin="0,0,0,4" />
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="ThirdPicker" Click="Color_Click" Tag="third" AutomationProperties.Name="选择第三颜色"
+                                    Width="32" Padding="5" Margin="0,0,6,0">
+                                <Border x:Name="ThirdSwatch" Width="15" Height="15" CornerRadius="3" />
+                            </Button>
+                            <TextBox x:Name="ThirdColor" TextChanged="Parameter_Changed" Width="88" MaxLength="7"
+                                     Style="{StaticResource HexTextBoxStyle}"
+                                     AutomationProperties.Name="第三颜色 HEX" />
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel x:Name="FourthRow" Margin="0,0,0,8">
+                        <TextBlock Text="颜色 4" Style="{StaticResource CardCaptionStyle}" Margin="0,0,0,4" />
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="FourthPicker" Click="Color_Click" Tag="fourth" AutomationProperties.Name="选择第四颜色"
+                                    Width="32" Padding="5" Margin="0,0,6,0">
+                                <Border x:Name="FourthSwatch" Width="15" Height="15" CornerRadius="3" />
+                            </Button>
+                            <TextBox x:Name="FourthColor" TextChanged="Parameter_Changed" Width="88" MaxLength="7"
+                                     Style="{StaticResource HexTextBoxStyle}"
+                                     AutomationProperties.Name="第四颜色 HEX" />
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel x:Name="SpeedRow" Margin="0,0,0,8">
+                        <DockPanel><TextBlock DockPanel.Dock="Right" Text="{Binding ElementName=Speed, Path=Value, StringFormat={}{0:0}%}" />
+                            <TextBlock Text="速度" Style="{StaticResource CardCaptionStyle}" /></DockPanel>
+                        <Slider x:Name="Speed" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True"
+                                AutomationProperties.Name="灯效速度" ValueChanged="Parameter_Changed" />
+                    </StackPanel>
+                    <StackPanel x:Name="BrightnessRow" Margin="0,0,0,8">
+                        <DockPanel><TextBlock DockPanel.Dock="Right" Text="{Binding ElementName=Brightness, Path=Value, StringFormat={}{0:0}%}" />
+                            <TextBlock Text="亮度" Style="{StaticResource CardCaptionStyle}" /></DockPanel>
+                        <Slider x:Name="Brightness" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True"
+                                AutomationProperties.Name="灯效亮度" ValueChanged="Parameter_Changed" />
+                    </StackPanel>
+                    <StackPanel x:Name="DirectionRow" Margin="0,0,0,8">
+                        <TextBlock Text="方向" Style="{StaticResource CardCaptionStyle}" Margin="0,0,0,4" />
+                        <ComboBox x:Name="Direction" SelectionChanged="Parameter_Changed" AutomationProperties.Name="灯效方向">
+                            <ComboBoxItem Content="正向" />
+                            <ComboBoxItem Content="反向" />
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel x:Name="TemperatureRow" Margin="0,0,0,8">
+                        <TextBlock Text="CPU 温度范围（°C）" Style="{StaticResource CardCaptionStyle}" Margin="0,0,0,4" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox x:Name="LowTemperature" MaxLength="3" Style="{StaticResource CompactNumberTextBoxStyle}"
+                                     TextChanged="Parameter_Changed" AutomationProperties.Name="低温阈值" />
+                            <TextBlock Text="至" Margin="6,0" VerticalAlignment="Center" />
+                            <TextBox x:Name="HighTemperature" MaxLength="3" Style="{StaticResource CompactNumberTextBoxStyle}"
+                                     TextChanged="Parameter_Changed" AutomationProperties.Name="高温阈值" />
+                        </StackPanel>
+                    </StackPanel>
+                    <TextBlock x:Name="HardwareHint" 
+                               Style="{StaticResource CardCaptionStyle}" TextWrapping="Wrap" Margin="0,4,0,0" />
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+        <Grid Grid.Row="3" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+            <StackPanel Margin="0,0,12,0" VerticalAlignment="Center">
+                <UniformGrid x:Name="Preview" Columns="18" Height="12" AutomationProperties.Name="灯效预览" />
+                <TextBlock x:Name="ValidationText" Style="{StaticResource CardCaptionStyle}" TextWrapping="Wrap" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <Button Content="还原参数" Click="Reset_Click" Margin="0,0,8,0" />
+                <Button x:Name="ApplyButton" Content="应用灯效" Click="Apply_Click" Style="{StaticResource AccentButtonStyle}" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

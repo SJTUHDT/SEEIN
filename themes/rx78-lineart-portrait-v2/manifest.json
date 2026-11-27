@@ -1,0 +1,5294 @@
+{
+  "schemaVersion": "1.0",
+  "id": "rx78-lineart-portrait-v2",
+  "name": "RX-78-2 · 正面线稿水杯版",
+  "author": "Custom / Codex",
+  "canvas": {
+    "width": 462,
+    "height": 1920
+  },
+  "orientation": "portraitClockwise",
+  "frameRate": 6,
+  "jpegQuality": 94,
+  "backgroundColor": "#286ED0",
+  "layers": [
+    {
+      "id": "gundam-wordmark",
+      "type": "image",
+      "x": 21,
+      "y": 24,
+      "width": 420,
+      "height": 110,
+      "z": 10,
+      "asset": "assets/gundam-wordmark.png"
+    },
+    {
+      "id": "serial",
+      "type": "text",
+      "x": 31,
+      "y": 153,
+      "width": 203,
+      "height": 18,
+      "z": 12,
+      "format": "SCV-70 / U.C.0079",
+      "style": {
+        "fontSize": 14,
+        "color": "#F7FBFF",
+        "fontFamily": "Consolas",
+        "fontWeight": "normal"
+      }
+    },
+    {
+      "id": "clock",
+      "type": "clock",
+      "x": 243,
+      "y": 139,
+      "width": 198,
+      "height": 54,
+      "z": 15,
+      "format": "HH:mm",
+      "style": {
+        "fontSize": 50,
+        "fontFamily": "Bahnschrift",
+        "fontWeight": "bold",
+        "color": "#FFC953"
+      }
+    },
+    {
+      "id": "cpu-cup-outer",
+      "type": "rect",
+      "x": 24,
+      "y": 1174,
+      "width": 200,
+      "height": 200,
+      "z": 4,
+      "style": {
+        "color": "#F7FBFF",
+        "radius": 22,
+        "borderWidth": 2,
+        "borderColor": "#CBDCE8"
+      }
+    },
+    {
+      "id": "cpu-cup-frame",
+      "type": "rect",
+      "x": 38,
+      "y": 1188,
+      "width": 172,
+      "height": 170,
+      "z": 5,
+      "style": {
+        "color": "#263039",
+        "radius": 14
+      }
+    },
+    {
+      "id": "cpu-cup-white",
+      "type": "rect",
+      "x": 48,
+      "y": 1198,
+      "width": 152,
+      "height": 150,
+      "z": 6,
+      "style": {
+        "color": "#FFFFFF",
+        "radius": 5
+      }
+    },
+    {
+      "id": "cpu-cup-water-000",
+      "type": "bar",
+      "x": 48,
+      "y": 1347,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 0.0,
+        "max": 0.78125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-001",
+      "type": "bar",
+      "x": 48,
+      "y": 1346,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 0.78125,
+        "max": 1.5625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-002",
+      "type": "bar",
+      "x": 48,
+      "y": 1345,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 1.5625,
+        "max": 2.34375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-003",
+      "type": "bar",
+      "x": 48,
+      "y": 1344,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 2.34375,
+        "max": 3.125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-004",
+      "type": "bar",
+      "x": 48,
+      "y": 1343,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 3.125,
+        "max": 3.90625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-005",
+      "type": "bar",
+      "x": 48,
+      "y": 1342,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 3.90625,
+        "max": 4.6875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-006",
+      "type": "bar",
+      "x": 48,
+      "y": 1341,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 4.6875,
+        "max": 5.46875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-007",
+      "type": "bar",
+      "x": 48,
+      "y": 1340,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 5.46875,
+        "max": 6.25,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-008",
+      "type": "bar",
+      "x": 48,
+      "y": 1339,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 6.25,
+        "max": 7.03125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-009",
+      "type": "bar",
+      "x": 48,
+      "y": 1338,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 7.03125,
+        "max": 7.8125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-010",
+      "type": "bar",
+      "x": 48,
+      "y": 1337,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 7.8125,
+        "max": 8.59375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-011",
+      "type": "bar",
+      "x": 48,
+      "y": 1336,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 8.59375,
+        "max": 9.375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-012",
+      "type": "bar",
+      "x": 48,
+      "y": 1335,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 9.375,
+        "max": 10.15625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-013",
+      "type": "bar",
+      "x": 48,
+      "y": 1334,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 10.15625,
+        "max": 10.9375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-014",
+      "type": "bar",
+      "x": 48,
+      "y": 1333,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 10.9375,
+        "max": 11.71875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-015",
+      "type": "bar",
+      "x": 48,
+      "y": 1332,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 11.71875,
+        "max": 12.5,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-016",
+      "type": "bar",
+      "x": 48,
+      "y": 1331,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 12.5,
+        "max": 13.28125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-017",
+      "type": "bar",
+      "x": 48,
+      "y": 1330,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 13.28125,
+        "max": 14.0625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-018",
+      "type": "bar",
+      "x": 48,
+      "y": 1329,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 14.0625,
+        "max": 14.84375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-019",
+      "type": "bar",
+      "x": 48,
+      "y": 1328,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 14.84375,
+        "max": 15.625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-020",
+      "type": "bar",
+      "x": 48,
+      "y": 1327,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 15.625,
+        "max": 16.40625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-021",
+      "type": "bar",
+      "x": 48,
+      "y": 1326,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 16.40625,
+        "max": 17.1875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-022",
+      "type": "bar",
+      "x": 48,
+      "y": 1325,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 17.1875,
+        "max": 17.96875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-023",
+      "type": "bar",
+      "x": 48,
+      "y": 1324,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 17.96875,
+        "max": 18.75,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-024",
+      "type": "bar",
+      "x": 48,
+      "y": 1323,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 18.75,
+        "max": 19.53125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-025",
+      "type": "bar",
+      "x": 48,
+      "y": 1322,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 19.53125,
+        "max": 20.3125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-026",
+      "type": "bar",
+      "x": 48,
+      "y": 1321,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 20.3125,
+        "max": 21.09375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-027",
+      "type": "bar",
+      "x": 48,
+      "y": 1320,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 21.09375,
+        "max": 21.875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-028",
+      "type": "bar",
+      "x": 48,
+      "y": 1319,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 21.875,
+        "max": 22.65625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-029",
+      "type": "bar",
+      "x": 48,
+      "y": 1318,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 22.65625,
+        "max": 23.4375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-030",
+      "type": "bar",
+      "x": 48,
+      "y": 1317,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 23.4375,
+        "max": 24.21875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-031",
+      "type": "bar",
+      "x": 48,
+      "y": 1316,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 24.21875,
+        "max": 25.0,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-032",
+      "type": "bar",
+      "x": 48,
+      "y": 1315,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 25.0,
+        "max": 25.78125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-033",
+      "type": "bar",
+      "x": 48,
+      "y": 1314,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 25.78125,
+        "max": 26.5625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-034",
+      "type": "bar",
+      "x": 48,
+      "y": 1313,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 26.5625,
+        "max": 27.34375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-035",
+      "type": "bar",
+      "x": 48,
+      "y": 1312,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 27.34375,
+        "max": 28.125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-036",
+      "type": "bar",
+      "x": 48,
+      "y": 1311,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 28.125,
+        "max": 28.90625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-037",
+      "type": "bar",
+      "x": 48,
+      "y": 1310,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 28.90625,
+        "max": 29.6875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-038",
+      "type": "bar",
+      "x": 48,
+      "y": 1309,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 29.6875,
+        "max": 30.46875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-039",
+      "type": "bar",
+      "x": 48,
+      "y": 1308,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 30.46875,
+        "max": 31.25,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-040",
+      "type": "bar",
+      "x": 48,
+      "y": 1307,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 31.25,
+        "max": 32.03125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-041",
+      "type": "bar",
+      "x": 48,
+      "y": 1306,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 32.03125,
+        "max": 32.8125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-042",
+      "type": "bar",
+      "x": 48,
+      "y": 1305,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 32.8125,
+        "max": 33.59375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-043",
+      "type": "bar",
+      "x": 48,
+      "y": 1304,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 33.59375,
+        "max": 34.375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-044",
+      "type": "bar",
+      "x": 48,
+      "y": 1303,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 34.375,
+        "max": 35.15625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-045",
+      "type": "bar",
+      "x": 48,
+      "y": 1302,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 35.15625,
+        "max": 35.9375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-046",
+      "type": "bar",
+      "x": 48,
+      "y": 1301,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 35.9375,
+        "max": 36.71875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-047",
+      "type": "bar",
+      "x": 48,
+      "y": 1300,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 36.71875,
+        "max": 37.5,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-048",
+      "type": "bar",
+      "x": 48,
+      "y": 1299,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 37.5,
+        "max": 38.28125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-049",
+      "type": "bar",
+      "x": 48,
+      "y": 1298,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 38.28125,
+        "max": 39.0625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-050",
+      "type": "bar",
+      "x": 48,
+      "y": 1297,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 39.0625,
+        "max": 39.84375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-051",
+      "type": "bar",
+      "x": 48,
+      "y": 1296,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 39.84375,
+        "max": 40.625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-052",
+      "type": "bar",
+      "x": 48,
+      "y": 1295,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 40.625,
+        "max": 41.40625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-053",
+      "type": "bar",
+      "x": 48,
+      "y": 1294,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 41.40625,
+        "max": 42.1875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-054",
+      "type": "bar",
+      "x": 48,
+      "y": 1293,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 42.1875,
+        "max": 42.96875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-055",
+      "type": "bar",
+      "x": 48,
+      "y": 1292,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 42.96875,
+        "max": 43.75,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-056",
+      "type": "bar",
+      "x": 48,
+      "y": 1291,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 43.75,
+        "max": 44.53125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-057",
+      "type": "bar",
+      "x": 48,
+      "y": 1290,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 44.53125,
+        "max": 45.3125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-058",
+      "type": "bar",
+      "x": 48,
+      "y": 1289,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 45.3125,
+        "max": 46.09375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-059",
+      "type": "bar",
+      "x": 48,
+      "y": 1288,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 46.09375,
+        "max": 46.875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-060",
+      "type": "bar",
+      "x": 48,
+      "y": 1287,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 46.875,
+        "max": 47.65625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-061",
+      "type": "bar",
+      "x": 48,
+      "y": 1286,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 47.65625,
+        "max": 48.4375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-062",
+      "type": "bar",
+      "x": 48,
+      "y": 1285,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 48.4375,
+        "max": 49.21875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-063",
+      "type": "bar",
+      "x": 48,
+      "y": 1284,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 49.21875,
+        "max": 50.0,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-064",
+      "type": "bar",
+      "x": 48,
+      "y": 1283,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 50.0,
+        "max": 50.78125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-065",
+      "type": "bar",
+      "x": 48,
+      "y": 1282,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 50.78125,
+        "max": 51.5625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-066",
+      "type": "bar",
+      "x": 48,
+      "y": 1281,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 51.5625,
+        "max": 52.34375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-067",
+      "type": "bar",
+      "x": 48,
+      "y": 1280,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 52.34375,
+        "max": 53.125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-068",
+      "type": "bar",
+      "x": 48,
+      "y": 1279,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 53.125,
+        "max": 53.90625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-069",
+      "type": "bar",
+      "x": 48,
+      "y": 1278,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 53.90625,
+        "max": 54.6875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-070",
+      "type": "bar",
+      "x": 48,
+      "y": 1277,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 54.6875,
+        "max": 55.46875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-071",
+      "type": "bar",
+      "x": 48,
+      "y": 1276,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 55.46875,
+        "max": 56.25,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-072",
+      "type": "bar",
+      "x": 48,
+      "y": 1275,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 56.25,
+        "max": 57.03125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-073",
+      "type": "bar",
+      "x": 48,
+      "y": 1274,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 57.03125,
+        "max": 57.8125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-074",
+      "type": "bar",
+      "x": 48,
+      "y": 1273,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 57.8125,
+        "max": 58.59375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-075",
+      "type": "bar",
+      "x": 48,
+      "y": 1272,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 58.59375,
+        "max": 59.375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-076",
+      "type": "bar",
+      "x": 48,
+      "y": 1271,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 59.375,
+        "max": 60.15625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-077",
+      "type": "bar",
+      "x": 48,
+      "y": 1270,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 60.15625,
+        "max": 60.9375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-078",
+      "type": "bar",
+      "x": 48,
+      "y": 1269,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 60.9375,
+        "max": 61.71875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-079",
+      "type": "bar",
+      "x": 48,
+      "y": 1268,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 61.71875,
+        "max": 62.5,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-080",
+      "type": "bar",
+      "x": 48,
+      "y": 1267,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 62.5,
+        "max": 63.28125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-081",
+      "type": "bar",
+      "x": 48,
+      "y": 1266,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 63.28125,
+        "max": 64.0625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-082",
+      "type": "bar",
+      "x": 48,
+      "y": 1265,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 64.0625,
+        "max": 64.84375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-083",
+      "type": "bar",
+      "x": 48,
+      "y": 1264,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 64.84375,
+        "max": 65.625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-084",
+      "type": "bar",
+      "x": 48,
+      "y": 1263,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 65.625,
+        "max": 66.40625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-085",
+      "type": "bar",
+      "x": 48,
+      "y": 1262,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 66.40625,
+        "max": 67.1875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-086",
+      "type": "bar",
+      "x": 48,
+      "y": 1261,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 67.1875,
+        "max": 67.96875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-087",
+      "type": "bar",
+      "x": 48,
+      "y": 1260,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 67.96875,
+        "max": 68.75,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-088",
+      "type": "bar",
+      "x": 48,
+      "y": 1259,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 68.75,
+        "max": 69.53125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-089",
+      "type": "bar",
+      "x": 48,
+      "y": 1258,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 69.53125,
+        "max": 70.3125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-090",
+      "type": "bar",
+      "x": 48,
+      "y": 1257,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 70.3125,
+        "max": 71.09375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-091",
+      "type": "bar",
+      "x": 48,
+      "y": 1256,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 71.09375,
+        "max": 71.875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-092",
+      "type": "bar",
+      "x": 48,
+      "y": 1255,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 71.875,
+        "max": 72.65625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-093",
+      "type": "bar",
+      "x": 48,
+      "y": 1254,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 72.65625,
+        "max": 73.4375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-094",
+      "type": "bar",
+      "x": 48,
+      "y": 1253,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 73.4375,
+        "max": 74.21875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-095",
+      "type": "bar",
+      "x": 48,
+      "y": 1252,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 74.21875,
+        "max": 75.0,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-096",
+      "type": "bar",
+      "x": 48,
+      "y": 1251,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 75.0,
+        "max": 75.78125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-097",
+      "type": "bar",
+      "x": 48,
+      "y": 1250,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 75.78125,
+        "max": 76.5625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-098",
+      "type": "bar",
+      "x": 48,
+      "y": 1249,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 76.5625,
+        "max": 77.34375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-099",
+      "type": "bar",
+      "x": 48,
+      "y": 1248,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 77.34375,
+        "max": 78.125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-100",
+      "type": "bar",
+      "x": 48,
+      "y": 1247,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 78.125,
+        "max": 78.90625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-101",
+      "type": "bar",
+      "x": 48,
+      "y": 1246,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 78.90625,
+        "max": 79.6875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-102",
+      "type": "bar",
+      "x": 48,
+      "y": 1245,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 79.6875,
+        "max": 80.46875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-103",
+      "type": "bar",
+      "x": 48,
+      "y": 1244,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 80.46875,
+        "max": 81.25,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-104",
+      "type": "bar",
+      "x": 48,
+      "y": 1243,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 81.25,
+        "max": 82.03125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-105",
+      "type": "bar",
+      "x": 48,
+      "y": 1242,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 82.03125,
+        "max": 82.8125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-106",
+      "type": "bar",
+      "x": 48,
+      "y": 1241,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 82.8125,
+        "max": 83.59375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-107",
+      "type": "bar",
+      "x": 48,
+      "y": 1240,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 83.59375,
+        "max": 84.375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-108",
+      "type": "bar",
+      "x": 48,
+      "y": 1239,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 84.375,
+        "max": 85.15625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-109",
+      "type": "bar",
+      "x": 48,
+      "y": 1238,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 85.15625,
+        "max": 85.9375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-110",
+      "type": "bar",
+      "x": 48,
+      "y": 1237,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 85.9375,
+        "max": 86.71875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-111",
+      "type": "bar",
+      "x": 48,
+      "y": 1236,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 86.71875,
+        "max": 87.5,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-112",
+      "type": "bar",
+      "x": 48,
+      "y": 1235,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 87.5,
+        "max": 88.28125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-113",
+      "type": "bar",
+      "x": 48,
+      "y": 1234,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 88.28125,
+        "max": 89.0625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-114",
+      "type": "bar",
+      "x": 48,
+      "y": 1233,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 89.0625,
+        "max": 89.84375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-115",
+      "type": "bar",
+      "x": 48,
+      "y": 1232,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 89.84375,
+        "max": 90.625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-116",
+      "type": "bar",
+      "x": 48,
+      "y": 1231,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 90.625,
+        "max": 91.40625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-117",
+      "type": "bar",
+      "x": 48,
+      "y": 1230,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 91.40625,
+        "max": 92.1875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-118",
+      "type": "bar",
+      "x": 48,
+      "y": 1229,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 92.1875,
+        "max": 92.96875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-119",
+      "type": "bar",
+      "x": 48,
+      "y": 1228,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 92.96875,
+        "max": 93.75,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-120",
+      "type": "bar",
+      "x": 48,
+      "y": 1227,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 93.75,
+        "max": 94.53125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-121",
+      "type": "bar",
+      "x": 48,
+      "y": 1226,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 94.53125,
+        "max": 95.3125,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-122",
+      "type": "bar",
+      "x": 48,
+      "y": 1225,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 95.3125,
+        "max": 96.09375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-123",
+      "type": "bar",
+      "x": 48,
+      "y": 1224,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 96.09375,
+        "max": 96.875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-124",
+      "type": "bar",
+      "x": 48,
+      "y": 1223,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 96.875,
+        "max": 97.65625,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-125",
+      "type": "bar",
+      "x": 48,
+      "y": 1222,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 97.65625,
+        "max": 98.4375,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-126",
+      "type": "bar",
+      "x": 48,
+      "y": 1221,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 98.4375,
+        "max": 99.21875,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-water-127",
+      "type": "bar",
+      "x": 48,
+      "y": 1220,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "cpu.total.load",
+      "style": {
+        "min": 99.21875,
+        "max": 100.0,
+        "radius": 0,
+        "color": "#40F45A",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "cpu-cup-usage",
+      "type": "text",
+      "x": 89,
+      "y": 1201,
+      "width": 111,
+      "height": 23,
+      "z": 12,
+      "format": "USAGE",
+      "style": {
+        "fontSize": 19,
+        "color": "#1B242B",
+        "fontFamily": "Arial",
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "cpu-cup-value",
+      "type": "metric",
+      "x": 63,
+      "y": 1229,
+      "width": 128,
+      "height": 106,
+      "z": 20,
+      "binding": "cpu.total.load",
+      "format": "0",
+      "style": {
+        "fontSize": 76,
+        "color": "#17212B",
+        "fontFamily": "Impact",
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "cpu-cup-percent",
+      "type": "text",
+      "x": 182,
+      "y": 1311,
+      "width": 23,
+      "height": 23,
+      "z": 12,
+      "format": "%",
+      "style": {
+        "fontSize": 15,
+        "color": "#17212B",
+        "fontFamily": "Arial",
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "cpu-cup-label",
+      "type": "text",
+      "x": 104,
+      "y": 1380,
+      "width": 100,
+      "height": 24,
+      "z": 12,
+      "format": "CPU",
+      "style": {
+        "fontSize": 20,
+        "color": "#F7FBFF",
+        "fontFamily": "Bahnschrift",
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "gpu-cup-outer",
+      "type": "rect",
+      "x": 242,
+      "y": 1480,
+      "width": 200,
+      "height": 200,
+      "z": 4,
+      "style": {
+        "color": "#F7FBFF",
+        "radius": 22,
+        "borderWidth": 2,
+        "borderColor": "#CBDCE8"
+      }
+    },
+    {
+      "id": "gpu-cup-frame",
+      "type": "rect",
+      "x": 256,
+      "y": 1494,
+      "width": 172,
+      "height": 170,
+      "z": 5,
+      "style": {
+        "color": "#263039",
+        "radius": 14
+      }
+    },
+    {
+      "id": "gpu-cup-white",
+      "type": "rect",
+      "x": 266,
+      "y": 1504,
+      "width": 152,
+      "height": 150,
+      "z": 6,
+      "style": {
+        "color": "#FFFFFF",
+        "radius": 5
+      }
+    },
+    {
+      "id": "gpu-cup-water-000",
+      "type": "bar",
+      "x": 266,
+      "y": 1653,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 0.0,
+        "max": 0.78125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-001",
+      "type": "bar",
+      "x": 266,
+      "y": 1652,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 0.78125,
+        "max": 1.5625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-002",
+      "type": "bar",
+      "x": 266,
+      "y": 1651,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 1.5625,
+        "max": 2.34375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-003",
+      "type": "bar",
+      "x": 266,
+      "y": 1650,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 2.34375,
+        "max": 3.125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-004",
+      "type": "bar",
+      "x": 266,
+      "y": 1649,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 3.125,
+        "max": 3.90625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-005",
+      "type": "bar",
+      "x": 266,
+      "y": 1648,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 3.90625,
+        "max": 4.6875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-006",
+      "type": "bar",
+      "x": 266,
+      "y": 1647,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 4.6875,
+        "max": 5.46875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-007",
+      "type": "bar",
+      "x": 266,
+      "y": 1646,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 5.46875,
+        "max": 6.25,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-008",
+      "type": "bar",
+      "x": 266,
+      "y": 1645,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 6.25,
+        "max": 7.03125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-009",
+      "type": "bar",
+      "x": 266,
+      "y": 1644,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 7.03125,
+        "max": 7.8125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-010",
+      "type": "bar",
+      "x": 266,
+      "y": 1643,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 7.8125,
+        "max": 8.59375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-011",
+      "type": "bar",
+      "x": 266,
+      "y": 1642,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 8.59375,
+        "max": 9.375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-012",
+      "type": "bar",
+      "x": 266,
+      "y": 1641,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 9.375,
+        "max": 10.15625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-013",
+      "type": "bar",
+      "x": 266,
+      "y": 1640,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 10.15625,
+        "max": 10.9375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-014",
+      "type": "bar",
+      "x": 266,
+      "y": 1639,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 10.9375,
+        "max": 11.71875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-015",
+      "type": "bar",
+      "x": 266,
+      "y": 1638,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 11.71875,
+        "max": 12.5,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-016",
+      "type": "bar",
+      "x": 266,
+      "y": 1637,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 12.5,
+        "max": 13.28125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-017",
+      "type": "bar",
+      "x": 266,
+      "y": 1636,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 13.28125,
+        "max": 14.0625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-018",
+      "type": "bar",
+      "x": 266,
+      "y": 1635,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 14.0625,
+        "max": 14.84375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-019",
+      "type": "bar",
+      "x": 266,
+      "y": 1634,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 14.84375,
+        "max": 15.625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-020",
+      "type": "bar",
+      "x": 266,
+      "y": 1633,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 15.625,
+        "max": 16.40625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-021",
+      "type": "bar",
+      "x": 266,
+      "y": 1632,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 16.40625,
+        "max": 17.1875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-022",
+      "type": "bar",
+      "x": 266,
+      "y": 1631,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 17.1875,
+        "max": 17.96875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-023",
+      "type": "bar",
+      "x": 266,
+      "y": 1630,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 17.96875,
+        "max": 18.75,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-024",
+      "type": "bar",
+      "x": 266,
+      "y": 1629,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 18.75,
+        "max": 19.53125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-025",
+      "type": "bar",
+      "x": 266,
+      "y": 1628,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 19.53125,
+        "max": 20.3125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-026",
+      "type": "bar",
+      "x": 266,
+      "y": 1627,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 20.3125,
+        "max": 21.09375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-027",
+      "type": "bar",
+      "x": 266,
+      "y": 1626,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 21.09375,
+        "max": 21.875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-028",
+      "type": "bar",
+      "x": 266,
+      "y": 1625,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 21.875,
+        "max": 22.65625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-029",
+      "type": "bar",
+      "x": 266,
+      "y": 1624,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 22.65625,
+        "max": 23.4375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-030",
+      "type": "bar",
+      "x": 266,
+      "y": 1623,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 23.4375,
+        "max": 24.21875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-031",
+      "type": "bar",
+      "x": 266,
+      "y": 1622,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 24.21875,
+        "max": 25.0,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-032",
+      "type": "bar",
+      "x": 266,
+      "y": 1621,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 25.0,
+        "max": 25.78125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-033",
+      "type": "bar",
+      "x": 266,
+      "y": 1620,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 25.78125,
+        "max": 26.5625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-034",
+      "type": "bar",
+      "x": 266,
+      "y": 1619,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 26.5625,
+        "max": 27.34375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-035",
+      "type": "bar",
+      "x": 266,
+      "y": 1618,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 27.34375,
+        "max": 28.125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-036",
+      "type": "bar",
+      "x": 266,
+      "y": 1617,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 28.125,
+        "max": 28.90625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-037",
+      "type": "bar",
+      "x": 266,
+      "y": 1616,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 28.90625,
+        "max": 29.6875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-038",
+      "type": "bar",
+      "x": 266,
+      "y": 1615,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 29.6875,
+        "max": 30.46875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-039",
+      "type": "bar",
+      "x": 266,
+      "y": 1614,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 30.46875,
+        "max": 31.25,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-040",
+      "type": "bar",
+      "x": 266,
+      "y": 1613,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 31.25,
+        "max": 32.03125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-041",
+      "type": "bar",
+      "x": 266,
+      "y": 1612,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 32.03125,
+        "max": 32.8125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-042",
+      "type": "bar",
+      "x": 266,
+      "y": 1611,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 32.8125,
+        "max": 33.59375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-043",
+      "type": "bar",
+      "x": 266,
+      "y": 1610,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 33.59375,
+        "max": 34.375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-044",
+      "type": "bar",
+      "x": 266,
+      "y": 1609,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 34.375,
+        "max": 35.15625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-045",
+      "type": "bar",
+      "x": 266,
+      "y": 1608,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 35.15625,
+        "max": 35.9375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-046",
+      "type": "bar",
+      "x": 266,
+      "y": 1607,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 35.9375,
+        "max": 36.71875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-047",
+      "type": "bar",
+      "x": 266,
+      "y": 1606,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 36.71875,
+        "max": 37.5,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-048",
+      "type": "bar",
+      "x": 266,
+      "y": 1605,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 37.5,
+        "max": 38.28125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-049",
+      "type": "bar",
+      "x": 266,
+      "y": 1604,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 38.28125,
+        "max": 39.0625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-050",
+      "type": "bar",
+      "x": 266,
+      "y": 1603,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 39.0625,
+        "max": 39.84375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-051",
+      "type": "bar",
+      "x": 266,
+      "y": 1602,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 39.84375,
+        "max": 40.625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-052",
+      "type": "bar",
+      "x": 266,
+      "y": 1601,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 40.625,
+        "max": 41.40625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-053",
+      "type": "bar",
+      "x": 266,
+      "y": 1600,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 41.40625,
+        "max": 42.1875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-054",
+      "type": "bar",
+      "x": 266,
+      "y": 1599,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 42.1875,
+        "max": 42.96875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-055",
+      "type": "bar",
+      "x": 266,
+      "y": 1598,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 42.96875,
+        "max": 43.75,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-056",
+      "type": "bar",
+      "x": 266,
+      "y": 1597,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 43.75,
+        "max": 44.53125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-057",
+      "type": "bar",
+      "x": 266,
+      "y": 1596,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 44.53125,
+        "max": 45.3125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-058",
+      "type": "bar",
+      "x": 266,
+      "y": 1595,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 45.3125,
+        "max": 46.09375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-059",
+      "type": "bar",
+      "x": 266,
+      "y": 1594,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 46.09375,
+        "max": 46.875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-060",
+      "type": "bar",
+      "x": 266,
+      "y": 1593,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 46.875,
+        "max": 47.65625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-061",
+      "type": "bar",
+      "x": 266,
+      "y": 1592,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 47.65625,
+        "max": 48.4375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-062",
+      "type": "bar",
+      "x": 266,
+      "y": 1591,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 48.4375,
+        "max": 49.21875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-063",
+      "type": "bar",
+      "x": 266,
+      "y": 1590,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 49.21875,
+        "max": 50.0,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-064",
+      "type": "bar",
+      "x": 266,
+      "y": 1589,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 50.0,
+        "max": 50.78125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-065",
+      "type": "bar",
+      "x": 266,
+      "y": 1588,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 50.78125,
+        "max": 51.5625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-066",
+      "type": "bar",
+      "x": 266,
+      "y": 1587,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 51.5625,
+        "max": 52.34375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-067",
+      "type": "bar",
+      "x": 266,
+      "y": 1586,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 52.34375,
+        "max": 53.125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-068",
+      "type": "bar",
+      "x": 266,
+      "y": 1585,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 53.125,
+        "max": 53.90625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-069",
+      "type": "bar",
+      "x": 266,
+      "y": 1584,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 53.90625,
+        "max": 54.6875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-070",
+      "type": "bar",
+      "x": 266,
+      "y": 1583,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 54.6875,
+        "max": 55.46875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-071",
+      "type": "bar",
+      "x": 266,
+      "y": 1582,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 55.46875,
+        "max": 56.25,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-072",
+      "type": "bar",
+      "x": 266,
+      "y": 1581,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 56.25,
+        "max": 57.03125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-073",
+      "type": "bar",
+      "x": 266,
+      "y": 1580,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 57.03125,
+        "max": 57.8125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-074",
+      "type": "bar",
+      "x": 266,
+      "y": 1579,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 57.8125,
+        "max": 58.59375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-075",
+      "type": "bar",
+      "x": 266,
+      "y": 1578,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 58.59375,
+        "max": 59.375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-076",
+      "type": "bar",
+      "x": 266,
+      "y": 1577,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 59.375,
+        "max": 60.15625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-077",
+      "type": "bar",
+      "x": 266,
+      "y": 1576,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 60.15625,
+        "max": 60.9375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-078",
+      "type": "bar",
+      "x": 266,
+      "y": 1575,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 60.9375,
+        "max": 61.71875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-079",
+      "type": "bar",
+      "x": 266,
+      "y": 1574,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 61.71875,
+        "max": 62.5,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-080",
+      "type": "bar",
+      "x": 266,
+      "y": 1573,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 62.5,
+        "max": 63.28125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-081",
+      "type": "bar",
+      "x": 266,
+      "y": 1572,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 63.28125,
+        "max": 64.0625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-082",
+      "type": "bar",
+      "x": 266,
+      "y": 1571,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 64.0625,
+        "max": 64.84375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-083",
+      "type": "bar",
+      "x": 266,
+      "y": 1570,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 64.84375,
+        "max": 65.625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-084",
+      "type": "bar",
+      "x": 266,
+      "y": 1569,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 65.625,
+        "max": 66.40625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-085",
+      "type": "bar",
+      "x": 266,
+      "y": 1568,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 66.40625,
+        "max": 67.1875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-086",
+      "type": "bar",
+      "x": 266,
+      "y": 1567,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 67.1875,
+        "max": 67.96875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-087",
+      "type": "bar",
+      "x": 266,
+      "y": 1566,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 67.96875,
+        "max": 68.75,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-088",
+      "type": "bar",
+      "x": 266,
+      "y": 1565,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 68.75,
+        "max": 69.53125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-089",
+      "type": "bar",
+      "x": 266,
+      "y": 1564,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 69.53125,
+        "max": 70.3125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-090",
+      "type": "bar",
+      "x": 266,
+      "y": 1563,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 70.3125,
+        "max": 71.09375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-091",
+      "type": "bar",
+      "x": 266,
+      "y": 1562,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 71.09375,
+        "max": 71.875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-092",
+      "type": "bar",
+      "x": 266,
+      "y": 1561,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 71.875,
+        "max": 72.65625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-093",
+      "type": "bar",
+      "x": 266,
+      "y": 1560,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 72.65625,
+        "max": 73.4375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-094",
+      "type": "bar",
+      "x": 266,
+      "y": 1559,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 73.4375,
+        "max": 74.21875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-095",
+      "type": "bar",
+      "x": 266,
+      "y": 1558,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 74.21875,
+        "max": 75.0,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-096",
+      "type": "bar",
+      "x": 266,
+      "y": 1557,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 75.0,
+        "max": 75.78125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-097",
+      "type": "bar",
+      "x": 266,
+      "y": 1556,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 75.78125,
+        "max": 76.5625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-098",
+      "type": "bar",
+      "x": 266,
+      "y": 1555,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 76.5625,
+        "max": 77.34375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-099",
+      "type": "bar",
+      "x": 266,
+      "y": 1554,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 77.34375,
+        "max": 78.125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-100",
+      "type": "bar",
+      "x": 266,
+      "y": 1553,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 78.125,
+        "max": 78.90625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-101",
+      "type": "bar",
+      "x": 266,
+      "y": 1552,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 78.90625,
+        "max": 79.6875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-102",
+      "type": "bar",
+      "x": 266,
+      "y": 1551,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 79.6875,
+        "max": 80.46875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-103",
+      "type": "bar",
+      "x": 266,
+      "y": 1550,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 80.46875,
+        "max": 81.25,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-104",
+      "type": "bar",
+      "x": 266,
+      "y": 1549,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 81.25,
+        "max": 82.03125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-105",
+      "type": "bar",
+      "x": 266,
+      "y": 1548,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 82.03125,
+        "max": 82.8125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-106",
+      "type": "bar",
+      "x": 266,
+      "y": 1547,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 82.8125,
+        "max": 83.59375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-107",
+      "type": "bar",
+      "x": 266,
+      "y": 1546,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 83.59375,
+        "max": 84.375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-108",
+      "type": "bar",
+      "x": 266,
+      "y": 1545,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 84.375,
+        "max": 85.15625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-109",
+      "type": "bar",
+      "x": 266,
+      "y": 1544,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 85.15625,
+        "max": 85.9375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-110",
+      "type": "bar",
+      "x": 266,
+      "y": 1543,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 85.9375,
+        "max": 86.71875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-111",
+      "type": "bar",
+      "x": 266,
+      "y": 1542,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 86.71875,
+        "max": 87.5,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-112",
+      "type": "bar",
+      "x": 266,
+      "y": 1541,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 87.5,
+        "max": 88.28125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-113",
+      "type": "bar",
+      "x": 266,
+      "y": 1540,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 88.28125,
+        "max": 89.0625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-114",
+      "type": "bar",
+      "x": 266,
+      "y": 1539,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 89.0625,
+        "max": 89.84375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-115",
+      "type": "bar",
+      "x": 266,
+      "y": 1538,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 89.84375,
+        "max": 90.625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-116",
+      "type": "bar",
+      "x": 266,
+      "y": 1537,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 90.625,
+        "max": 91.40625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-117",
+      "type": "bar",
+      "x": 266,
+      "y": 1536,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 91.40625,
+        "max": 92.1875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-118",
+      "type": "bar",
+      "x": 266,
+      "y": 1535,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 92.1875,
+        "max": 92.96875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-119",
+      "type": "bar",
+      "x": 266,
+      "y": 1534,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 92.96875,
+        "max": 93.75,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-120",
+      "type": "bar",
+      "x": 266,
+      "y": 1533,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 93.75,
+        "max": 94.53125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-121",
+      "type": "bar",
+      "x": 266,
+      "y": 1532,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 94.53125,
+        "max": 95.3125,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-122",
+      "type": "bar",
+      "x": 266,
+      "y": 1531,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 95.3125,
+        "max": 96.09375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-123",
+      "type": "bar",
+      "x": 266,
+      "y": 1530,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 96.09375,
+        "max": 96.875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-124",
+      "type": "bar",
+      "x": 266,
+      "y": 1529,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 96.875,
+        "max": 97.65625,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-125",
+      "type": "bar",
+      "x": 266,
+      "y": 1528,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 97.65625,
+        "max": 98.4375,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-126",
+      "type": "bar",
+      "x": 266,
+      "y": 1527,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 98.4375,
+        "max": 99.21875,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-water-127",
+      "type": "bar",
+      "x": 266,
+      "y": 1526,
+      "width": 152,
+      "height": 1,
+      "z": 7,
+      "binding": "gpu.core.load",
+      "style": {
+        "min": 99.21875,
+        "max": 100.0,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#FFFFFF"
+      }
+    },
+    {
+      "id": "gpu-cup-usage",
+      "type": "text",
+      "x": 307,
+      "y": 1507,
+      "width": 111,
+      "height": 23,
+      "z": 12,
+      "format": "USAGE",
+      "style": {
+        "fontSize": 19,
+        "color": "#1B242B",
+        "fontFamily": "Arial",
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "gpu-cup-value",
+      "type": "metric",
+      "x": 281,
+      "y": 1535,
+      "width": 128,
+      "height": 106,
+      "z": 20,
+      "binding": "gpu.core.load",
+      "format": "0",
+      "style": {
+        "fontSize": 76,
+        "color": "#17212B",
+        "fontFamily": "Impact",
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "gpu-cup-percent",
+      "type": "text",
+      "x": 400,
+      "y": 1617,
+      "width": 23,
+      "height": 23,
+      "z": 12,
+      "format": "%",
+      "style": {
+        "fontSize": 15,
+        "color": "#17212B",
+        "fontFamily": "Arial",
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "gpu-cup-label",
+      "type": "text",
+      "x": 322,
+      "y": 1686,
+      "width": 100,
+      "height": 24,
+      "z": 12,
+      "format": "GPU",
+      "style": {
+        "fontSize": 20,
+        "color": "#F7FBFF",
+        "fontFamily": "Bahnschrift",
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "efs-abbr",
+      "type": "text",
+      "x": 245,
+      "y": 227,
+      "width": 193,
+      "height": 45,
+      "z": 12,
+      "format": "E.F.S.F.",
+      "style": {
+        "fontSize": 36,
+        "color": "#10253E",
+        "fontFamily": "Impact",
+        "fontWeight": "normal"
+      }
+    },
+    {
+      "id": "project-v",
+      "type": "text",
+      "x": 248,
+      "y": 271,
+      "width": 185,
+      "height": 29,
+      "z": 12,
+      "format": "PROJECT V",
+      "style": {
+        "fontSize": 25,
+        "color": "#10253E",
+        "fontFamily": "Impact",
+        "fontWeight": "normal"
+      }
+    },
+    {
+      "id": "prototype",
+      "type": "text",
+      "x": 251,
+      "y": 308,
+      "width": 184,
+      "height": 31,
+      "z": 12,
+      "format": "PROTOTYPE\nMOBILE SUIT",
+      "style": {
+        "fontSize": 12,
+        "color": "#D2E4F8",
+        "fontFamily": "Consolas",
+        "fontWeight": "normal"
+      }
+    },
+    {
+      "id": "cpu-thermometer",
+      "type": "image",
+      "x": 29,
+      "y": 225,
+      "width": 30,
+      "height": 88,
+      "z": 10,
+      "asset": "assets/thermometer.png"
+    },
+    {
+      "id": "cpu-temperature",
+      "type": "metric",
+      "x": 65,
+      "y": 220,
+      "width": 112,
+      "height": 64,
+      "z": 20,
+      "binding": "cpu.package.temp",
+      "format": "0",
+      "style": {
+        "fontSize": 59,
+        "color": "#40F45A",
+        "fontFamily": "Bahnschrift",
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "cpu-temp-label",
+      "type": "text",
+      "x": 180,
+      "y": 233,
+      "width": 66,
+      "height": 37,
+      "z": 12,
+      "format": "CPU\nTEMP °C",
+      "style": {
+        "fontSize": 13,
+        "color": "#FFF335",
+        "fontFamily": "Arial Narrow",
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "cpu-fan-icon",
+      "type": "image",
+      "x": 67,
+      "y": 289,
+      "width": 20,
+      "height": 20,
+      "z": 10,
+      "asset": "assets/fan.png"
+    },
+    {
+      "id": "cpu-fan",
+      "type": "metric",
+      "x": 94,
+      "y": 278,
+      "width": 152,
+      "height": 39,
+      "z": 20,
+      "binding": "fan.radiator.rpm",
+      "format": "0' RPM'",
+      "style": {
+        "fontSize": 23,
+        "color": "#F7FBFF",
+        "fontFamily": "Bahnschrift",
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "aio-label",
+      "type": "text",
+      "x": 65,
+      "y": 319,
+      "width": 185,
+      "height": 17,
+      "z": 12,
+      "format": "360 AIO / RADIATOR",
+      "style": {
+        "fontSize": 11,
+        "color": "#D2E4F8",
+        "fontFamily": "Consolas",
+        "fontWeight": "normal"
+      }
+    },
+    {
+      "id": "white-base",
+      "type": "image",
+      "x": 18,
+      "y": 373,
+      "width": 207,
+      "height": 103.5,
+      "z": 10,
+      "asset": "assets/white-base-wordmark.png"
+    },
+    {
+      "id": "gpu-thermometer",
+      "type": "image",
+      "x": 240,
+      "y": 376,
+      "width": 30,
+      "height": 88,
+      "z": 10,
+      "asset": "assets/thermometer.png"
+    },
+    {
+      "id": "gpu-temperature",
+      "type": "metric",
+      "x": 276,
+      "y": 371,
+      "width": 112,
+      "height": 64,
+      "z": 20,
+      "binding": "gpu.core.temp",
+      "format": "0",
+      "style": {
+        "fontSize": 59,
+        "color": "#40F45A",
+        "fontFamily": "Bahnschrift",
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "gpu-temp-label",
+      "type": "text",
+      "x": 391,
+      "y": 384,
+      "width": 66,
+      "height": 37,
+      "z": 12,
+      "format": "GPU\nTEMP °C",
+      "style": {
+        "fontSize": 13,
+        "color": "#FFF335",
+        "fontFamily": "Arial Narrow",
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "gpu-fan-icon",
+      "type": "image",
+      "x": 278,
+      "y": 440,
+      "width": 20,
+      "height": 20,
+      "z": 10,
+      "asset": "assets/fan.png"
+    },
+    {
+      "id": "gpu-fan",
+      "type": "metric",
+      "x": 305,
+      "y": 429,
+      "width": 152,
+      "height": 39,
+      "z": 20,
+      "binding": "gpu.fan.rpm",
+      "format": "0' RPM'",
+      "style": {
+        "fontSize": 23,
+        "color": "#F7FBFF",
+        "fontFamily": "Bahnschrift",
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "hero-small",
+      "type": "text",
+      "x": 30,
+      "y": 526,
+      "width": 406,
+      "height": 22,
+      "z": 12,
+      "format": "RX SERIES  /  FEDERATION TYPE",
+      "style": {
+        "fontSize": 15,
+        "color": "#F7FBFF",
+        "fontFamily": "Consolas",
+        "fontWeight": "normal"
+      }
+    },
+    {
+      "id": "hero-type",
+      "type": "text",
+      "x": 16,
+      "y": 549,
+      "width": 436,
+      "height": 142,
+      "z": 3,
+      "format": "RX-78-2",
+      "style": {
+        "fontSize": 125,
+        "color": "#F7FBFF",
+        "fontFamily": "Impact",
+        "fontWeight": "normal"
+      }
+    },
+    {
+      "id": "gundam-front",
+      "type": "image",
+      "x": 8,
+      "y": 625,
+      "width": 446,
+      "height": 390,
+      "z": 8,
+      "asset": "assets/rx78-front-detailed.png"
+    },
+    {
+      "id": "memory-label",
+      "type": "text",
+      "x": 30,
+      "y": 1024,
+      "width": 212,
+      "height": 25,
+      "z": 12,
+      "format": "MEMORY / RAM",
+      "style": {
+        "fontSize": 20,
+        "color": "#F7FBFF",
+        "fontFamily": "Arial Narrow",
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "memory",
+      "type": "metric",
+      "x": 28,
+      "y": 1052,
+      "width": 212,
+      "height": 78,
+      "z": 20,
+      "binding": "memory.load",
+      "format": "0'%'",
+      "style": {
+        "fontSize": 72,
+        "color": "#FFF335",
+        "fontFamily": "Bahnschrift",
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "memory-level",
+      "type": "bar",
+      "x": 30,
+      "y": 1142,
+      "width": 194,
+      "height": 8,
+      "z": 8,
+      "binding": "memory.load",
+      "style": {
+        "min": 0,
+        "max": 100,
+        "radius": 0,
+        "color": "#FFF335",
+        "trackColor": "#6296DA"
+      }
+    },
+    {
+      "id": "vertical-rx78-mark",
+      "type": "image",
+      "x": 262,
+      "y": 1138,
+      "width": 174,
+      "height": 330,
+      "z": 10,
+      "asset": "assets/vertical-rx78-mark.png"
+    },
+    {
+      "id": "vram-label",
+      "type": "text",
+      "x": 252,
+      "y": 1830,
+      "width": 191,
+      "height": 24,
+      "z": 12,
+      "format": "VRAM USED",
+      "style": {
+        "fontSize": 18,
+        "color": "#D2E4F8",
+        "fontFamily": "Consolas",
+        "fontWeight": "normal"
+      }
+    },
+    {
+      "id": "vram",
+      "type": "metric",
+      "x": 250,
+      "y": 1858,
+      "width": 194,
+      "height": 52,
+      "z": 20,
+      "binding": "gpu.memory.used.mb",
+      "format": "0.0' GB'",
+      "style": {
+        "fontSize": 44,
+        "color": "#F7FBFF",
+        "fontFamily": "Bahnschrift",
+        "fontWeight": "bold",
+        "valueScale": 0.0009765625
+      }
+    },
+    {
+      "id": "fps-label",
+      "type": "text",
+      "x": 265,
+      "y": 1028,
+      "width": 179,
+      "height": 25,
+      "z": 12,
+      "format": "FRAME RATE",
+      "style": {
+        "fontSize": 20,
+        "color": "#D2E4F8",
+        "fontFamily": "Arial Narrow",
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "fps",
+      "type": "metric",
+      "x": 262,
+      "y": 1054,
+      "width": 142,
+      "height": 75,
+      "z": 20,
+      "binding": "game.fps",
+      "format": "0",
+      "style": {
+        "fontSize": 64,
+        "color": "#F7FBFF",
+        "fontFamily": "Bahnschrift",
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "fps-unit",
+      "type": "text",
+      "x": 394,
+      "y": 1110,
+      "width": 52,
+      "height": 24,
+      "z": 12,
+      "format": "FPS",
+      "style": {
+        "fontSize": 17,
+        "color": "#FFF335",
+        "fontFamily": "Consolas",
+        "fontWeight": "normal"
+      }
+    },
+    {
+      "id": "session-energy-label",
+      "type": "text",
+      "x": 32,
+      "y": 1450,
+      "width": 204,
+      "height": 26,
+      "z": 12,
+      "format": "本次用电",
+      "style": {
+        "fontSize": 20,
+        "color": "#D2E4F8",
+        "fontFamily": "Microsoft YaHei UI",
+        "fontWeight": "normal"
+      }
+    },
+    {
+      "id": "session-energy",
+      "type": "metric",
+      "x": 28,
+      "y": 1480,
+      "width": 208,
+      "height": 76,
+      "z": 20,
+      "binding": "power.session.wh",
+      "format": "0.000''",
+      "style": {
+        "fontSize": 64,
+        "color": "#FFF335",
+        "fontFamily": "RX78 Readout",
+        "fontWeight": "bold",
+        "valueScale": 0.001
+      }
+    },
+    {
+      "id": "power-label",
+      "type": "text",
+      "x": 32,
+      "y": 1560,
+      "width": 204,
+      "height": 23,
+      "z": 12,
+      "format": "SYSTEM / EST.",
+      "style": {
+        "fontSize": 17,
+        "color": "#D2E4F8",
+        "fontFamily": "Consolas",
+        "fontWeight": "normal"
+      }
+    },
+    {
+      "id": "power",
+      "type": "metric",
+      "x": 28,
+      "y": 1589,
+      "width": 208,
+      "height": 76,
+      "z": 20,
+      "binding": "power.system.estimated.w",
+      "format": "0'W'",
+      "style": {
+        "fontSize": 64,
+        "color": "#F7FBFF",
+        "fontFamily": "RX78 Readout",
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "down-label",
+      "type": "text",
+      "x": 30,
+      "y": 1733,
+      "width": 200,
+      "height": 24,
+      "z": 12,
+      "format": "DOWNLINK",
+      "style": {
+        "fontSize": 18,
+        "color": "#D2E4F8",
+        "fontFamily": "Consolas",
+        "fontWeight": "normal"
+      }
+    },
+    {
+      "id": "down",
+      "type": "metric",
+      "x": 28,
+      "y": 1763,
+      "width": 218,
+      "height": 44,
+      "z": 20,
+      "binding": "network.down.bps",
+      "format": "rate",
+      "style": {
+        "fontSize": 29,
+        "color": "#F7FBFF",
+        "fontFamily": "Bahnschrift",
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "up-label",
+      "type": "text",
+      "x": 252,
+      "y": 1733,
+      "width": 191,
+      "height": 24,
+      "z": 12,
+      "format": "UPLINK",
+      "style": {
+        "fontSize": 18,
+        "color": "#D2E4F8",
+        "fontFamily": "Consolas",
+        "fontWeight": "normal"
+      }
+    },
+    {
+      "id": "up",
+      "type": "metric",
+      "x": 250,
+      "y": 1763,
+      "width": 196,
+      "height": 44,
+      "z": 20,
+      "binding": "network.up.bps",
+      "format": "rate",
+      "style": {
+        "fontSize": 29,
+        "color": "#FFF335",
+        "fontFamily": "Bahnschrift",
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "data-mark-0",
+      "type": "rect",
+      "x": 34,
+      "y": 1688,
+      "width": 9,
+      "height": 3,
+      "z": 2,
+      "style": {
+        "color": "#81AFE4"
+      }
+    },
+    {
+      "id": "data-mark-1",
+      "type": "rect",
+      "x": 53,
+      "y": 1688,
+      "width": 9,
+      "height": 3,
+      "z": 2,
+      "style": {
+        "color": "#81AFE4"
+      }
+    },
+    {
+      "id": "data-mark-2",
+      "type": "rect",
+      "x": 72,
+      "y": 1688,
+      "width": 9,
+      "height": 3,
+      "z": 2,
+      "style": {
+        "color": "#81AFE4"
+      }
+    },
+    {
+      "id": "data-mark-3",
+      "type": "rect",
+      "x": 91,
+      "y": 1688,
+      "width": 9,
+      "height": 3,
+      "z": 2,
+      "style": {
+        "color": "#81AFE4"
+      }
+    },
+    {
+      "id": "data-mark-4",
+      "type": "rect",
+      "x": 110,
+      "y": 1688,
+      "width": 9,
+      "height": 3,
+      "z": 2,
+      "style": {
+        "color": "#81AFE4"
+      }
+    },
+    {
+      "id": "data-mark-5",
+      "type": "rect",
+      "x": 129,
+      "y": 1688,
+      "width": 9,
+      "height": 3,
+      "z": 2,
+      "style": {
+        "color": "#81AFE4"
+      }
+    },
+    {
+      "id": "data-mark-6",
+      "type": "rect",
+      "x": 148,
+      "y": 1688,
+      "width": 9,
+      "height": 3,
+      "z": 2,
+      "style": {
+        "color": "#81AFE4"
+      }
+    },
+    {
+      "id": "data-mark-7",
+      "type": "rect",
+      "x": 167,
+      "y": 1688,
+      "width": 9,
+      "height": 3,
+      "z": 2,
+      "style": {
+        "color": "#81AFE4"
+      }
+    },
+    {
+      "id": "data-mark-8",
+      "type": "rect",
+      "x": 186,
+      "y": 1688,
+      "width": 9,
+      "height": 3,
+      "z": 2,
+      "style": {
+        "color": "#81AFE4"
+      }
+    },
+    {
+      "id": "footer-art",
+      "type": "text",
+      "x": 28,
+      "y": 1849,
+      "width": 205,
+      "height": 49,
+      "z": 12,
+      "format": "E.F.S.F.",
+      "style": {
+        "fontSize": 44,
+        "color": "#10253E",
+        "fontFamily": "Impact",
+        "fontWeight": "normal"
+      }
+    },
+    {
+      "id": "footer-caption",
+      "type": "text",
+      "x": 32,
+      "y": 1901,
+      "width": 405,
+      "height": 14,
+      "z": 12,
+      "format": "EARTH FEDERATION SPACE FORCE",
+      "style": {
+        "fontSize": 10,
+        "color": "#F7FBFF",
+        "fontFamily": "Bahnschrift",
+        "fontWeight": "bold"
+      }
+    }
+  ]
+}

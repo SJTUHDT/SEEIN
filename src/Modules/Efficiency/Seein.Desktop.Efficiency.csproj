@@ -1,0 +1,1 @@
+<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><UseWPF>true</UseWPF><UseWindowsForms>true</UseWindowsForms></PropertyGroup><ItemGroup><ProjectReference Include="../../Seein.Desktop.Tools/Seein.Desktop.Tools.csproj"/></ItemGroup></Project>

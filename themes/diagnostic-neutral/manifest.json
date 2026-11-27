@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "1.0",
+  "id": "diagnostic-neutral",
+  "name": "中性诊断",
+  "author": "Seein",
+  "canvas": { "width": 1920, "height": 462 },
+  "orientation": "landscape",
+  "frameRate": 6,
+  "jpegQuality": 88,
+  "backgroundColor": "#0B0E14",
+  "layers": [
+    { "id": "title", "type": "text", "x": 42, "y": 24, "width": 700, "height": 40, "z": 1, "format": "SYSTEM DIAGNOSTICS", "style": { "fontSize": 25, "color": "#EAF0F7" } },
+    { "id": "clock", "type": "text", "x": 1530, "y": 24, "width": 340, "height": 40, "z": 1, "format": "SEEIN PANEL", "style": { "fontSize": 22, "color": "#768194" } },
+
+    { "id": "cpu-label", "type": "text", "x": 42, "y": 102, "width": 230, "height": 34, "z": 2, "format": "CPU", "style": { "fontSize": 22, "color": "#8290A6" } },
+    { "id": "cpu-temp", "type": "metric", "x": 42, "y": 138, "width": 240, "height": 78, "z": 2, "binding": "cpu.package.temp", "format": "0'°C'", "style": { "fontSize": 58, "color": "#F4F7FB" } },
+    { "id": "cpu-load-ring", "type": "ring", "x": 282, "y": 105, "width": 118, "height": 118, "z": 2, "binding": "cpu.total.load", "style": { "min": 0, "max": 100, "strokeWidth": 10, "color": "#40D2BE", "trackColor": "#27303C" } },
+    { "id": "cpu-load-label", "type": "metric", "x": 304, "y": 144, "width": 90, "height": 44, "z": 3, "binding": "cpu.total.load", "format": "0'%'", "style": { "fontSize": 25, "color": "#DDE5EE" } },
+    { "id": "cpu-power-label", "type": "text", "x": 42, "y": 244, "width": 180, "height": 28, "z": 2, "format": "PACKAGE POWER", "style": { "fontSize": 16, "color": "#687487" } },
+    { "id": "cpu-power", "type": "metric", "x": 42, "y": 274, "width": 180, "height": 42, "z": 2, "binding": "cpu.package.power", "format": "0' W'", "style": { "fontSize": 30, "color": "#F4F7FB" } },
+    { "id": "cpu-history", "type": "sparkline", "x": 42, "y": 342, "width": 358, "height": 76, "z": 2, "binding": "cpu.package.temp", "style": { "min": 25, "max": 100, "strokeWidth": 3, "color": "#40D2BE" } },
+
+    { "id": "gpu-label", "type": "text", "x": 468, "y": 102, "width": 230, "height": 34, "z": 2, "format": "GPU", "style": { "fontSize": 22, "color": "#8290A6" } },
+    { "id": "gpu-temp", "type": "metric", "x": 468, "y": 138, "width": 240, "height": 78, "z": 2, "binding": "gpu.core.temp", "format": "0'°C'", "style": { "fontSize": 58, "color": "#F4F7FB" } },
+    { "id": "gpu-load-ring", "type": "ring", "x": 708, "y": 105, "width": 118, "height": 118, "z": 2, "binding": "gpu.core.load", "style": { "min": 0, "max": 100, "strokeWidth": 10, "color": "#619BFF", "trackColor": "#27303C" } },
+    { "id": "gpu-load-label", "type": "metric", "x": 730, "y": 144, "width": 90, "height": 44, "z": 3, "binding": "gpu.core.load", "format": "0'%'", "style": { "fontSize": 25, "color": "#DDE5EE" } },
+    { "id": "gpu-power-label", "type": "text", "x": 468, "y": 244, "width": 180, "height": 28, "z": 2, "format": "BOARD POWER", "style": { "fontSize": 16, "color": "#687487" } },
+    { "id": "gpu-power", "type": "metric", "x": 468, "y": 274, "width": 180, "height": 42, "z": 2, "binding": "gpu.board.power", "format": "0' W'", "style": { "fontSize": 30, "color": "#F4F7FB" } },
+    { "id": "gpu-history", "type": "sparkline", "x": 468, "y": 342, "width": 358, "height": 76, "z": 2, "binding": "gpu.core.temp", "style": { "min": 25, "max": 100, "strokeWidth": 3, "color": "#619BFF" } },
+
+    { "id": "power-title", "type": "text", "x": 906, "y": 102, "width": 340, "height": 34, "z": 2, "format": "估算整机功耗", "style": { "fontSize": 22, "color": "#8290A6" } },
+    { "id": "system-power", "type": "metric", "x": 906, "y": 142, "width": 330, "height": 78, "z": 2, "binding": "power.system.estimated.w", "format": "0' W'", "style": { "fontSize": 58, "color": "#FFCB6B" } },
+    { "id": "session-energy-label", "type": "text", "x": 906, "y": 244, "width": 180, "height": 28, "z": 2, "format": "本次开机", "style": { "fontSize": 16, "color": "#687487" } },
+    { "id": "session-energy", "type": "metric", "x": 906, "y": 274, "width": 260, "height": 42, "z": 2, "binding": "power.session.wh", "format": "0.0' Wh'", "style": { "fontSize": 30, "color": "#F4F7FB" } },
+    { "id": "today-energy-label", "type": "text", "x": 906, "y": 342, "width": 180, "height": 28, "z": 2, "format": "今日累计", "style": { "fontSize": 16, "color": "#687487" } },
+    { "id": "today-energy", "type": "metric", "x": 906, "y": 372, "width": 300, "height": 42, "z": 2, "binding": "power.today.wh", "format": "0.0' Wh'", "style": { "fontSize": 30, "color": "#F4F7FB" } },
+
+    { "id": "memory-label", "type": "text", "x": 1300, "y": 102, "width": 240, "height": 30, "z": 2, "format": "MEMORY", "style": { "fontSize": 18, "color": "#8290A6" } },
+    { "id": "memory-value", "type": "metric", "x": 1300, "y": 136, "width": 180, "height": 42, "z": 2, "binding": "memory.load", "format": "0'%'", "style": { "fontSize": 31, "color": "#F4F7FB" } },
+    { "id": "memory-bar", "type": "bar", "x": 1300, "y": 188, "width": 244, "height": 12, "z": 2, "binding": "memory.load", "style": { "min": 0, "max": 100, "radius": 6, "color": "#B37CFF", "trackColor": "#27303C" } },
+    { "id": "fps-label", "type": "text", "x": 1615, "y": 102, "width": 240, "height": 30, "z": 2, "format": "PRESENTMON FPS", "style": { "fontSize": 18, "color": "#8290A6" } },
+    { "id": "fps-value", "type": "metric", "x": 1615, "y": 136, "width": 240, "height": 54, "z": 2, "binding": "game.fps", "format": "0' FPS'", "style": { "fontSize": 38, "color": "#F4F7FB" } },
+    { "id": "network-label", "type": "text", "x": 1300, "y": 248, "width": 500, "height": 30, "z": 2, "format": "NETWORK  ·  BYTES / SEC", "style": { "fontSize": 18, "color": "#8290A6" } },
+    { "id": "network-down-label", "type": "text", "x": 1300, "y": 292, "width": 55, "height": 32, "z": 2, "format": "DOWN", "style": { "fontSize": 14, "color": "#687487" } },
+    { "id": "network-down", "type": "metric", "x": 1370, "y": 282, "width": 240, "height": 44, "z": 2, "binding": "network.down.bps", "format": "0' B/s'", "style": { "fontSize": 25, "color": "#40D2BE" } },
+    { "id": "network-up-label", "type": "text", "x": 1300, "y": 350, "width": 55, "height": 32, "z": 2, "format": "UP", "style": { "fontSize": 14, "color": "#687487" } },
+    { "id": "network-up", "type": "metric", "x": 1370, "y": 340, "width": 240, "height": 44, "z": 2, "binding": "network.up.bps", "format": "0' B/s'", "style": { "fontSize": 25, "color": "#619BFF" } }
+  ]
+}
+

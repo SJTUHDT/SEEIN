@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AssemblyName>seepet</AssemblyName>
+    <AssemblyTitle>seepet</AssemblyTitle>
+    <FileDescription>seepet · SEEIN 桌宠</FileDescription>
+    <StartupObject>Seein.PetHost.Program</StartupObject>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- WPF owns the message loop; its PerMonitorV2 manifest must precede WinForms Screen usage. -->
+    <NoWarn>$(NoWarn);WFAC010</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Seein.Pet/Seein.Pet.csproj" />
+    <ProjectReference Include="../Seein.Core/Seein.Core.csproj" />
+    <PackageReference Include="FFmpeg.AutoGen" Version="8.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="../Seein.Tray/Styles/Controls.xaml" Link="Styles/Controls.xaml" />
+    <Page Include="../Seein.Tray/Styles/Theme.Light.xaml" Link="Styles/Theme.Light.xaml" />
+    <Page Include="../Seein.Tray/Styles/Theme.Dark.xaml" Link="Styles/Theme.Dark.xaml" />
+  </ItemGroup>
+<ItemGroup><PackageReference Include="SkiaSharp" Version="4.153.1"/><PackageReference Include="SkiaSharp.NativeAssets.Win32" Version="4.153.1"/></ItemGroup></Project>

@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><IsPackable>false</IsPackable><IsTestProject>true</IsTestProject></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Seein.Core\Seein.Core.csproj" />
+    <ProjectReference Include="..\..\src\Seein.Service\Seein.Service.csproj" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2"><PrivateAssets>all</PrivateAssets><IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets></PackageReference>
+  </ItemGroup>
+  <ItemGroup><Using Include="Xunit" /></ItemGroup>
+  <ItemGroup><Compile Include="../../src/Seein.Desktop.Tools/Services/ToolShortcutCatalog.cs" Link="ToolShortcutCatalog.cs" /></ItemGroup>
+  <ItemGroup><Compile Include="..\..\src\Modules\Devices\Desktop\Services\LampShortcutController.cs" Link="LampShortcutController.cs" /></ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Seein.Pet\Seein.Pet.csproj" />
+    <ProjectReference Include="..\..\src\Seein.SmartHome\Seein.SmartHome.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/Modules/Display/Seein.Modules.Display.csproj"/>
+    <ProjectReference Include="../../src/Modules/Applications/Seein.Modules.Applications.csproj"/>
+    <ProjectReference Include="../../src/Modules/Devices/Seein.Modules.Devices.csproj"/>
+    <ProjectReference Include="../../src/Modules/Companion/Seein.Modules.Companion.csproj"/>
+  </ItemGroup>
+
+
+</Project>

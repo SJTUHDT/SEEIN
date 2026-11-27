@@ -1,0 +1,7 @@
+name: 功能或兼容性建议
+description: 说明使用场景与目标设备
+body:
+  - type: textarea
+    id: request
+    attributes: {label: 使用场景、设备型号和期望行为}
+    validations: {required: true}

@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>WinExe</OutputType><UseWPF>true</UseWPF><AssemblyName>Seein.SearchSites.Preview</AssemblyName></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/Seein.Desktop.Tools/Seein.Desktop.Tools.csproj"/>
+    <ProjectReference Include="../../src/Modules/Applications/Desktop/Seein.Desktop.Applications.csproj"/>
+    <ProjectReference Include="../../src/Modules/Devices/Desktop/Seein.Desktop.Devices.csproj"/>
+    <Content Include="../../src/Seein.Tray/Styles/Controls.xaml" Link="Styles/Controls.xaml" CopyToOutputDirectory="PreserveNewest"/>
+    <Content Include="../../src/Seein.Tray/Styles/Theme.Light.xaml" Link="Styles/Theme.Light.xaml" CopyToOutputDirectory="PreserveNewest"/>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,17 @@
+name: 故障反馈
+description: 报告可复现的问题，请勿附带凭据或个人数据库
+body:
+  - type: input
+    id: version
+    attributes: {label: SEEIN 与插件版本}
+    validations: {required: true}
+  - type: input
+    id: environment
+    attributes: {label: Windows 版本和设备型号}
+  - type: textarea
+    id: steps
+    attributes: {label: 复现步骤、预期与实际结果}
+    validations: {required: true}
+  - type: textarea
+    id: evidence
+    attributes: {label: 已脱敏的截图或日志摘录}

@@ -1,0 +1,1216 @@
+diff --git a/cmake/SnowShotMini.cmake b/cmake/SnowShotMini.cmake
+index 4573935..301e5e5 100644
+--- a/cmake/SnowShotMini.cmake
++++ b/cmake/SnowShotMini.cmake
+@@ -6,7 +6,11 @@ add_library(snow_shot_edition_full INTERFACE)
+ target_compile_definitions(snow_shot_edition_full INTERFACE SNOW_SHOT_EDITION_MINI=0)
+ foreach(_feature IN ITEMS QR_RECOGNITION TABLE_RECOGNITION IMAGE_CONVERSION
+         LATEX_RECOGNITION DOCUMENT_RECOGNITION TEXT_TRANSLATION API_CONFIGURATION EXTENDED_FEATURES)
+-    target_compile_definitions(snow_shot_edition_full INTERFACE SNOW_SHOT_ENABLE_${_feature}=1)
++    if(_feature STREQUAL "TEXT_TRANSLATION" OR _feature STREQUAL "API_CONFIGURATION")
++        target_compile_definitions(snow_shot_edition_full INTERFACE SNOW_SHOT_ENABLE_${_feature}=1)
++    else()
++        target_compile_definitions(snow_shot_edition_full INTERFACE SNOW_SHOT_ENABLE_${_feature}=0)
++    endif()
+ endforeach()
+ 
+ set(_snow_mini_libraries
+diff --git a/cmake/SnowWindowsArchitecture.cmake b/cmake/SnowWindowsArchitecture.cmake
+index 4bfa4ca..2d54829 100644
+--- a/cmake/SnowWindowsArchitecture.cmake
++++ b/cmake/SnowWindowsArchitecture.cmake
+@@ -39,7 +39,8 @@ function(snow_configure_windows_architecture)
+         message(FATAL_ERROR "Snow Shot requires a 64-bit Windows compiler")
+     endif()
+     if(VCPKG_TARGET_TRIPLET)
+-        if(NOT VCPKG_TARGET_TRIPLET MATCHES "^(x64|arm64)-windows(-.*)?$")
++        string(REGEX REPLACE "^seein-" "" _architecture_triplet "${VCPKG_TARGET_TRIPLET}")
++        if(NOT _architecture_triplet MATCHES "^(x64|arm64)-windows(-.*)?$")
+             message(FATAL_ERROR "Unsupported Windows vcpkg target triplet: ${VCPKG_TARGET_TRIPLET}")
+         endif()
+         if(NOT CMAKE_MATCH_1 STREQUAL _detected)
+diff --git a/cmake/vcpkg-overlay-ports/crashpad/portfile.cmake b/cmake/vcpkg-overlay-ports/crashpad/portfile.cmake
+index bd8d10f..e7fce84 100644
+--- a/cmake/vcpkg-overlay-ports/crashpad/portfile.cmake
++++ b/cmake/vcpkg-overlay-ports/crashpad/portfile.cmake
+@@ -4,9 +4,10 @@
+ set(_snow_upstream "${VCPKG_ROOT_DIR}/ports/crashpad")
+ # Snow's Windows executables and OCR runtime use the static CRT.
+ if(VCPKG_TARGET_IS_WINDOWS)
+-    set(VCPKG_CRT_LINKAGE static)
++    # Respect the selected triplet CRT; SEEIN uses dynamic Qt and dynamic CRT.
+ endif()
+ file(READ "${_snow_upstream}/portfile.cmake" _snow_port)
++string(REPLACE "https://chromium.googlesource.com/chromium/mini_chromium" "https://github.com/chromium/mini_chromium.git" _snow_port "${_snow_port}")
+ string(REPLACE "z;zlib;zlibd" "z;zlib;zlibd;zlibstatic;zlibstaticd" _snow_port "${_snow_port}")
+ foreach(_snow_patch fix-linux.patch fix-lib-name-conflict.patch crashpad-memset-errors-5758170.diff
+         fix-std-20.patch ndk-toolchain.diff fix-lib-name-conflict-1.patch)
+@@ -27,12 +28,21 @@ if(VCPKG_TARGET_IS_OSX)
+ endif()
+ 
+ set(_snow_escape [=[
++    if(VCPKG_CRT_LINKAGE STREQUAL "dynamic")
++        set(_snow_release_crt "/MD")
++        set(_snow_debug_crt "/MDd")
++    else()
++        set(_snow_release_crt "/MT")
++        set(_snow_debug_crt "/MTd")
++    endif()
++    foreach(_snow_language C CXX)
++        string(APPEND VCPKG_COMBINED_${_snow_language}_FLAGS_RELEASE " ${_snow_release_crt}")
++        string(APPEND VCPKG_COMBINED_${_snow_language}_FLAGS_DEBUG " ${_snow_debug_crt}")
++    endforeach()
+     foreach(_snow_flags VCPKG_COMBINED_C_FLAGS_DEBUG VCPKG_COMBINED_CXX_FLAGS_DEBUG
+             VCPKG_COMBINED_C_FLAGS_RELEASE VCPKG_COMBINED_CXX_FLAGS_RELEASE
+             VCPKG_COMBINED_SHARED_LINKER_FLAGS_DEBUG VCPKG_COMBINED_SHARED_LINKER_FLAGS_RELEASE
+             VCPKG_COMBINED_STATIC_LINKER_FLAGS_DEBUG VCPKG_COMBINED_STATIC_LINKER_FLAGS_RELEASE)
+-        string(REPLACE "-MD" "-MT" ${_snow_flags} "${${_snow_flags}}")
+-        string(REPLACE "/MD" "/MT" ${_snow_flags} "${${_snow_flags}}")
+         string(REGEX REPLACE "[-/]GL([ ;]|$)" "/GL-\\1" ${_snow_flags} "${${_snow_flags}}")
+         string(REPLACE "\\" "\\\\" ${_snow_flags} "${${_snow_flags}}")
+         string(REPLACE "\"" "\\\"" ${_snow_flags} "${${_snow_flags}}")
+@@ -70,6 +80,22 @@ vcpkg_replace_string("${SOURCE_PATH}/third_party/mini_chromium/mini_chromium/bui
+       if tools_version:
+         args.append('-vcvars_ver=' + tools_version)
+     args.extend(('&&', 'set'))]==])
++vcpkg_replace_string("${SOURCE_PATH}/third_party/mini_chromium/mini_chromium/build/win_helper.py"
++    "  def ExecGetVisualStudioData(self, outdir, toolchain_path):"
++    [==[  def ExecGetVisualStudioData(self, outdir, toolchain_path):
++    if os.environ.get('SEEIN_PORTABLE_MSVC'):
++      names = ('INCLUDE','LIB','LIBPATH','PATH','PATHEXT','SYSTEMROOT','TEMP','TMP')
++      env = {k: os.environ[k] for k in names if k in os.environ}
++      env['CL'] = '/utf-8'
++      for arch in ('x86','amd64','arm64'):
++        with open(os.path.join(outdir, 'environment.' + arch), 'wb') as f:
++          f.write(_FormatAsEnvironmentBlock(env).encode('utf-8'))
++      print('install_dir = "' + os.environ['VCToolsInstallDir'].replace('\\','/').rstrip('/') + '"')
++      print('x86_environment_file = "environment.x86"')
++      print('x64_environment_file = "environment.amd64"')
++      print('arm64_environment_file = "environment.arm64"')
++      return 0
++]==])
+ ]=])
+ string(REPLACE "vcpkg_gn_configure(" "${_snow_build_tools}\nvcpkg_gn_configure("
+     _snow_port "${_snow_port}")
+diff --git a/cmake/vcpkg-overlay-ports/minizip-ng/portfile.cmake b/cmake/vcpkg-overlay-ports/minizip-ng/portfile.cmake
+index 9f7f083..a13f6d2 100644
+--- a/cmake/vcpkg-overlay-ports/minizip-ng/portfile.cmake
++++ b/cmake/vcpkg-overlay-ports/minizip-ng/portfile.cmake
+@@ -2,7 +2,7 @@ if(VCPKG_TARGET_IS_WINDOWS)
+     vcpkg_check_linkage(ONLY_STATIC_LIBRARY)
+     # Snow Shot links the static Qt kit and therefore uses the static CRT even
+     # in its debug preset. minizip is linked into that executable directly.
+-    set(VCPKG_CRT_LINKAGE static)
++    # Respect the selected triplet CRT; SEEIN uses dynamic Qt and dynamic CRT.
+ endif()
+ 
+ vcpkg_from_github(
+diff --git a/cmake/vcpkg-overlay-ports/opencv4/portfile.cmake b/cmake/vcpkg-overlay-ports/opencv4/portfile.cmake
+index bfd06bd..62213c3 100644
+--- a/cmake/vcpkg-overlay-ports/opencv4/portfile.cmake
++++ b/cmake/vcpkg-overlay-ports/opencv4/portfile.cmake
+@@ -6,7 +6,7 @@ if(VCPKG_TARGET_IS_WINDOWS)
+     # in its debug preset. OpenCV is linked into that executable directly, so
+     # the library must match the static CRT or every std::string/std::vector
+     # returned by the decoders would cross CRT heap boundaries.
+-    set(VCPKG_CRT_LINKAGE static)
++    # Respect the selected triplet CRT; SEEIN uses dynamic Qt and dynamic CRT.
+ endif()
+ 
+ # fix to get version from eigen after v3.4.0
+diff --git a/cmake/vcpkg-overlay-ports/x264/portfile.cmake b/cmake/vcpkg-overlay-ports/x264/portfile.cmake
+index 0d5e125..03e45f8 100644
+--- a/cmake/vcpkg-overlay-ports/x264/portfile.cmake
++++ b/cmake/vcpkg-overlay-ports/x264/portfile.cmake
+@@ -141,6 +141,7 @@ vcpkg_make_configure(
+         add_cross_prefix
+     OPTIONS
+         ${OPTIONS}
++        "--extra-cflags=-FS -utf-8"
+         --enable-pic
+         --disable-lavf
+         --disable-swscale
+diff --git a/snow-crates/crates/snow-recording-export/src/streaming.rs b/snow-crates/crates/snow-recording-export/src/streaming.rs
+index bed1328..3e5fa80 100644
+--- a/snow-crates/crates/snow-recording-export/src/streaming.rs
++++ b/snow-crates/crates/snow-recording-export/src/streaming.rs
+@@ -3124,10 +3124,12 @@ pub fn cleanup_stale_staging_files(directory: &Path) -> std::io::Result<usize> {
+ }
+ 
+ fn create_staging_path(final_path: &Path) -> std::io::Result<PathBuf> {
+-    let directory = final_path
++    let seein_staging = std::env::var_os("SEEIN_RECORDING_STAGING_DIRECTORY").filter(|value| !value.is_empty()).map(PathBuf::from);
++    let directory = seein_staging.as_deref().unwrap_or_else(|| final_path
+         .parent()
+         .filter(|path| !path.as_os_str().is_empty())
+-        .unwrap_or_else(|| Path::new("."));
++        .unwrap_or_else(|| Path::new(".")));
++    fs::create_dir_all(directory)?;
+     let extension = final_path
+         .extension()
+         .and_then(|value| value.to_str())
+@@ -3152,6 +3154,18 @@ fn create_staging_path(final_path: &Path) -> std::io::Result<PathBuf> {
+ }
+ 
+ fn publish_staging_file(staging_path: &Path, final_path: &Path) -> std::io::Result<()> {
++    if std::env::var_os("SEEIN_RECORDING_STAGING_DIRECTORY").is_some() {
++        let directory = final_path.parent().filter(|path| !path.as_os_str().is_empty()).unwrap_or_else(|| Path::new("."));
++        fs::create_dir_all(directory)?;
++        let mut published = tempfile::Builder::new().prefix(".seein-final-recording-").tempfile_in(directory)?;
++        let mut source = std::fs::File::open(staging_path)?;
++        std::io::copy(&mut source, published.as_file_mut())?;
++        published.as_file().sync_all()?;
++        published.persist(final_path).map_err(|failure| failure.error)?;
++        drop(source);
++        let _ = fs::remove_file(staging_path);
++        return Ok(());
++    }
+     // Both paths share a filesystem. Replacement is atomic, after cancellation's
+     // final commit; failure/cancel leaves the preceding destination intact.
+     // The encoder retains responsibility for failure recovery and staging cleanup.
+diff --git a/snow-crates/crates/snow-recording-runtime/src/deferred.rs b/snow-crates/crates/snow-recording-runtime/src/deferred.rs
+index bb5c2ba..7ee2ea2 100644
+--- a/snow-crates/crates/snow-recording-runtime/src/deferred.rs
++++ b/snow-crates/crates/snow-recording-runtime/src/deferred.rs
+@@ -421,7 +421,7 @@ fn run_recording(
+     capture_controls: DeferredCaptureControls,
+ ) -> Result<DeferredRecordingSource> {
+     let mut webcam_capture = crate::webcam::CaptureLease::new(&config);
+-    let parent = options.working_directory.unwrap_or_else(|| {
++    let parent = options.working_directory.or_else(|| std::env::var_os("SEEIN_RECORDING_STAGING_DIRECTORY").filter(|value| !value.is_empty()).map(PathBuf::from)).unwrap_or_else(|| {
+         config
+             .output_path
+             .parent()
+diff --git a/snow_shot/CMakeLists.txt b/snow_shot/CMakeLists.txt
+index 3c1a629..088f614 100644
+--- a/snow_shot/CMakeLists.txt
++++ b/snow_shot/CMakeLists.txt
+@@ -394,6 +394,15 @@ if(APPLE)
+         "CARGO_PROFILE_RELEASE_SPLIT_DEBUGINFO=packed"
+         "CARGO_PROFILE_RELEASE_FAST_SPLIT_DEBUGINFO=packed")
+ endif()
++set(SEEIN_OCR_RUNTIME "" CACHE FILEPATH "Pinned, manifest-verified official OCR runtime")
++if(SEEIN_OCR_RUNTIME)
++    if(NOT EXISTS "${SEEIN_OCR_RUNTIME}")
++        message(FATAL_ERROR "The pinned SEEIN OCR runtime is missing")
++    endif()
++    add_executable(snow_ocr_process IMPORTED GLOBAL)
++    set_target_properties(snow_ocr_process PROPERTIES IMPORTED_LOCATION "${SEEIN_OCR_RUNTIME}")
++    add_custom_target(snow_ocr_process_build)
++else()
+ snow_add_rust_executable(snow_ocr_process
+     PACKAGE snow-ocr-process
+     MANIFEST_DIR "${SNOW_SHOT_CAPTURE_CRATES_DIR}"
+@@ -404,6 +413,7 @@ snow_add_rust_executable(snow_ocr_process
+     FEATURES ${SNOW_SHOT_OCR_PROCESS_FEATURES}
+     ENVIRONMENT ${SNOW_SHOT_OCR_PROCESS_ENVIRONMENT}
+ )
++endif()
+ 
+ # The MCP bridge is deliberately a small standalone process.  It only speaks
+ # MCP over stdio and connects to an already running Snow Shot instance through
+@@ -708,7 +718,9 @@ if(NOT TARGET adqt::widgets)
+     add_subdirectory("${SNOW_SHOT_ADQT_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/ant_design_qt")
+ endif()
+ 
++set_source_files_properties(src/app/seeinsecret.cpp PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
+ set(SNOW_SHOT_STORAGE_SOURCES
++    src/app/seeinsecret.cpp
+     include/snow_shot/storage/preparedpngimage.h
+     include/snow_shot/storage/applicationstorage.h
+     include/snow_shot/storage/appstorageusage.h
+@@ -2227,6 +2239,10 @@ qt_add_executable(snow_shot
+     MANUAL_FINALIZATION
+     ${PROJECT_SOURCES}
+ )
++if(WIN32)
++    set_target_properties(snow_shot PROPERTIES OUTPUT_NAME seeshot)
++endif()
++target_sources(snow_shot PRIVATE src/app/seeinexternal.cpp)
+ snow_shot_link_macos_window_platform(snow_shot)
+ if(WIN32 AND SNOW_SHOT_DISTRIBUTION_CHANNEL STREQUAL "store")
+     add_dependencies(snow_shot snow_shot_explorer_command)
+@@ -2283,8 +2299,8 @@ target_compile_definitions(snow_shot PRIVATE
+ if(WIN32)
+     add_custom_command(TARGET snow_shot POST_BUILD
+         COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${SNOW_CRASHPAD_HANDLER}"
+-            "$<TARGET_FILE_DIR:snow_shot>/crashpad_handler.exe")
+-    install(PROGRAMS "${SNOW_CRASHPAD_HANDLER}" DESTINATION bin)
++            "$<TARGET_FILE_DIR:snow_shot>/seecrash.exe")
++    install(PROGRAMS "${SNOW_CRASHPAD_HANDLER}" DESTINATION bin RENAME seecrash.exe)
+ endif()
+ if(MSVC)
+     target_compile_options(snow_shot PRIVATE $<$<CONFIG:Release>:/Z7>)
+@@ -11798,6 +11814,8 @@ endif()
+ 
+ if(WIN32 AND NOT SNOW_SHOT_QT_STATIC)
+     set(_snow_shot_qt_deploy_arguments)
++    # SEEIN stages the pinned app-local CRT explicitly; no system installer is needed.
++    list(APPEND _snow_shot_qt_deploy_arguments NO_COMPILER_RUNTIME)
+     # The release staging policy keeps only the platform and Schannel TLS
+     # plugins. Snow Shot uses its project-owned resources and statically linked
+     # image codecs, so Qt's optional image, style, and generic plugins are not
+diff --git a/snow_shot/include/snow_shot/app/edition.h b/snow_shot/include/snow_shot/app/edition.h
+index bb5e0a5..ed6965d 100644
+--- a/snow_shot/include/snow_shot/app/edition.h
++++ b/snow_shot/include/snow_shot/app/edition.h
+@@ -55,6 +55,7 @@ inline constexpr bool extendedFeatures = SNOW_SHOT_ENABLE_EXTENDED_FEATURES != 0
+ }
+ [[nodiscard]] inline QString executableName() {
+ #ifdef Q_OS_WIN
++    if (!qEnvironmentVariableIsEmpty("SEEIN_TOOL_PIPE")) return QStringLiteral("seeshot.exe");
+     return applicationName() + QStringLiteral(".exe");
+ #else
+     return applicationName();
+@@ -68,6 +69,7 @@ inline constexpr bool extendedFeatures = SNOW_SHOT_ENABLE_EXTENDED_FEATURES != 0
+ }
+ [[nodiscard]] inline QString updaterName() {
+ #ifdef Q_OS_WIN
++    if (!qEnvironmentVariableIsEmpty("SEEIN_TOOL_PIPE")) return QStringLiteral("seeupdate.exe");
+     return productId() + QStringLiteral("-updater.exe");
+ #else
+     return productId() + QStringLiteral("-updater");
+diff --git a/snow_shot/include/snow_shot/app/editionfeatures.h b/snow_shot/include/snow_shot/app/editionfeatures.h
+index d331894..6e66984 100644
+--- a/snow_shot/include/snow_shot/app/editionfeatures.h
++++ b/snow_shot/include/snow_shot/app/editionfeatures.h
+@@ -4,9 +4,15 @@
+ #include "snow_shot/app/edition.h"
+ 
+ #include <QString>
++#include <QStringList>
+ 
+ namespace snow_shot::app {
+ [[nodiscard]] inline bool editionActionToolAvailable(const QString& id) {
++    const QStringList excluded{QStringLiteral("pin-to-screen"), QStringLiteral("pin-window-to-screen"),
++        QStringLiteral("image-stitching"), QStringLiteral("image-splitting"), QStringLiteral("image-compression"),
++        QStringLiteral("color-picker"), QStringLiteral("trim"), QStringLiteral("global-canvas"),
++        QStringLiteral("angle"), QStringLiteral("distance"), QStringLiteral("cloud-upload")};
++    if (excluded.contains(id)) return false;
+     if (id == QStringLiteral("pin-window-to-screen")) {
+ #if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+         return true;
+diff --git a/snow_shot/include/snow_shot/customaimodelconfiguration.h b/snow_shot/include/snow_shot/customaimodelconfiguration.h
+index 53c961f..8ef5c5d 100644
+--- a/snow_shot/include/snow_shot/customaimodelconfiguration.h
++++ b/snow_shot/include/snow_shot/customaimodelconfiguration.h
+@@ -2,6 +2,7 @@
+ #define SNOW_SHOT_CUSTOMAIMODELCONFIGURATION_H
+ 
+ #include <QCryptographicHash>
++#include "snow_shot/seeinsecret.h"
+ #include <QJsonDocument>
+ #include <QJsonArray>
+ #include <QJsonObject>
+@@ -75,7 +76,7 @@ inline QJsonArray customAiModelsToJson(const CustomAiModels& models) {
+         result.append(QJsonObject{{QStringLiteral("id"), model.id},
+                                   {QStringLiteral("name"), model.name},
+                                   {QStringLiteral("base_url"), model.baseUrl},
+-                                  {QStringLiteral("api_key"), model.apiKey},
++                                  {QStringLiteral("api_key"), seeinProtectSecret(model.apiKey)},
+                                   {QStringLiteral("model"), model.model},
+                                   {QStringLiteral("supports_vision"), model.supportsVision},
+                                   {QStringLiteral("supports_reasoning"), model.supportsReasoning},
+@@ -120,7 +121,7 @@ inline CustomAiModels customAiModelsFromJson(const QJsonValue& value, bool* vali
+             {object.value(QStringLiteral("id")).toString(),
+              object.value(QStringLiteral("name")).toString(),
+              object.value(QStringLiteral("base_url")).toString(),
+-             object.value(QStringLiteral("api_key")).toString(),
++             seeinUnprotectSecret(object.value(QStringLiteral("api_key")).toString()),
+              object.value(QStringLiteral("model")).toString(),
+              object.value(QStringLiteral("supports_vision")).toBool(), reasoning.toBool(false),
+              concurrency, provider.isUndefined() ? QStringLiteral("qwen") : provider.toString()});
+diff --git a/snow_shot/resources/windows-app-resource.rc.in b/snow_shot/resources/windows-app-resource.rc.in
+index 566a701..268c372 100644
+--- a/snow_shot/resources/windows-app-resource.rc.in
++++ b/snow_shot/resources/windows-app-resource.rc.in
+@@ -22,11 +22,11 @@ BEGIN
+         BLOCK "040904B0"
+         BEGIN
+             VALUE "CompanyName", "@SNOW_SHOT_VENDOR@\0"
+-            VALUE "FileDescription", "@SNOW_SHOT_PRODUCT_NAME@ screenshot utility\0"
++            VALUE "FileDescription", "seeshot - SEEIN screenshot and recording\0"
+             VALUE "FileVersion", "@PROJECT_VERSION@.0\0"
+             VALUE "InternalName", "@SNOW_SHOT_EXECUTABLE_NAME@\0"
+             VALUE "LegalCopyright", "@SNOW_SHOT_COPYRIGHT@\0"
+-            VALUE "OriginalFilename", "@SNOW_SHOT_EXECUTABLE_NAME@.exe\0"
++            VALUE "OriginalFilename", "seeshot.exe\0"
+             VALUE "ProductName", "@SNOW_SHOT_PRODUCT_NAME@\0"
+             VALUE "ProductVersion", "@SNOW_SHOT_VERSION@\0"
+         END
+diff --git a/snow_shot/rust/snow-shot-updater/build.rs b/snow_shot/rust/snow-shot-updater/build.rs
+index ec2869f..1235638 100644
+--- a/snow_shot/rust/snow-shot-updater/build.rs
++++ b/snow_shot/rust/snow-shot-updater/build.rs
+@@ -106,6 +106,12 @@ END
+     );
+     fs::write(&resource_path, contents).expect("failed to write updater resource file");
+     let mut resource = winres::WindowsResource::new();
++    if env::var_os("SEEIN_PORTABLE_MSVC").is_some() {
++        let sdk = PathBuf::from(env::var_os("WindowsSdkDir").expect("WindowsSdkDir"));
++        let version = env::var("WindowsSDKVersion").expect("WindowsSDKVersion");
++        let toolkit = sdk.join("bin").join(version.trim_matches(['\\', '/'])).join("x64");
++        resource.set_toolkit_path(toolkit.to_str().expect("SDK path"));
++    }
+     resource.set_resource_file(resource_path.to_str().expect("resource path must be UTF-8"));
+     resource
+         .compile()
+diff --git a/snow_shot/src/app/applicationcontroller.cpp b/snow_shot/src/app/applicationcontroller.cpp
+index f4c4eee..d856923 100644
+--- a/snow_shot/src/app/applicationcontroller.cpp
++++ b/snow_shot/src/app/applicationcontroller.cpp
+@@ -1,5 +1,6 @@
+ #include "snow_shot/app/edition.h"
+ #include "snow_shot/app/applicationcontroller.h"
++#include "snow_shot/storage/configurationschema.h"
+ #include "snow_shot/app/distribution.h"
+ #include "snow_shot/app/storeupdatelifecycle.h"
+ #include "snow_shot/app/shellimagelaunch.h"
+@@ -75,6 +76,14 @@
+ #include "widgets/message.h"
+ 
+ #include <QApplication>
++#include <QLocalServer>
++#include <QLocalSocket>
++#include <QJsonDocument>
++#include <QFileDialog>
++#include <QJsonArray>
++#include <QTimer>
++#include "snow_shot/presentation/settings/settingsruntimesession.h"
++#include "snow_shot/presentation/settings/settingsregistry.h"
+ #include <QEvent>
+ #include <QDir>
+ #include <QJsonArray>
+@@ -142,6 +151,7 @@ storage::PinnedWindowRepository* initializedPinnedWindowRepository() {
+ 
+ class ApplicationController::Impl {
+   public:
++#include "seein_bridge.inc"
+     enum class QuickActionOrigin { Other, GlobalShortcut };
+     enum class OwnedPause { None, Relocation, UpdateHandoff };
+ 
+@@ -1322,10 +1332,10 @@ class ApplicationController::Impl {
+                          &permissions, &presentation::AppPermissionService::refresh);
+         permissions.refresh();
+ #endif
+-        systemTray.show();
+-        globalShortcutManager.initialize();
++        if (!seeinMode()) systemTray.show();
++        if (!seeinMode()) globalShortcutManager.initialize();
+         globalMouseManager.setCaptureAvailable(ensureScreenshotController()->captureAvailable());
+-        globalMouseManager.initialize();
++        if (!seeinMode()) globalMouseManager.initialize();
+         QObject::connect(&app, &QGuiApplication::applicationStateChanged, &globalMouseManager,
+                          [this](Qt::ApplicationState state) {
+                              if (state == Qt::ApplicationActive) {
+@@ -1348,6 +1358,7 @@ class ApplicationController::Impl {
+     }
+ 
+     void finishStartup(std::function<void()> maintenance) {
++        if (seeinMode()) return;
+         deferredStartup.start({[this] { updates->start(); }, std::move(maintenance),
+                                [this] {
+                                    if (auto* controller = ensureScreenshotController())
+@@ -1899,7 +1910,7 @@ class ApplicationController::Impl {
+             showGeneralSettings();
+             break;
+         case presentation::GlobalShortcutAction::TranslateSelectedText:
+-#if SNOW_SHOT_ENABLE_TEXT_TRANSLATION
++#if SNOW_SHOT_ENABLE_TEXT_TRANSLATION && SNOW_SHOT_ENABLE_EXTENDED_FEATURES
+             if (storage::ExtendedFeaturesSettings().translationPageEnabled()) {
+                 ensureSelectedTextTranslationCoordinator().capture();
+             }
+@@ -2035,9 +2046,13 @@ class ApplicationController::Impl {
+                 selectedTextTranslationCoordinator.get(),
+                 &presentation::SelectedTextTranslationCoordinator::mainTranslationRequested, &q,
+                 [this](const QString& text) {
++#if SNOW_SHOT_ENABLE_EXTENDED_FEATURES
+                     if (storage::ExtendedFeaturesSettings().translationPageEnabled()) {
+                         ensureMainWindow().showTranslation(text);
+                     }
++#else
++                    Q_UNUSED(text);
++#endif
+                 });
+             QObject::connect(&app, &QCoreApplication::aboutToQuit,
+                              selectedTextTranslationCoordinator.get(),
+@@ -2071,12 +2086,14 @@ class ApplicationController::Impl {
+     }
+ 
+     void showMainWindow() {
++        if (seeinMode()) { openSeeinSettings(); return; }
+         if (storage::ApplicationStorage::instance().directoryChanging())
+             return;
+         ensureMainWindow().showAndActivate();
+     }
+ 
+     void restorePinnedWindows() {
++        if (seeinMode()) return;
+         static_cast<void>(actionGate.dispatch([this]() {
+             if (ScreenshotController* controller = ensureScreenshotController()) {
+                 controller->restorePinnedWindows();
+@@ -2108,6 +2125,7 @@ class ApplicationController::Impl {
+     }
+ 
+     void showGeneralSettings() {
++        if (seeinMode()) { openSeeinSettings(); return; }
+         ensureMainWindow().showGeneralSettings();
+     }
+ 
+@@ -2197,6 +2215,7 @@ ApplicationController::~ApplicationController() = default;
+ void ApplicationController::start(const QStringList& initialArguments,
+                                   std::function<void()> maintenance) {
+     m_impl->start(initialArguments, std::move(maintenance));
++    m_impl->startSeeinBridge();
+ }
+ 
+ void ApplicationController::showMainWindow() {
+diff --git a/snow_shot/src/app/main.cpp b/snow_shot/src/app/main.cpp
+index 26a2124..bc65f99 100644
+--- a/snow_shot/src/app/main.cpp
++++ b/snow_shot/src/app/main.cpp
+@@ -565,7 +565,7 @@ int main(int argc, char* argv[]) {
+         QDir(selectedStorage.executableDirectory).filePath(QStringLiteral("crashpad_handler"));
+ #else
+     diagnosticsOptions.handlerPath =
+-        QDir(selectedStorage.executableDirectory).filePath(QStringLiteral("crashpad_handler.exe"));
++        QDir(selectedStorage.executableDirectory).filePath(QStringLiteral("seecrash.exe"));
+ #endif
+     diagnosticsOptions.version = QStringLiteral(SNOW_DIAGNOSTICS_VERSION);
+     diagnosticsOptions.revision = QStringLiteral(SNOW_DIAGNOSTICS_REVISION);
+diff --git a/snow_shot/src/app/singleinstancecoordinator.cpp b/snow_shot/src/app/singleinstancecoordinator.cpp
+index d575c17..91d9d56 100644
+--- a/snow_shot/src/app/singleinstancecoordinator.cpp
++++ b/snow_shot/src/app/singleinstancecoordinator.cpp
+@@ -32,6 +32,7 @@ QString instanceIdentity() {
+                            QCoreApplication::applicationName();
+     if (distribution::isStoreManaged())
+         identityText += u'|' + distribution::installationIdentity();
++    identityText += u'|' + qEnvironmentVariable("SEEIN_TOOL_PIPE");
+     const QByteArray identity = identityText.toUtf8();
+     return QString::fromLatin1(
+         QCryptographicHash::hash(identity, QCryptographicHash::Sha256).toHex().left(24));
+diff --git a/snow_shot/src/platform/filemanager.cpp b/snow_shot/src/platform/filemanager.cpp
+index 3e5e5a4..2f254c4 100644
+--- a/snow_shot/src/platform/filemanager.cpp
++++ b/snow_shot/src/platform/filemanager.cpp
+@@ -1,3 +1,4 @@
++#include "snow_shot/seeinexternal.h"
+ #include "snow_shot/platform/filemanager.h"
+ #include "filemanagerbackend_p.h"
+ 
+@@ -36,7 +37,7 @@ bool revealInFileManager(const QString& path, const FileManagerLauncher& launche
+         }
+     }
+     const QUrl url = QUrl::fromLocalFile(directory);
+-    return launcher.openDirectory ? launcher.openDirectory(url) : QDesktopServices::openUrl(url);
++    return launcher.openDirectory ? launcher.openDirectory(url) : snow_shot::seeinOpenUrl(url);
+ }
+ 
+ } // namespace snow_shot::platform
+diff --git a/snow_shot/src/presentation/collage/collageeditorwidget.cpp b/snow_shot/src/presentation/collage/collageeditorwidget.cpp
+index 5beefee..dd20977 100644
+--- a/snow_shot/src/presentation/collage/collageeditorwidget.cpp
++++ b/snow_shot/src/presentation/collage/collageeditorwidget.cpp
+@@ -1884,6 +1884,7 @@ ImageStitchingEditorWidget::ImageStitchingEditorWidget(ImageStitchingDocument* d
+     d.outputType->addOption({}, QStringLiteral("static"));
+     d.outputType->addOption({}, QStringLiteral("pdf"));
+     d.outputTypeField = d.form->addField({}, d.outputType, QStringLiteral("output_type"));
++    d.outputTypeField->hide();
+     d.direction = segmented("collageDirection", "vertical", "horizontal", 0);
+     d.direction->addOption({}, QStringLiteral("custom"));
+     auto* grid = new QWidget(d.form);
+diff --git a/snow_shot/src/presentation/collage/collagewindow.cpp b/snow_shot/src/presentation/collage/collagewindow.cpp
+index 4b33d48..8d9e43c 100644
+--- a/snow_shot/src/presentation/collage/collagewindow.cpp
++++ b/snow_shot/src/presentation/collage/collagewindow.cpp
+@@ -356,7 +356,7 @@ struct ImageStitchingWindow::Impl {
+     }
+ 
+     void retranslate() {
+-        modal->setWindowTitle(imageStitchingText("Image stitching"));
++        modal->setWindowTitle(imageStitchingText("PDF documents"));
+         cancelButton->setText(imageStitchingText("Cancel"));
+         editButton->setText(imageStitchingText("Image editing"));
+         copyButton->setText(imageStitchingText("Copy"));
+@@ -1219,7 +1219,8 @@ struct ImageStitchingWindow::Impl {
+         const bool combined = settings.exportMode == ImageStitchingPdfExportMode::Combined;
+         dialog->setWindowTitle(combined ? imageStitchingText("Save PDF document")
+                                         : imageStitchingText("Select destination folder"));
+-        dialog->setDirectory(storage::ScreenshotSettings().lastManualSaveDirectory());
++        const QString seeinPdfDirectory = qEnvironmentVariable("SEEIN_PDF_DIRECTORY");
++        dialog->setDirectory(seeinPdfDirectory.isEmpty() ? storage::ScreenshotSettings().lastManualSaveDirectory() : seeinPdfDirectory);
+         if (combined) {
+             dialog->setAcceptMode(QFileDialog::AcceptSave);
+             dialog->setFileMode(QFileDialog::AnyFile);
+@@ -1333,6 +1334,7 @@ ImageStitchingWindow::~ImageStitchingWindow() {
+ void ImageStitchingWindow::present(const QVector<storage::CaptureHistoryRecord>& records) {
+     if (m_impl->closing || m_impl->exporting)
+         return;
++    m_impl->document->setOutputType(ImageStitchingOutputType::PdfDocument);
+     const bool firstPresentation = !m_impl->modal->isOpen();
+     if (firstPresentation) {
+         QScreen* screen = QGuiApplication::screenAt(QCursor::pos());
+diff --git a/snow_shot/src/presentation/components/aboutpagewidget.cpp b/snow_shot/src/presentation/components/aboutpagewidget.cpp
+index 8c2b33f..445a580 100644
+--- a/snow_shot/src/presentation/components/aboutpagewidget.cpp
++++ b/snow_shot/src/presentation/components/aboutpagewidget.cpp
+@@ -1,3 +1,4 @@
++#include "snow_shot/seeinexternal.h"
+ #include "snow_shot/app/edition.h"
+ #include "snow_shot/presentation/components/aboutpagewidget.h"
+ #include "widgets/detail/pointer_region.h"
+@@ -392,7 +393,7 @@ struct AboutPageWidget::Ui {
+ AboutPageWidget::AboutPageWidget(QWidget* parent, UrlOpener urlOpener,
+                                  snow_shot::update::UpdateService* updates)
+     : QWidget(parent), m_version(QCoreApplication::applicationVersion()),
+-      m_urlOpener(urlOpener ? std::move(urlOpener) : QDesktopServices::openUrl),
++      m_urlOpener(urlOpener ? std::move(urlOpener) : snow_shot::seeinOpenUrl),
+       m_ui(std::make_unique<Ui>()) {
+     initializeAboutResources();
+     setObjectName(QStringLiteral("aboutPage"));
+diff --git a/snow_shot/src/presentation/components/accountpagewidget.cpp b/snow_shot/src/presentation/components/accountpagewidget.cpp
+index 09b267e..15da732 100644
+--- a/snow_shot/src/presentation/components/accountpagewidget.cpp
++++ b/snow_shot/src/presentation/components/accountpagewidget.cpp
+@@ -1,3 +1,4 @@
++#include "snow_shot/seeinexternal.h"
+ #include "snow_shot/presentation/components/accountpagewidget.h"
+ 
+ #include "snow_shot/app/accountsessionservice.h"
+@@ -322,7 +323,7 @@ AccountPageWidget::AccountPageWidget(AccountSessionService* service, QWidget* pa
+             const auto path = locale.language() == QLocale::Chinese
+                                   ? QStringLiteral("/zh/pricing.html")
+                                   : QStringLiteral("/pricing.html");
+-            QDesktopServices::openUrl(
++            snow_shot::seeinOpenUrl(
+                 QUrl(QStringLiteral(SNOW_SHOT_WEBSITE_URL)).resolved(QUrl(path)));
+         });
+         return button;
+diff --git a/snow_shot/src/presentation/components/screenshothistorypagewidget.cpp b/snow_shot/src/presentation/components/screenshothistorypagewidget.cpp
+index 8175e91..fb4ed85 100644
+--- a/snow_shot/src/presentation/components/screenshothistorypagewidget.cpp
++++ b/snow_shot/src/presentation/components/screenshothistorypagewidget.cpp
+@@ -883,14 +883,17 @@ class HistoryEntryWidget final : public HistoryEntryCard {
+         pin->setObjectName(QStringLiteral("screenshotHistoryEntryPin"));
+         pin->setEnabled(m_record.result.has_value());
+         m_pinAction = pin;
++        pin->setVisible(false);
+         auto* stitch = menu->addItem(QString(), custom_outlined_icons::ImageStitching());
+         stitch->setObjectName(QStringLiteral("screenshotHistoryEntryStitch"));
+         stitch->setEnabled(m_record.result.has_value());
+         m_stitchAction = stitch;
++        stitch->setVisible(false);
+         auto* split = menu->addItem(QString(), custom_outlined_icons::ImageSplitting());
+         split->setObjectName(QStringLiteral("screenshotHistoryEntrySplit"));
+         split->setEnabled(m_record.result.has_value());
+         m_splitAction = split;
++        split->setVisible(false);
+         m_imageEditingAction = menu->addItem(HistoryEntryWidget::tr("Image editing"),
+                                              custom_outlined_icons::ImageEditing());
+         m_imageEditingAction->setObjectName(QStringLiteral("screenshotHistoryEntryImageEditing"));
+@@ -902,7 +905,8 @@ class HistoryEntryWidget final : public HistoryEntryCard {
+                                                  custom_outlined_icons::ImageCompression());
+         m_imageCompressionAction->setObjectName(
+             QStringLiteral("screenshotHistoryEntryImageCompression"));
+-        m_imageCompressionAction->setEnabled(m_record.result.has_value());
++        m_imageCompressionAction->setEnabled(false);
++        m_imageCompressionAction->setVisible(false);
+         connect(m_imageCompressionAction, &QAction::triggered, this, [this] {
+             if (m_imageCompressionRequested)
+                 m_imageCompressionRequested();
+@@ -1822,6 +1826,7 @@ void ScreenshotHistoryPageWidget::retranslateUi() {
+     m_deleteSelectedButton->setAccessibleName(tr("Delete selected history entries"));
+     m_selectAllButton->setText(tr("Select all"));
+     m_batchActionsButton->setText(tr("Batch actions"));
++    m_batchActionsButton->hide();
+     m_batchActionsButton->setToolTip(tr("Batch actions"));
+     m_batchActionsButton->setAccessibleName(tr("Batch actions"));
+     updateBatchActions();
+diff --git a/snow_shot/src/presentation/imagesplit/imagesplitwindow.cpp b/snow_shot/src/presentation/imagesplit/imagesplitwindow.cpp
+index f36ed2a..18629c7 100644
+--- a/snow_shot/src/presentation/imagesplit/imagesplitwindow.cpp
++++ b/snow_shot/src/presentation/imagesplit/imagesplitwindow.cpp
+@@ -1,3 +1,4 @@
++#include "snow_shot/seeinexternal.h"
+ // SPDX-License-Identifier: GPL-3.0-only
+ #include "snow_shot/presentation/imagesplitwindow.h"
+ #include "snow_shot/presentation/components/windowconfirmation.h"
+@@ -851,7 +852,7 @@ struct ImageSplitWindow::Impl final {
+                     if (services.openDirectory)
+                         services.openDirectory(exportResult.directory);
+                     else
+-                        QDesktopServices::openUrl(QUrl::fromLocalFile(exportResult.directory));
++                        snow_shot::seeinOpenUrl(QUrl::fromLocalFile(exportResult.directory));
+                 }
+                 emit q.exportFinished(exportResult);
+             });
+diff --git a/snow_shot/src/presentation/mainwindow.cpp b/snow_shot/src/presentation/mainwindow.cpp
+index f283b56..f8655d0 100644
+--- a/snow_shot/src/presentation/mainwindow.cpp
++++ b/snow_shot/src/presentation/mainwindow.cpp
+@@ -1,4 +1,5 @@
+ #include "snow_shot/app/edition.h"
++#include "snow_shot/seeinshell.h"
+ #include "snow_shot/presentation/windowcloseshortcut.h"
+ #include "snow_shot/presentation/mainwindow.h"
+ #include "snow_shot/presentation/mainwindowskinwidget.h"
+@@ -225,6 +226,7 @@ void MainWindow::buildUi() {
+     auto* sidebar = new SidebarWidget(m_settingsRegistry, body);
+     bodyLayout->addWidget(sidebar, 0);
+     m_sidebar = sidebar;
++    if (!qEnvironmentVariable("SEEIN_TOOL_PIPE").isEmpty()) sidebar->hide();
+ 
+     auto* contentShell = new QWidget(body);
+     m_contentShell = contentShell;
+@@ -236,6 +238,7 @@ void MainWindow::buildUi() {
+     auto* contentHeader = new MainContentHeaderWidget(metric, contentShell);
+     contentShellLayout->addWidget(contentHeader, 0);
+     m_contentHeader = contentHeader;
++    if (!qEnvironmentVariable("SEEIN_TOOL_PIPE").isEmpty()) contentHeader->hide();
+ 
+     auto* contentArea = new QWidget(contentShell);
+     m_contentArea = contentArea;
+@@ -396,6 +399,7 @@ void MainWindow::showAppPermissions(const QString& permissionId) {
+ }
+ 
+ void MainWindow::showScreenshotSettings() {
++    if (!qEnvironmentVariable("SEEIN_TOOL_PIPE").isEmpty()) { snow_shot::seeinOpenSettings(); return; }
+     if (m_contentCard != nullptr) {
+         m_contentCard->showScreenshotSettings();
+     }
+@@ -403,12 +407,14 @@ void MainWindow::showScreenshotSettings() {
+ }
+ 
+ void MainWindow::showSettingsLocation(const QString& pageId, const QString& sectionId) {
++    if (!qEnvironmentVariable("SEEIN_TOOL_PIPE").isEmpty()) { snow_shot::seeinOpenSettings(); return; }
+     if (m_contentCard)
+         m_contentCard->navigateTo({pageId, sectionId, {}});
+     showAndActivate();
+ }
+ 
+ void MainWindow::showGeneralSettings() {
++    if (!qEnvironmentVariable("SEEIN_TOOL_PIPE").isEmpty()) { snow_shot::seeinOpenSettings(); return; }
+     if (m_contentCard != nullptr) {
+         m_contentCard->showGeneralSettings();
+     }
+diff --git a/snow_shot/src/presentation/ocr/screenshotimageconversioncontroller.cpp b/snow_shot/src/presentation/ocr/screenshotimageconversioncontroller.cpp
+index 5a5a573..8e30eba 100644
+--- a/snow_shot/src/presentation/ocr/screenshotimageconversioncontroller.cpp
++++ b/snow_shot/src/presentation/ocr/screenshotimageconversioncontroller.cpp
+@@ -1,3 +1,6 @@
++// SEEIN optional component
++#include "snow_shot/app/edition.h"
++#if SNOW_SHOT_ENABLE_IMAGE_CONVERSION
+ #include "snow_shot/presentation/screenshotimageconversioncontroller.h"
+ 
+ #include "snow_shot/presentation/languagemanager.h"
+@@ -453,3 +456,5 @@ void ScreenshotImageConversionController::startWithModels(
+         fail(tr("The image could not be prepared for conversion"));
+     }
+ }
++
++#endif
+diff --git a/snow_shot/src/presentation/ocr/screenshotlatexrenderer.cpp b/snow_shot/src/presentation/ocr/screenshotlatexrenderer.cpp
+index 67e2061..2f69d9d 100644
+--- a/snow_shot/src/presentation/ocr/screenshotlatexrenderer.cpp
++++ b/snow_shot/src/presentation/ocr/screenshotlatexrenderer.cpp
+@@ -1,3 +1,6 @@
++// SEEIN optional component
++#include "snow_shot/app/edition.h"
++#if SNOW_SHOT_ENABLE_LATEX_RECOGNITION
+ #include "snow_shot/presentation/screenshotlatexrenderer.h"
+ 
+ #ifdef _MSC_VER
+@@ -396,3 +399,5 @@ void ScreenshotLatexRenderer::clearCache() {
+         sharedWorker->forget(m_state);
+     }
+ }
++
++#endif
+diff --git a/snow_shot/src/presentation/ocr/screenshotocrassets.cpp b/snow_shot/src/presentation/ocr/screenshotocrassets.cpp
+index 97aa3f3..fedf048 100644
+--- a/snow_shot/src/presentation/ocr/screenshotocrassets.cpp
++++ b/snow_shot/src/presentation/ocr/screenshotocrassets.cpp
+@@ -461,6 +461,18 @@ ScreenshotOcrResolvedAssets resolved(const QString& runtimeRoot, const QString&
+     result.runtimeVersion = descriptor.runtimeVersion;
+     result.runtimeDirectory = runtimeDirectory(runtimeRoot, descriptor);
+     result.processPath = QDir(result.runtimeDirectory).filePath(descriptor.executable);
++    if (!qEnvironmentVariable("SEEIN_TOOL_PIPE").isEmpty()) {
++        // Keep upstream asset names/checksums intact. Execute a verified branded
++        // copy in the same versioned directory so adjacent runtime DLLs resolve.
++        const QString branded = QDir(result.runtimeDirectory).filePath(QStringLiteral("seeocr.exe"));
++        const QByteArray expected = sha256File(result.processPath, nullptr);
++        if (expected.isEmpty()) { result.processPath.clear(); return result; }
++        if (sha256File(branded, nullptr) != expected) {
++            if ((QFile::exists(branded) && !QFile::remove(branded)) || !QFile::copy(result.processPath, branded) ||
++                sha256File(branded, nullptr) != expected) { result.processPath.clear(); return result; }
++        }
++        result.processPath = branded;
++    }
+     const QString models = modelDirectory(modelRoot, model);
+     if (model.paragraph) {
+         result.paragraphModelPath = QDir(models).filePath(model.files.front().name);
+diff --git a/snow_shot/src/presentation/ocr/screenshotocrcontroller.cpp b/snow_shot/src/presentation/ocr/screenshotocrcontroller.cpp
+index e8a460d..bced174 100644
+--- a/snow_shot/src/presentation/ocr/screenshotocrcontroller.cpp
++++ b/snow_shot/src/presentation/ocr/screenshotocrcontroller.cpp
+@@ -1,3 +1,4 @@
++#include "snow_shot/seeinexternal.h"
+ #include "snow_shot/presentation/screenshotocrcontroller.h"
+ #include "snow_shot/presentation/screenshotclipboardcontent.h"
+ #include "snow_shot/presentation/screenshotclipboardservice.h"
+@@ -821,7 +822,7 @@ void ScreenshotOcrController::handleQrLinkActivated(const QUrl& url) {
+         (scheme != QStringLiteral("http") && scheme != QStringLiteral("https"))) {
+         return;
+     }
+-    if (!QDesktopServices::openUrl(url)) {
++    if (!snow_shot::seeinOpenUrl(url)) {
+         showStatus(tr("Unable to open the recognized link"), true);
+         return;
+     }
+diff --git a/snow_shot/src/presentation/ocr/screenshotqrcontroller.cpp b/snow_shot/src/presentation/ocr/screenshotqrcontroller.cpp
+index 2bb8ed0..92c69ee 100644
+--- a/snow_shot/src/presentation/ocr/screenshotqrcontroller.cpp
++++ b/snow_shot/src/presentation/ocr/screenshotqrcontroller.cpp
+@@ -1,3 +1,7 @@
++#include "snow_shot/seeinexternal.h"
++// SEEIN optional component
++#include "snow_shot/app/edition.h"
++#if SNOW_SHOT_ENABLE_QR_RECOGNITION
+ #include "snow_draw_engine_qt/snow_canvas_image.h"
+ #include "snow_shot/platform/applicationqos.h"
+ #include "snow_shot/runtime/runtimeactivitytracker.h"
+@@ -272,7 +276,7 @@ ScreenshotQrController::ScreenshotQrController(ScreenshotQrRecognitionPort& reco
+                                                Actions actions, QObject* parent)
+     : QObject(parent), m_recognition(&recognition), m_actions(std::move(actions)) {
+     if (!m_actions.openUrl)
+-        m_actions.openUrl = QDesktopServices::openUrl;
++        m_actions.openUrl = snow_shot::seeinOpenUrl;
+     m_hoverTimer.setSingleShot(true);
+     m_hoverTimer.setInterval(150);
+     m_dismissTimer.setSingleShot(true);
+@@ -718,3 +722,5 @@ bool ScreenshotQrController::eventFilter(QObject* watched, QEvent* event) {
+     }
+     return QObject::eventFilter(watched, event);
+ }
++
++#endif
+diff --git a/snow_shot/src/presentation/ocr/screenshotqrrecognitionservice.cpp b/snow_shot/src/presentation/ocr/screenshotqrrecognitionservice.cpp
+index 421cb95..d71bfd9 100644
+--- a/snow_shot/src/presentation/ocr/screenshotqrrecognitionservice.cpp
++++ b/snow_shot/src/presentation/ocr/screenshotqrrecognitionservice.cpp
+@@ -1,3 +1,6 @@
++// SEEIN optional component
++#include "snow_shot/app/edition.h"
++#if SNOW_SHOT_ENABLE_QR_RECOGNITION
+ #include "snow_draw_engine_qt/snow_canvas_image.h"
+ #include "snow_shot/platform/applicationqos.h"
+ #include "snow_shot/runtime/runtimeactivitytracker.h"
+@@ -443,3 +446,5 @@ void ScreenshotQrRecognitionService::cancel(RequestToken token) {
+         m_impl->cancel(token);
+     }
+ }
++
++#endif
+diff --git a/snow_shot/src/presentation/ocr/screenshotrecognitionsessioncontroller.cpp b/snow_shot/src/presentation/ocr/screenshotrecognitionsessioncontroller.cpp
+index 0e44b5c..4e145e0 100644
+--- a/snow_shot/src/presentation/ocr/screenshotrecognitionsessioncontroller.cpp
++++ b/snow_shot/src/presentation/ocr/screenshotrecognitionsessioncontroller.cpp
+@@ -1,3 +1,4 @@
++#include "snow_shot/seeinexternal.h"
+ #include "snow_shot/presentation/screenshotrecognitionsessioncontroller.h"
+ #include "snow_shot/presentation/screenshotlatexrenderer.h"
+ #include <QTemporaryDir>
+@@ -4112,7 +4113,7 @@ bool ScreenshotRecognitionSessionController::openDocumentFile(std::function<void
+                     static_cast<void>(guard->showStatus(result.error, true));
+                     return;
+                 }
+-                if (!QDesktopServices::openUrl(QUrl::fromLocalFile(result.path))) {
++                if (!snow_shot::seeinOpenUrl(QUrl::fromLocalFile(result.path))) {
+                     if (guard)
+                         static_cast<void>(
+                             guard->showStatus(tr("The document file could not be opened"), true));
+diff --git a/snow_shot/src/presentation/ocr/screenshottableconversioncontroller.cpp b/snow_shot/src/presentation/ocr/screenshottableconversioncontroller.cpp
+index 15d6e81..4612f01 100644
+--- a/snow_shot/src/presentation/ocr/screenshottableconversioncontroller.cpp
++++ b/snow_shot/src/presentation/ocr/screenshottableconversioncontroller.cpp
+@@ -1,3 +1,6 @@
++// SEEIN optional component
++#include "snow_shot/app/edition.h"
++#if SNOW_SHOT_ENABLE_TABLE_RECOGNITION
+ #include "snow_shot/presentation/screenshottableconversioncontroller.h"
+ #if SNOW_SHOT_ENABLE_TABLE_RECOGNITION
+ #include "snow_shot/platform/applicationqos.h"
+@@ -194,3 +197,5 @@ void ScreenshotTableConversionController::fail(const QString& error) {
+         emit completed({}, error);
+ }
+ #endif
++
++#endif
+diff --git a/snow_shot/src/presentation/ocr/screenshottabledocument.cpp b/snow_shot/src/presentation/ocr/screenshottabledocument.cpp
+index c692bdd..b819b59 100644
+--- a/snow_shot/src/presentation/ocr/screenshottabledocument.cpp
++++ b/snow_shot/src/presentation/ocr/screenshottabledocument.cpp
+@@ -1,3 +1,6 @@
++// SEEIN optional component
++#include "snow_shot/app/edition.h"
++#if SNOW_SHOT_ENABLE_TABLE_RECOGNITION
+ #include "snow_shot/presentation/screenshottabledocument.h"
+ #include "snow_shot/presentation/screenshotdocumentformatting.h"
+ 
+@@ -783,3 +786,5 @@ void ScreenshotTableDocument::splitAnchor(int row, int column, bool headerRow) {
+     }
+     m_slots[row][column].cell.text = merged.text;
+ }
++
++#endif
+diff --git a/snow_shot/src/presentation/ocr/screenshottableeditor.cpp b/snow_shot/src/presentation/ocr/screenshottableeditor.cpp
+index 34be601..ca913d8 100644
+--- a/snow_shot/src/presentation/ocr/screenshottableeditor.cpp
++++ b/snow_shot/src/presentation/ocr/screenshottableeditor.cpp
+@@ -1,3 +1,6 @@
++// SEEIN optional component
++#include "snow_shot/app/edition.h"
++#if SNOW_SHOT_ENABLE_TABLE_RECOGNITION
+ #include "snow_shot/shortcuts/shortcutbinding.h"
+ #include "snow_shot/presentation/screenshottableeditor.h"
+ 
+@@ -1306,3 +1309,5 @@ void ScreenshotTableEditingSession::applyDocument(
+         session->undoStack.push(
+             new ReplaceTableDocumentCommand(session, session->document, replacement, label));
+ }
++
++#endif
+diff --git a/snow_shot/src/presentation/pinned/screenshotpinnedwindow.cpp b/snow_shot/src/presentation/pinned/screenshotpinnedwindow.cpp
+index 169db8c..faac218 100644
+--- a/snow_shot/src/presentation/pinned/screenshotpinnedwindow.cpp
++++ b/snow_shot/src/presentation/pinned/screenshotpinnedwindow.cpp
+@@ -1,3 +1,4 @@
++#include "snow_shot/seeinexternal.h"
+ #include "snow_shot/presentation/imageeditingdocument.h"
+ #include "widgets/detail/window_modality.h"
+ #include "snow_shot/presentation/screenshotmanualsave.h"
+@@ -6209,7 +6210,7 @@ ScreenshotRecognitionWindow* ScreenshotPinnedWindow::ensureRecognitionContent()
+                           m_recognitionSession->mode() ==
+                               ScreenshotRecognitionSessionController::Mode::Latex))) {
+                         if (url.isValid()) {
+-                            QDesktopServices::openUrl(url);
++                            snow_shot::seeinOpenUrl(url);
+                         }
+                     }
+                 },
+diff --git a/snow_shot/src/presentation/recording/screenrecordingcontroller.cpp b/snow_shot/src/presentation/recording/screenrecordingcontroller.cpp
+index 7401ef7..241d22f 100644
+--- a/snow_shot/src/presentation/recording/screenrecordingcontroller.cpp
++++ b/snow_shot/src/presentation/recording/screenrecordingcontroller.cpp
+@@ -1,4 +1,5 @@
+ #include "snow_shot/platform/screenshotwindownames.h"
++#include "snow_shot/seeinshell.h"
+ #include "widgets/detail/window_modality.h"
+ #include "snow_shot/runtime/runtimeactivitytracker.h"
+ #include "recordingtrimsession.h"
+@@ -849,6 +850,7 @@ struct ScreenRecordingController::Impl {
+         QObject::connect(
+             palette, &ScreenshotToolPalette::recordingSettingsRequested,
+             uiSession->connections.get(), [this] {
++                if (!qEnvironmentVariable("SEEIN_TOOL_PIPE").isEmpty()) { snow_shot::seeinOpenSettings(); return; }
+                 if (sessionStatus.state() != ScreenshotToolPalette::RecordingState::Idle ||
+                     sessionStatus.busy())
+                     return;
+diff --git a/snow_shot/src/presentation/recording/screenrecordingfolder.cpp b/snow_shot/src/presentation/recording/screenrecordingfolder.cpp
+index d58badf..6357dc7 100644
+--- a/snow_shot/src/presentation/recording/screenrecordingfolder.cpp
++++ b/snow_shot/src/presentation/recording/screenrecordingfolder.cpp
+@@ -1,3 +1,4 @@
++#include "snow_shot/seeinexternal.h"
+ #include "snow_shot/presentation/screenrecordingfolder.h"
+ #include "snow_shot/platform/filemanager.h"
+ 
+@@ -88,7 +89,7 @@ QString screenRecordingOutputPath(const QStringList& directories, const QString&
+ 
+ bool openScreenRecordingFolder(const storage::ScreenshotExportContext& names) {
+     const QString path = screenRecordingDirectory(QDateTime::currentDateTime(), names);
+-    return !path.isEmpty() && QDesktopServices::openUrl(QUrl::fromLocalFile(path));
++    return !path.isEmpty() && snow_shot::seeinOpenUrl(QUrl::fromLocalFile(path));
+ }
+ 
+ bool revealScreenRecordingFile(const QString& path) {
+diff --git a/snow_shot/src/presentation/services/screenshotcontroller.cpp b/snow_shot/src/presentation/services/screenshotcontroller.cpp
+index ded283b..d72a2be 100644
+--- a/snow_shot/src/presentation/services/screenshotcontroller.cpp
++++ b/snow_shot/src/presentation/services/screenshotcontroller.cpp
+@@ -12,6 +12,7 @@
+ #include "snow_shot/presentation/screenshotautofiltercontroller.h"
+ #include "snow_shot/presentation/screenshotsourceimagecomposer.h"
+ #include "snow_shot/presentation/screenshotcontroller.h"
++#include "snow_shot/seeinshell.h"
+ #include "snow_shot/presentation/screenshotexporttasks.h"
+ #ifdef SNOW_SHOT_CONTROLLER_LIFETIME_TESTS
+ #include "../../../tests/screenshot_controller_test_access.h"
+@@ -1343,6 +1344,7 @@ bool ScreenshotController::Impl::ensureRecognitionFeature() {
+     QObject::connect(
+         &applicationStorage.configuration(), &snow_shot::storage::ConfigurationStore::valueChanged,
+         &owner, [this](const QString& key, const QJsonValue&) {
++#if SNOW_SHOT_ENABLE_IMAGE_CONVERSION
+             if (key == QStringLiteral("api_configuration/custom_models") &&
+                 m_tableRecognition != nullptr) {
+                 const auto conversion = snow_shot::storage::ScreenshotImageConversionSettings();
+@@ -1356,6 +1358,9 @@ bool ScreenshotController::Impl::ensureRecognitionFeature() {
+                     conversion.setVisionModel(m_tableRecognition->fallbackModel(true));
+                 }
+             }
++#else
++            Q_UNUSED(key);
++#endif
+         });
+ #endif
+ 
+@@ -3094,7 +3099,7 @@ void ScreenshotController::Impl::toggleTextTranslation() {
+ }
+ 
+ void ScreenshotController::Impl::jumpToTranslationPage() {
+-#if SNOW_SHOT_ENABLE_TEXT_TRANSLATION
++#if SNOW_SHOT_ENABLE_TEXT_TRANSLATION && SNOW_SHOT_ENABLE_EXTENDED_FEATURES
+     const snow_shot::storage::ExtendedFeaturesSettings settings;
+     if (m_ocrController == nullptr || !m_ocrController->hasTextResult() ||
+         !settings.translationPageEnabled() || !settings.jumpToTranslationPage()) {
+@@ -3114,6 +3119,7 @@ void ScreenshotController::Impl::resetTextEditing() {
+ }
+ 
+ void ScreenshotController::Impl::openTextTranslationSettings() {
++    if (!qEnvironmentVariable("SEEIN_TOOL_PIPE").isEmpty()) { snow_shot::seeinOpenSettings(); return; }
+ #if SNOW_SHOT_ENABLE_TEXT_TRANSLATION
+     if (ensureRecognitionFeature()) {
+         m_ocrController->openTranslationSettings();
+@@ -6958,6 +6964,7 @@ void ScreenshotController::cancelGlobalMouseCapture(quint64 gestureId) {
+ }
+ 
+ bool ScreenshotController::captureForAction(CaptureAction action) {
++    if (action == CaptureAction::Pin) return false;
+     using namespace snow_shot::app;
+     if ((action == CaptureAction::RecognizeTable && !edition::tableRecognition) ||
+         (action == CaptureAction::RecognizeQr && !edition::qrRecognition) ||
+@@ -7109,6 +7116,7 @@ void ScreenshotController::startDelayedCapture(int delaySeconds) {
+ }
+ 
+ void ScreenshotController::captureAndPinSelection() {
++    if (!qEnvironmentVariable("SEEIN_TOOL_PIPE").isEmpty()) return;
+     static_cast<void>(m_impl->beginCapture(Impl::PendingSelectionAction::Pin));
+ }
+ 
+@@ -7206,6 +7214,7 @@ void ScreenshotController::pinHistoryRecord(const QString& recordId) {
+ }
+ 
+ void ScreenshotController::pinClipboardContentToScreen() {
++    if (!qEnvironmentVariable("SEEIN_TOOL_PIPE").isEmpty()) return;
+     if (!handleActiveScreenshotShortcut(
+             snow_shot::presentation::GlobalShortcutAction::ScreenshotPinToScreen,
+             /*requireActivation=*/true))
+@@ -7213,6 +7222,7 @@ void ScreenshotController::pinClipboardContentToScreen() {
+ }
+ 
+ void ScreenshotController::pinSelectedFilesToScreen() {
++    if (!qEnvironmentVariable("SEEIN_TOOL_PIPE").isEmpty()) return;
+     pinSelectedFilesToScreen(snow_shot::platform::createSelectedFileBackend()->captureTarget());
+ }
+ 
+diff --git a/snow_shot/src/presentation/services/screenshotrecognitionfileexport.cpp b/snow_shot/src/presentation/services/screenshotrecognitionfileexport.cpp
+index 5032ba5..ffddfd0 100644
+--- a/snow_shot/src/presentation/services/screenshotrecognitionfileexport.cpp
++++ b/snow_shot/src/presentation/services/screenshotrecognitionfileexport.cpp
+@@ -1,4 +1,6 @@
++#include "snow_shot/seeinexternal.h"
+ #include "snow_shot/presentation/screenshotrecognitionfileexport.h"
++#if SNOW_SHOT_ENABLE_IMAGE_CONVERSION || SNOW_SHOT_ENABLE_LATEX_RECOGNITION || SNOW_SHOT_ENABLE_QR_RECOGNITION || SNOW_SHOT_ENABLE_TABLE_RECOGNITION
+ #include "snow_shot/storage/exportfilename.h"
+ #include "snow_shot/presentation/screenshotdocumentexport.h"
+ 
+@@ -557,7 +559,7 @@ ScreenshotRecognitionFileSaveResult ScreenshotRecognitionFileExport::openTempora
+     if (!result.succeeded())
+         return result;
+     const QUrl url = QUrl::fromLocalFile(result.path);
+-    if (!(openUrl ? openUrl(url) : QDesktopServices::openUrl(url)))
++    if (!(openUrl ? openUrl(url) : snow_shot::seeinOpenUrl(url)))
+         return {{},
+                 message(QT_TRANSLATE_NOOP("ScreenshotRecognitionFileExport",
+                                           "The spreadsheet file could not be opened"))};
+@@ -599,7 +601,7 @@ ScreenshotRecognitionFileSaveResult ScreenshotRecognitionFileExport::openTempora
+     if (!result.succeeded())
+         return result;
+     const auto url = QUrl::fromLocalFile(result.path);
+-    if (!(openUrl ? openUrl(url) : QDesktopServices::openUrl(url)))
++    if (!(openUrl ? openUrl(url) : snow_shot::seeinOpenUrl(url)))
+         return {{},
+                 message(QT_TRANSLATE_NOOP("ScreenshotRecognitionFileExport",
+                                           "The document file could not be opened"))};
+@@ -893,3 +895,4 @@ ScreenshotRecognitionFileExport::quickSave(const ScreenshotRecognitionFileSnapsh
+             message(QT_TRANSLATE_NOOP("ScreenshotRecognitionFileExport",
+                                       "No available output filename was found"))};
+ }
++#endif
+diff --git a/snow_shot/src/presentation/tools/screenshottoolpalette.cpp b/snow_shot/src/presentation/tools/screenshottoolpalette.cpp
+index ab61407..b9f6ef2 100644
+--- a/snow_shot/src/presentation/tools/screenshottoolpalette.cpp
++++ b/snow_shot/src/presentation/tools/screenshottoolpalette.cpp
+@@ -6916,7 +6916,7 @@ bool ScreenshotToolPalette::addMainSecondaryButtons(const Options& options, QBox
+                 [this]() { activateActionTool(QStringLiteral("record-screen")); });
+     }
+ 
+-    if (!options.showRecordingControls && (options.actions & PinAction) != 0) {
++    if (false && !options.showRecordingControls && (options.actions & PinAction) != 0) {
+         m_pinButton = addActionButton("Pin to screen", custom_outlined_icons::PinToScreen());
+         applyScreenshotShortcutTooltip(m_pinButton, QStringLiteral("Pin to screen"),
+                                        QStringLiteral("pin_to_screen"));
+@@ -7751,7 +7751,7 @@ void ScreenshotToolPalette::createRecordingExportSettingsToolbar() {
+         m_recordExportSettingsPanel, "Show keystrokes in recording",
+         custom_outlined_icons::RecordingKeyboard(), styleButtonMetrics(m_physicalScale));
+     m_recordKeyboardButton->setObjectName(QStringLiteral("screenRecordingShowKeyboard"));
+-    layout->addWidget(m_recordKeyboardButton);
++    m_recordKeyboardButton->hide(); // removed in SEEIN
+     m_recordKeyboardButton->setFocusPolicy(Qt::StrongFocus);
+     m_recordKeyboardPopover = new adqt::widgets::AdPopover(m_recordKeyboardButton);
+     m_recordKeyboardPopover->setObjectName(QStringLiteral("screenRecordingKeyboardPopover"));
+@@ -7815,7 +7815,7 @@ void ScreenshotToolPalette::createRecordingExportSettingsToolbar() {
+     m_recordFollowMouseButton->setCheckable(true);
+     m_recordFollowMouseButton->setCheckedUsesActiveStyle(false);
+     m_recordFollowMouseButton->setFocusPolicy(Qt::StrongFocus);
+-    layout->addWidget(m_recordFollowMouseButton);
++    m_recordFollowMouseButton->hide(); // removed in SEEIN
+     connect(m_recordFollowMouseButton, &adqt::widgets::AdButton::clicked, this, [this]() {
+         if (m_recordingSession.state() != RecordingState::Idle || recordingBusy())
+             return;
+@@ -7864,7 +7864,7 @@ void ScreenshotToolPalette::createRecordingExportSettingsToolbar() {
+         m_recordExportSettingsPanel, "Record webcam", custom_outlined_icons::RecordingCamera(),
+         styleButtonMetrics(m_physicalScale));
+     m_recordWebcamButton->setObjectName(QStringLiteral("screenRecordingWebcam"));
+-    layout->addWidget(m_recordWebcamButton);
++    m_recordWebcamButton->hide(); // removed in SEEIN
+     connect(m_recordWebcamButton, &adqt::widgets::AdButton::clicked, this, [this]() {
+         setRecordingWebcamEnabled(!m_recordingWebcamEnabled);
+         emit recordingWebcamEnabledChanged(m_recordingWebcamEnabled);
+@@ -7876,7 +7876,7 @@ void ScreenshotToolPalette::createRecordingExportSettingsToolbar() {
+     m_recordPostProcessingButton->setCheckable(true);
+     m_recordPostProcessingButton->setChecked(m_recordPostProcessingEnabled);
+     m_recordPostProcessingButton->setCheckedUsesActiveStyle(false);
+-    layout->addWidget(m_recordPostProcessingButton);
++    m_recordPostProcessingButton->hide(); // removed in SEEIN
+     connect(m_recordPostProcessingButton, &adqt::widgets::AdButton::toggled, this,
+             [this](bool checked) {
+                 m_recordPostProcessingEnabled = checked;
+@@ -7963,6 +7963,15 @@ void ScreenshotToolPalette::createRecordingExportSettingsToolbar() {
+         emit recordingKeyboardVisibleChanged(m_recordingKeyboardVisible);
+     });
+ 
++    for (QWidget* removed : {static_cast<QWidget*>(m_recordMouseTrailIcon),
++            static_cast<QWidget*>(m_recordMouseClickIcon), static_cast<QWidget*>(m_recordMouseTrailColorPicker),
++            static_cast<QWidget*>(m_recordMouseClickColorPicker), static_cast<QWidget*>(m_recordSettingsButton),
++            static_cast<QWidget*>(m_recordKeyboardButton), static_cast<QWidget*>(m_recordWebcamButton),
++            static_cast<QWidget*>(m_recordPostProcessingButton)}) if (removed) removed->hide();
++    for (auto* button : m_recordMouseTrailColorPresets->buttons()) button->hide();
++    for (auto* button : m_recordMouseClickColorPresets->buttons()) button->hide();
++    for (const auto* id : {"screenRecordingExportTrailSeparator", "screenRecordingExportClickSeparator"})
++        if (auto* separator = findChild<QWidget*>(QString::fromLatin1(id))) separator->hide();
+     connect(m_recordOutputFormatSelect, &adqt::widgets::AdSelect::currentValueChanged, this,
+             [this](const QVariant& value) {
+                 const QString previous = m_recordingOutputFormat;
+@@ -10876,7 +10885,7 @@ ScreenshotToolPalette::recordingActionSourceButton(const QString& itemId) const
+     if (itemId == QStringLiteral("close"))
+         return m_recordCloseButton;
+     if (itemId == QStringLiteral("trim"))
+-        return m_recordTrimButton;
++        return nullptr;
+     if (itemId == QStringLiteral("save"))
+         return m_recordSaveButton;
+     if (itemId == QStringLiteral("copy"))
+diff --git a/snow_shot/src/storage/applicationstorage.cpp b/snow_shot/src/storage/applicationstorage.cpp
+index 78aefe8..fc1f471 100644
+--- a/snow_shot/src/storage/applicationstorage.cpp
++++ b/snow_shot/src/storage/applicationstorage.cpp
+@@ -200,11 +200,11 @@ ApplicationStorage::resolveDirectory(const StorageInitializationOptions& options
+     }
+     executableDirectory = QDir::cleanPath(executableDirectory);
+     const QString requestedAppData =
+-        options.appDataDirectory.isEmpty()
++        options.appDataDirectory.isEmpty() && qEnvironmentVariable("SEEIN_TOOL_DATA").isEmpty()
+             ? (app::distribution::isStoreManaged()
+                    ? app::distribution::writableDataDirectory()
+                    : QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))
+-            : options.appDataDirectory;
++            : (qEnvironmentVariable("SEEIN_TOOL_DATA").isEmpty() ? options.appDataDirectory : qEnvironmentVariable("SEEIN_TOOL_DATA"));
+     if (requestedAppData.isEmpty()) {
+         StorageDirectorySelection unavailable;
+         unavailable.executableDirectory = executableDirectory;
+@@ -297,11 +297,11 @@ StorageResult ApplicationStorage::initialize(const StorageInitializationOptions&
+     const auto selection = resolveDirectory(options);
+     m_executableDirectory = selection.executableDirectory;
+     m_bootstrapDirectory =
+-        options.appDataDirectory.isEmpty()
++        options.appDataDirectory.isEmpty() && qEnvironmentVariable("SEEIN_TOOL_DATA").isEmpty()
+             ? (app::distribution::isStoreManaged()
+                    ? app::distribution::writableDataDirectory()
+                    : QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))
+-            : options.appDataDirectory;
++            : (qEnvironmentVariable("SEEIN_TOOL_DATA").isEmpty() ? options.appDataDirectory : qEnvironmentVariable("SEEIN_TOOL_DATA"));
+     const QString effectiveDirectory = selection.effectiveDirectory;
+     m_status = {};
+     m_status.requestedDirectory = selection.requestedDirectory;
+diff --git a/snow_shot/src/storage/configurationschema.cpp b/snow_shot/src/storage/configurationschema.cpp
+index 648d937..5f358b8 100644
+--- a/snow_shot/src/storage/configurationschema.cpp
++++ b/snow_shot/src/storage/configurationschema.cpp
+@@ -936,14 +936,14 @@ constexpr SchemaEntryDescriptor kEntryDescriptors[] = {
+ #else
+     {u"system/auto_start_at_boot", booleanDefault(true), ConfigurationValueKind::Boolean},
+ #endif
+-    {u"system/context_menu_mode", stringDefault(u"image_files"), ConfigurationValueKind::String,
++    {u"system/context_menu_mode", stringDefault(u"none"), ConfigurationValueKind::String,
+      nullptr, &kSchemaAllowed7},
+     {u"system/annotation_mode_when_opening_for_editing", booleanDefault(true),
+      ConfigurationValueKind::Boolean},
+     {u"system/launch_as_administrator", booleanDefault(false), ConfigurationValueKind::Boolean},
+     {u"mcp/enabled", booleanDefault(false), ConfigurationValueKind::Boolean},
+ #ifdef Q_OS_MACOS
+-    {u"updates/mode", stringDefault(u"next_launch"), ConfigurationValueKind::String, nullptr,
++    {u"updates/mode", stringDefault(u"manual"), ConfigurationValueKind::String, nullptr,
+      &kSchemaAllowed8},
+ #else
+     {u"updates/mode", stringDefault(u"next_launch"), ConfigurationValueKind::String, nullptr,
+@@ -1613,7 +1613,7 @@ constexpr SchemaEntryDescriptor kEntryDescriptors[] = {
+     {u"pin_to_screen/duplicate_content_action", stringDefault(u"shake_window"),
+      ConfigurationValueKind::String, nullptr, &kSchemaAllowed46},
+     {u"pin_to_screen/auto_resize_window", booleanDefault(true), ConfigurationValueKind::Boolean},
+-    {u"tray/enabled", booleanDefault(true), ConfigurationValueKind::Boolean},
++    {u"tray/enabled", booleanDefault(false), ConfigurationValueKind::Boolean},
+     {u"tray/use_system_icon_color", booleanDefault(false), ConfigurationValueKind::Boolean},
+     {u"tray/icon", stringDefault(u"default"), ConfigurationValueKind::String, nullptr,
+      &kSchemaAllowed47},
+@@ -1755,13 +1755,13 @@ constexpr SchemaEntryDescriptor kEntryDescriptors[] = {
+     {u"capture_history/keep_permanently", booleanDefault(false), ConfigurationValueKind::Boolean},
+     {u"capture_history/compression_level", stringDefault(u"medium"), ConfigurationValueKind::String,
+      nullptr, &kSchemaAllowed69},
+-    {u"capture_history/retention_days", integerDefault(7), ConfigurationValueKind::Integer,
++    {u"capture_history/retention_days", integerDefault(30), ConfigurationValueKind::Integer,
+      &kSchemaRange24},
+     {u"capture_history/max_entries", integerDefault(100), ConfigurationValueKind::Integer,
+      &kSchemaRange25},
+     {u"capture_history/max_disk_mib", integerDefault(1024), ConfigurationValueKind::Integer,
+      &kSchemaRange26},
+-    {u"pinned_history/enabled", booleanDefault(true), ConfigurationValueKind::Boolean},
++    {u"pinned_history/enabled", booleanDefault(false), ConfigurationValueKind::Boolean},
+     {u"pinned_history/keep_permanently", booleanDefault(false), ConfigurationValueKind::Boolean},
+     {u"pinned_history/compression_level", stringDefault(u"medium"), ConfigurationValueKind::String,
+      nullptr, &kSchemaAllowed69},
+diff --git a/snow_shot/src/storage/storageusagetracker.cpp b/snow_shot/src/storage/storageusagetracker.cpp
+index 4209e46..db8e5f0 100644
+--- a/snow_shot/src/storage/storageusagetracker.cpp
++++ b/snow_shot/src/storage/storageusagetracker.cpp
+@@ -30,6 +30,8 @@ QString cleanDirectory(const QString& path) {
+ }
+ 
+ QString defaultCacheDirectory() {
++    const QString seeinCache = qEnvironmentVariable("SEEIN_CACHE_DIRECTORY");
++    if (!seeinCache.isEmpty()) return QDir::cleanPath(seeinCache);
+     if (app::distribution::isStoreManaged()) {
+         const QString localState = app::distribution::writableDataDirectory();
+         return localState.isEmpty() ? QString()

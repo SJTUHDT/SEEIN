@@ -1,0 +1,19 @@
+{
+  "snow": {
+    "repository": "https://github.com/mg-chao/snow-shot.git",
+    "commit": "7fecdb40a766e69f3a16b84c02e0fc50efc6e162",
+    "tag": "v1.6.3_snow-shot",
+    "directory": "snow-shot-1.6.3",
+    "license": "GPL-3.0-or-later (see per-component LICENSE.md)",
+    "ocrSubmodule": "a2fc7abfec5913618c78a0d2330ae520872c5abf"
+  },
+  "pane": {
+    "repository": "https://github.com/LBEILC/Pane.git",
+    "commit": "6f8be9632bd4d4e6d27240db5e18ea5923327476",
+    "tag": "v0.1.606",
+    "directory": "Pane-0.1.606",
+    "license": "GPL-3.0"
+  },
+  "vcpkg": "4497409a47f19db373a410a0efb84eca4747adbf",
+  "toolchain": { "qt": "6.12.0", "msvc": "14.51.36231", "sdk": "10.0.28000.0", "dotnet": "10.0.404", "rust": "1.97.1", "ocrRust": "nightly-2026-09-08" }
+}

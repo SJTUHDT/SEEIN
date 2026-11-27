@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>seeservice</AssemblyName>
+    <AssemblyTitle>seeservice</AssemblyTitle>
+    <FileDescription>seeservice · SEEIN 后台服务</FileDescription>
+    <ApplicationIcon>Assets\seein.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Seein.Core\Seein.Core.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\seein.ico" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+</Project>
+

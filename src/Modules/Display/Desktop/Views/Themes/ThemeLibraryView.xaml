@@ -1,0 +1,38 @@
+<UserControl x:Class="Seein.Tray.ThemeLibraryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{DynamicResource WindowBrush}" Foreground="{DynamicResource TextBrush}">
+    <Grid>
+        <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="20" /><ColumnDefinition Width="330" /></Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+            <TextBlock Text="可用主题" Style="{StaticResource SectionTitleStyle}" AutomationProperties.HeadingLevel="Level2" Margin="0,0,0,12" />
+            <ListBox x:Name="ImportedThemesList" Grid.Row="1" AutomationProperties.Name="可用副屏主题" SelectionChanged="ImportedThemesList_SelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="SemiBold" />
+                            <TextBlock Text="{Binding Source}" Foreground="{DynamicResource MutedTextBrush}" FontSize="{DynamicResource TypeCaptionSize}" Margin="0,4,0,0" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Button Grid.Row="2" Content="＋ 导入 .jptheme" Click="ImportTheme_Click" Margin="0,12,0,0" HorizontalAlignment="Left" />
+        </Grid>
+        <Border Grid.Column="2" Style="{StaticResource CardStyle}">
+            <Grid>
+                <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                <TextBlock Text="副屏预览" Style="{StaticResource SectionTitleStyle}" AutomationProperties.HeadingLevel="Level2" />
+                <Grid Grid.Row="1" Margin="0,12">
+                    <Border Background="{DynamicResource PanelAltBrush}" CornerRadius="5" Padding="5"><Image x:Name="PreviewImage" Stretch="Uniform" AutomationProperties.Name="选中主题的副屏预览" /></Border>
+                    <TextBlock x:Name="PreviewHint" Text="选择主题以查看模拟预览" Foreground="{DynamicResource MutedTextBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" />
+                </Grid>
+                <TextBlock Grid.Row="2" Text="使用模拟数据，不影响正在运行的副屏。" FontSize="{DynamicResource TypeCaptionSize}" Foreground="{DynamicResource MutedTextBrush}" HorizontalAlignment="Center" Margin="0,0,0,10" />
+                <StackPanel Grid.Row="3">
+                    <Button x:Name="EnableSelectedThemeButton" Content="应用到副屏" Click="EnableSelectedTheme_Click" IsEnabled="False" Style="{StaticResource AccentButtonStyle}" />
+                    <Button x:Name="DeleteSelectedThemeButton" Content="删除导入主题" Click="DeleteSelectedTheme_Click" IsEnabled="False" Margin="0,8,0,0" Foreground="{DynamicResource DangerBrush}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,253 @@
+<UserControl x:Class="Seein.Tray.AppListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Seein.Tray" xmlns:shared="clr-namespace:Seein.Tray;assembly=Seein.Desktop.Shared"
+             Background="Transparent" Foreground="{DynamicResource TextBrush}">
+    <UserControl.Resources>
+        <Style x:Key="AppListHeaderButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="MinWidth" Value="0" />
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Foreground" Value="{DynamicResource MutedTextBrush}" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="Transparent" Padding="0">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="RowChevronButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="MinWidth" Value="0" />
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Foreground" Value="{DynamicResource MutedTextBrush}" />
+            <Setter Property="FontFamily" Value="{DynamicResource IconFontFamily}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Chrome" Background="Transparent" CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Chrome" Property="Background" Value="{DynamicResource HoverBrush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Border x:Name="SearchBorder" Width="300" Height="36" CornerRadius="6" HorizontalAlignment="Left"
+                    Background="{DynamicResource PanelBrush}"
+                    BorderThickness="1">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" Value="{DynamicResource ScrollThumbHoverBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Grid>
+                    <TextBox x:Name="SearchBox" Background="Transparent" BorderThickness="0" FontSize="13"
+                             Padding="0" Margin="34,0,10,0" VerticalContentAlignment="Center"
+                             VerticalAlignment="Stretch" Foreground="{DynamicResource TextBrush}"
+                             CaretBrush="{DynamicResource TextBrush}"
+                             ToolTip="按应用名称或进程路径搜索" AutomationProperties.Name="搜索应用或进程"
+                             TextChanged="Search_TextChanged" />
+                    <TextBlock Text="&#xE721;" FontFamily="{DynamicResource IconFontFamily}" FontSize="14"
+                               Foreground="{DynamicResource MutedTextBrush}" Margin="12,0,0,0"
+                               HorizontalAlignment="Left" VerticalAlignment="Center" IsHitTestVisible="False" />
+                    <TextBlock Text="搜索应用或进程" FontSize="12.5" VerticalAlignment="Center"
+                               Foreground="{DynamicResource SubtleTextBrush}" Margin="34,0,10,0"
+                               HorizontalAlignment="Left" IsHitTestVisible="False">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=SearchBox}" Value="">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Grid>
+            </Border>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom">
+                <CheckBox x:Name="ShowHiddenToggle" Content="显示已隐藏" Margin="0,0,14,0" VerticalAlignment="Center"
+                          Checked="Filter_Changed" Unchecked="Filter_Changed" />
+                <Button Content="归并规则" Margin="0,0,8,0" Click="GroupingRules_Click" />
+                <Button Content="刷新" Click="Refresh_Click" />
+            </StackPanel>
+        </Grid>
+
+        <TextBlock x:Name="StatusText" Grid.Row="1" Foreground="{DynamicResource MutedTextBrush}" TextWrapping="Wrap" Visibility="Collapsed" Margin="0,0,0,12" AutomationProperties.LiveSetting="Polite"/>
+        <Border x:Name="CatalogContent" Grid.Row="2" Style="{StaticResource CardStyle}" Padding="10,12" Visibility="Collapsed">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid Margin="8,0,8,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="34" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="110" />
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="110" />
+                        <ColumnDefinition Width="290" />
+                    </Grid.ColumnDefinitions>
+                        <Button x:Name="NameSortButton" Grid.Column="1" Margin="54,0,0,0" Content="应用名称" Tag="Name"
+                            Style="{StaticResource AppListHeaderButtonStyle}" Click="Sort_Click" />
+                    <Button x:Name="TotalSortButton" Grid.Column="2" Content="累计时长" Tag="Total"
+                            Style="{StaticResource AppListHeaderButtonStyle}" Click="Sort_Click" />
+                    <Button x:Name="TodaySortButton" Grid.Column="3" Content="今日时长" Tag="Today"
+                            Style="{StaticResource AppListHeaderButtonStyle}" Click="Sort_Click" />
+                    <Button x:Name="ColorSortButton" Grid.Column="4" Content="颜色" Tag="Color"
+                            Style="{StaticResource AppListHeaderButtonStyle}" Click="Sort_Click" />
+                    <TextBlock Grid.Column="5" Text="操作" FontSize="13" FontWeight="Medium" Foreground="{DynamicResource MutedTextBrush}" VerticalAlignment="Center" />
+                    <Border Grid.ColumnSpan="6" Height="1" Background="{DynamicResource BorderBrush}"
+                            VerticalAlignment="Bottom" Margin="0,0,0,-4" />
+                </Grid>
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl x:Name="AppList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Height="46" Margin="8,0,8,0" Background="Transparent">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="34" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="110" />
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="110" />
+                                        <ColumnDefinition Width="290" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="1" Margin="{Binding Indent}" VerticalAlignment="Center">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="26" />
+                                            <ColumnDefinition Width="24" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Button Style="{StaticResource RowChevronButtonStyle}"
+                                                Width="{Binding ChevronSize}" Height="{Binding ChevronSize}"
+                                                HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                Content="{Binding ChevronGlyph}" FontSize="{Binding ChevronFontSize}"
+                                                Visibility="{Binding ChevronVisibility}"
+                                                Click="Expander_Click" Tag="{Binding Key}" />
+                                        <Image Grid.Column="1" Source="{Binding Icon}" Width="22" Height="22" VerticalAlignment="Center" />
+                                        <StackPanel Grid.Column="2" Margin="4,0,10,0">
+                                            <TextBlock Text="{Binding Name}" FontSize="{Binding NameSize}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                            <TextBlock Text="{Binding Subtitle}" FontSize="{DynamicResource TypeCaptionSize}" TextTrimming="CharacterEllipsis"
+                                                       Foreground="{DynamicResource SubtleTextBrush}" />
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <TextBlock Grid.Column="2" Text="{Binding TotalText}" FontSize="12" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="3" Text="{Binding Duration}" FontSize="12" VerticalAlignment="Center" />
+                                    <Button Grid.Column="4" Width="76" Height="24" HorizontalAlignment="Left" Padding="0"
+                                            Background="Transparent" BorderThickness="0" Cursor="Hand" HorizontalContentAlignment="Left"
+                                            Visibility="{Binding ActionsVisibility}"
+                                            ToolTip="选择颜色" Click="Color_Click" Tag="{Binding Key}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border Width="14" Height="14" CornerRadius="8" Background="{Binding ColorBrush}"
+                                                    BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" />
+                                            <TextBlock Text="改色" FontSize="{DynamicResource TypeCaptionSize}" Margin="6,0,0,0" VerticalAlignment="Center"
+                                                       Foreground="{DynamicResource MutedTextBrush}" />
+                                        </StackPanel>
+                                    </Button>
+                                    <StackPanel Grid.Column="5" Orientation="Horizontal" VerticalAlignment="Center"
+                                                Visibility="{Binding ActionsVisibility}">
+                                        <Button Content="改名" Style="{StaticResource InlineActionButtonStyle}" Click="Rename_Click" Tag="{Binding Key}" />
+                                        <Button Content="换图标" Style="{StaticResource InlineActionButtonStyle}" Click="Icon_Click" Tag="{Binding Key}" />
+                                        <Button Content="{Binding MergeText}" Visibility="{Binding MergeVisibility}"
+                                                Style="{StaticResource InlineActionButtonStyle}" Click="Merge_Click" Tag="{Binding Key}" />
+                                        <Button Content="{Binding HideText}" Visibility="{Binding HideVisibility}"
+                                                Style="{StaticResource InlineActionButtonStyle}" Click="Hide_Click" Tag="{Binding Key}" />
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <shared:PageLoadPanel x:Name="CatalogLoadPanel" Grid.Row="2" Visibility="Collapsed" />
+
+        <Grid x:Name="EditorOverlay" Panel.ZIndex="50" Grid.RowSpan="3" Visibility="Collapsed" Background="#7F000000" KeyboardNavigation.TabNavigation="Cycle"
+              KeyboardNavigation.ControlTabNavigation="Cycle" PreviewKeyDown="Editor_KeyDown"
+              AutomationProperties.Name="{Binding Text, ElementName=EditorTitle}">
+            <Border Style="{StaticResource CardStyle}" Width="460" Padding="22"
+                    HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel>
+                    <TextBlock x:Name="EditorTitle" Style="{StaticResource SectionTitleStyle}" AutomationProperties.HeadingLevel="Level2" />
+                    <TextBlock x:Name="EditorHint" FontSize="12" Margin="0,6,0,12" TextWrapping="Wrap"
+                               Foreground="{DynamicResource MutedTextBrush}" />
+
+                    <StackPanel x:Name="TextPanel">
+                        <TextBox x:Name="EditorInput" Padding="8,6" AutomationProperties.Name="应用名称" />
+                    </StackPanel>
+
+                    <StackPanel x:Name="ColorPanel" Visibility="Collapsed">
+                        <WrapPanel x:Name="SwatchPanel" />
+                        <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                            <TextBox x:Name="HexInput" Width="110" Style="{StaticResource HexTextBoxStyle}" AutomationProperties.Name="应用十六进制颜色" />
+                            <Border x:Name="HexPreview" Width="28" Height="28" Margin="8,0,0,0" CornerRadius="4"
+                                    BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" />
+                            <Button Content="屏幕取色" Padding="10,6" Margin="8,0,0,0" Click="PickScreen_Click" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <ListBox x:Name="EditorList" AutomationProperties.Name="归并目标" MaxHeight="220" Visibility="Collapsed" DisplayMemberPath="Name" />
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
+                        <Button x:Name="EditorCancelButton" Content="取消" Padding="16,7" Margin="0,0,8,0" Click="EditorCancel_Click" />
+                        <Button x:Name="EditorOkButton" Content="确定" Padding="16,7" Style="{StaticResource AccentButtonStyle}" Click="EditorOk_Click" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

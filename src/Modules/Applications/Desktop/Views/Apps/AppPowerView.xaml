@@ -1,0 +1,138 @@
+<UserControl x:Class="Seein.Tray.AppPowerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Seein.Tray" xmlns:shared="clr-namespace:Seein.Tray;assembly=Seein.Desktop.Shared"
+             Background="Transparent" Foreground="{DynamicResource TextBrush}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Border />
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom">
+                <Border Style="{StaticResource SegmentedHostStyle}" Margin="0,0,14,0">
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton x:Name="DayModeButton" Content="日" Style="{StaticResource SegmentedButtonStyle}"
+                                     IsChecked="True" Checked="Mode_Changed" />
+                        <RadioButton x:Name="WeekModeButton" Content="周" Style="{StaticResource SegmentedButtonStyle}"
+                                     Checked="Mode_Changed" />
+                    </StackPanel>
+                </Border>
+                <Button x:Name="PreviousButton" AutomationProperties.Name="上一时段" Width="34" Click="Previous_Click" Margin="0,0,4,0"
+                        Content="&#xE76B;" FontFamily="{DynamicResource IconFontFamily}" FontSize="{DynamicResource TypeCaptionSize}" Padding="0" />
+                <TextBlock x:Name="DateText" VerticalAlignment="Center" FontSize="13" MinWidth="100"
+                           TextAlignment="Center" />
+                <Button x:Name="NextButton" AutomationProperties.Name="下一时段" Width="34" Click="Next_Click" Margin="4,0,14,0"
+                        Content="&#xE76C;" FontFamily="{DynamicResource IconFontFamily}" FontSize="{DynamicResource TypeCaptionSize}" Padding="0" />
+                <Button Content="刷新" Click="Refresh_Click" />
+            </StackPanel>
+        </Grid>
+
+        <UniformGrid Grid.Row="1" Columns="4" Margin="0,0,0,16">
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,12,0" Padding="16,14">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource CardCaptionStyle}" Text="应用耗电合计" />
+                    <TextBlock x:Name="AppsWhText" Style="{StaticResource CardValueStyle}" Text="—" Margin="0,6,0,0" FontSize="22" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,12,0" Padding="16,14">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource CardCaptionStyle}" Text="系统进程" />
+                    <TextBlock x:Name="SystemWhText" Style="{StaticResource CardValueStyle}" Text="—" Margin="0,6,0,0" FontSize="22" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,12,0" Padding="16,14">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource CardCaptionStyle}" Text="基线与其他" />
+                    <TextBlock x:Name="BaselineWhText" Style="{StaticResource CardValueStyle}" Text="—" Margin="0,6,0,0" FontSize="22" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource CardStyle}" Padding="16,14">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource CardCaptionStyle}" Text="应用归属率" />
+                    <TextBlock x:Name="ShareText" Style="{StaticResource CardValueStyle}" Text="—" Margin="0,6,0,0" FontSize="22" />
+                </StackPanel>
+            </Border>
+        </UniformGrid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="340" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Style="{StaticResource CardStyle}" Padding="16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="耗电构成" Style="{StaticResource SectionTitleStyle}" />
+                    <Grid Grid.Row="1" Margin="0,10,0,0">
+                        <shared:DonutChart x:Name="Donut" AutomationProperties.Name="应用与系统耗电构成" />
+                        <shared:WeekBars x:Name="WeekChart" AutomationProperties.Name="七天趋势图" Visibility="Collapsed" />
+                    </Grid>
+                    <StackPanel x:Name="LegendPanel" Grid.Row="2" Margin="0,12,0,0" />
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="2" Style="{StaticResource CardStyle}" Padding="10,14">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid Margin="6,0,6,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="88" />
+                            <ColumnDefinition Width="88" />
+                            <ColumnDefinition Width="64" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="应用" Style="{StaticResource CardCaptionStyle}" />
+                        <TextBlock Grid.Column="1" Text="运行时长" Style="{StaticResource CardCaptionStyle}" HorizontalAlignment="Right" />
+                        <TextBlock Grid.Column="2" Text="耗电" Style="{StaticResource CardCaptionStyle}" HorizontalAlignment="Right" />
+                        <TextBlock Grid.Column="3" Text="占比" Style="{StaticResource CardCaptionStyle}" HorizontalAlignment="Right" />
+                    </Grid>
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl x:Name="PowerList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Height="44" Margin="6,0,6,0" ToolTip="{Binding ToolTip}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="30" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="82" />
+                                            <ColumnDefinition Width="88" />
+                                            <ColumnDefinition Width="64" />
+                                        </Grid.ColumnDefinitions>
+                                        <Image Source="{Binding Icon}" Width="22" Height="22" VerticalAlignment="Center" />
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,12,0">
+                                            <Ellipse Width="8" Height="8" Fill="{Binding CategoryBrush}" VerticalAlignment="Center" Margin="0,0,7,0" />
+                                            <TextBlock Text="{Binding Name}" FontSize="13" TextTrimming="CharacterEllipsis" />
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="2" Text="{Binding DurationText}" FontSize="12"
+                                                   Foreground="{DynamicResource MutedTextBrush}" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                                        <TextBlock Grid.Column="3" Text="{Binding PowerText}" FontSize="13"
+                                                   VerticalAlignment="Center" HorizontalAlignment="Right" />
+                                        <TextBlock Grid.Column="4" Text="{Binding ShareText}" FontSize="12"
+                                                   Foreground="{DynamicResource MutedTextBrush}" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

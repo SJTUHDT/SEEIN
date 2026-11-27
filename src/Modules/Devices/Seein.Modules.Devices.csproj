@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="../../Seein.Core/Seein.Core.csproj" />
+    <ProjectReference Include="../../Seein.SmartHome/Seein.SmartHome.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.1" />
+    <PackageReference Include="HidSharp" Version="2.6.4" />
+  </ItemGroup>
+  <ItemGroup><Using Include="Microsoft.Extensions.Logging"/><Using Include="Microsoft.Extensions.Hosting"/></ItemGroup>
+<ItemGroup><PackageReference Include="System.ServiceProcess.ServiceController" Version="8.0.1"/></ItemGroup><ItemGroup><InternalsVisibleTo Include="Seein.Tests"/></ItemGroup><ItemGroup><Compile Remove="Desktop/**/*.cs"/><None Remove="Desktop/**"/></ItemGroup></Project>
+

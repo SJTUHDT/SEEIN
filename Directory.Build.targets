@@ -1,0 +1,7 @@
+<Project>
+  <!-- The DDC host shares the tray assembly, but owns a separate process image. -->
+  <Target Name="StageSeeinDisplayHost" AfterTargets="Build;Publish" Condition="'$(MSBuildProjectName)' == 'Seein.Tray'">
+    <Copy SourceFiles="$(TargetDir)$(TargetName).exe" DestinationFiles="$(TargetDir)seedisplay.exe" SkipUnchangedFiles="true" Condition="Exists('$(TargetDir)$(TargetName).exe')" />
+    <Copy SourceFiles="$(PublishDir)$(TargetName).exe" DestinationFiles="$(PublishDir)seedisplay.exe" SkipUnchangedFiles="true" Condition="'$(PublishDir)' != '' and Exists('$(PublishDir)$(TargetName).exe')" />
+  </Target>
+</Project>

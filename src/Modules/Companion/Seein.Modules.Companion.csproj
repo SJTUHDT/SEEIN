@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="../../Seein.Core/Seein.Core.csproj" />
+    <ProjectReference Include="../../Seein.Pet/Seein.Pet.csproj" />
+  </ItemGroup>
+<ItemGroup><Compile Remove="Desktop/**/*.cs"/><None Remove="Desktop/**"/></ItemGroup></Project>
+

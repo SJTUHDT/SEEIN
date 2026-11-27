@@ -1,0 +1,304 @@
+diff --git a/src/Pane.App/App.Secondary.cs b/src/Pane.App/App.Secondary.cs
+index 2351992..a2079bd 100644
+--- a/src/Pane.App/App.Secondary.cs
++++ b/src/Pane.App/App.Secondary.cs
+@@ -37,9 +37,15 @@ public sealed partial class App
+         launcher.OpenTimer+=ShowTimer;   /* 058：「定时关机…」 */
+     }
+ 
+-    public void ShowFiles(string query,string? focus)=>Present(SecondaryId.Files, Strings.Common_Files,()=>new FilesView(Files,secondaryActions!),v=>((FilesView)v).Open(query,focus));
++    public void ShowFiles(string query,string? focus)
++    {
++        Windows.Foundation.Point? center=null;
++        if(SeeinMode&&panels.TryGetValue("launcher",out var launcher)&&launcher.Shown&&launcher.View is LauncherView source)
++            center=launcher.SeeinSearchCenter(source.SeeinSearchInput);
++        Present(SecondaryId.Files, Strings.Common_Files,()=>new FilesView(Files,secondaryActions!),v=>((FilesView)v).Open(query,focus),searchCenter:center);
++    }
+     /// <summary>打开设置并跳到某个分区（各处「去设置」，issue 11）。</summary>
+-    public void OpenSettings(string? section){Command("show-settings");if(section!=null&&settings?.View is SettingsView v)v.ShowSection(section);}
++    public void OpenSettings(string? section){if(SeeinMode){OpenSeeinSettings();return;}Command("show-settings");if(section!=null&&settings?.View is SettingsView v)v.ShowSection(section);}
+     public void ShowTranslate(string? text)=>Present(SecondaryId.Translate, Strings.Common_Translate,()=>{var v=new TranslateView(Ai,secondaryActions!);v.OpenSettings+=(_,_)=>OpenSettings("ai");return v;},v=>((TranslateView)v).Open(text));
+     public void ShowChat(string? question,IReadOnlyList<AiChatMessage>? history)=>Present(SecondaryId.Chat, Strings.Common_AiChat,()=>new ChatView(Ai,secondaryActions!),v=>((ChatView)v).Open(question,history));
+     public void ShowChatDraft(string draft)=>Present(SecondaryId.Chat, Strings.Common_AiChat,()=>new ChatView(Ai,secondaryActions!),v=>((ChatView)v).SetDraft(draft));
+@@ -63,7 +69,7 @@ public sealed partial class App
+     void WireSuper(SuperView super){super.OpenTranslate+=text=>ShowTranslate(text);super.OpenChat+=text=>ShowChatDraft(text);super.OpenRename+=files=>ShowRename(files,0);}
+ 
+     /// <param name="at">新建窗口时放到这里（物理像素，玻璃左上角），代替上次记下的位置（分词：剪贴板原来的位置、鼠标附近）。</param>
+-    void Present(SecondaryId id,string name,Func<Microsoft.UI.Xaml.Controls.UserControl> make,Action<IPanelView> open,(int X,int Y)? at=null)
++    void Present(SecondaryId id,string name,Func<Microsoft.UI.Xaml.Controls.UserControl> make,Action<IPanelView> open,(int X,int Y)? at=null,Windows.Foundation.Point? searchCenter=null)
+     {
+         if(closing)return;
+         var owner=id switch { SecondaryId.Files=>ModuleIds.Launcher, SecondaryId.Rename=>ModuleIds.Rename, SecondaryId.Timer=>ModuleIds.PowerTimer, SecondaryId.Words=>ModuleIds.Words, _=>ModuleIds.Ai };
+@@ -84,11 +90,16 @@ public sealed partial class App
+             };
+             panel.Prepare();secondaries[id]=panel;
+         }
++        if(searchCenter is {} center&&panel.View is FilesView files)
++            panel.SeeinAlignSearchAt(files.SeeinSearchInput,center);
+         // 从启动器 / 超级面板展开：那两个面板先收起
+         foreach(var p in panels.Values)p.Hide();
+         open(panel.View);
+         current=panel;
+         panel.BringToFront(activate:!demo&&Environment.GetEnvironmentVariable("PANE_VERIFY")!="1");
++        // Restoring a minimized window can restore its OS-saved bounds.
++        if(searchCenter is {} restoredCenter&&panel.View is FilesView restoredFiles)
++            panel.SeeinAlignSearchAt(restoredFiles.SeeinSearchInput,restoredCenter);
+     }
+ 
+     void HideSecondaries(){foreach(var w in secondaries.Values.ToArray())w.Hide();}
+diff --git a/src/Pane.App/App.WinV.cs b/src/Pane.App/App.WinV.cs
+index 893540e..34f6bd6 100644
+--- a/src/Pane.App/App.WinV.cs
++++ b/src/Pane.App/App.WinV.cs
+@@ -5,7 +5,7 @@ public sealed partial class App
+     async Task StartWinV()
+     {
+         // 开发、诊断和演示实例不连接真实注册表或资源管理器。
+-        if (!IsProduction || demo || shell == null) return;
++        if (SeeinMode || !IsProduction || demo || shell == null) return;
+         var service = new Services.WinV.WinVReplacement(Store.DirectoryPath,
+             new Services.WinV.WindowsWinVRegistry(),
+             new Services.WinV.ExplorerRestart(new Services.WinV.WindowsExplorerPlatform()), shell);
+diff --git a/src/Pane.App/App.xaml.cs b/src/Pane.App/App.xaml.cs
+index 73aebf2..45bfd9a 100644
+--- a/src/Pane.App/App.xaml.cs
++++ b/src/Pane.App/App.xaml.cs
+@@ -64,7 +64,7 @@ public sealed partial class App : Application
+         try {
+             GlassParameters.InitializeResources(Resources);queue.EnsureSystemDispatcherQueue();manager=WindowsXamlManager.InitializeForCurrentThread();
+             string data=RuntimeMode.Current.DataDirectory;
+-            Store=new SettingsStore(data,GlassParameters.Defaults());Store.CorruptFile+=(_,_)=>Ack("settings-recovered");Store.Load();ApplyUiLanguage();if(!demo)Fonts=new Pane.Services.FontCatalog();ApplyUiFont();/* 设计：界面字体 */
++            Store=new SettingsStore(data,GlassParameters.Defaults());Store.CorruptFile+=(_,_)=>Ack("settings-recovered");Store.Load(); if(SeeinMode) Store.Save(SeeinSanitize(Store.Current));ApplyUiLanguage();if(!demo)Fonts=new Pane.Services.FontCatalog();ApplyUiFont();/* 设计：界面字体 */
+             var autostart=new Pane.Services.AutostartService(IsProduction,Environment.ProcessPath!,Store,CreateStartupRegistry());Autostart=autostart;autostart.Align();
+             aiService=new Pane.Services.Ai.AiService(Store);AiSetup=aiService;Ai=demo?new Pane.DesignData.AiSample():aiService;aiService.SetModuleEnabled(false);
+             Glass=new GlassParameters(Store.Current.General);
+@@ -74,10 +74,10 @@ public sealed partial class App : Application
+             if(!demo&&startupLevel>=5){shell=new ShellHost(Command,ModuleShellSettings());shell.HotkeyOccupied+=(_,conflict)=>{if(controlsEnabled)File.AppendAllText(output+".hotkey-conflicts",$"{conflict.Target};{conflict.Error}\n");HotkeyOccupied?.Invoke(this,conflict);};}
+             await StartWinV();
+             if(!demo)SettingsView.DataStorage=new Pane.Services.Clipboard.DataStorage(Store,()=>clipboardService,()=>{launcherSearch?.RebuildStorageCache();(FileIcons as Pane.Services.Icons.FileIcons)?.RebuildStorageCache();},text=>queue.TryEnqueue(()=>{if(!closing)shell?.NotifyOnce(text);}),ClearWebStorageCache,()=>launcherSearch?.WebSearchHistory.Completion??Task.CompletedTask);
+-            await StartModules();
++            await StartModules(); StartSeeinBridge();
+             hotkeysReadyMs=(DateTime.UtcNow-System.Diagnostics.Process.GetCurrentProcess().StartTime.ToUniversalTime()).TotalMilliseconds;
+             listener=SingleInstance.Listen(command=>queue.TryEnqueue(()=>{Command(command);Ack("forwarded");}),cancellation.Token);
+-            if(IsProduction&&!demo)Updates=new Pane.Services.Updates.UpdateService(Pane.Services.Setup.SetupFiles.VersionOf(Environment.ProcessPath!)??"0.1.0",data,()=>Store.Current.Update.AutoUpdate,path=>{
++            if(IsProduction&&!demo&&!SeeinMode)Updates=new Pane.Services.Updates.UpdateService(Pane.Services.Setup.SetupFiles.VersionOf(Environment.ProcessPath!)??"0.1.0",data,()=>Store.Current.Update.AutoUpdate,path=>{
+                 var start=new System.Diagnostics.ProcessStartInfo(path){UseShellExecute=false,CreateNoWindow=true,WorkingDirectory=Path.GetDirectoryName(Path.GetFullPath(path))!};start.ArgumentList.Add("--auto-update");
+                 using var installer=System.Diagnostics.Process.Start(start)??throw new IOException(Strings.Setup_InstallerLaunchFailed);Shutdown();
+             }, selectedSource:()=>Store.Current.Update.Source);
+@@ -114,6 +114,7 @@ public sealed partial class App : Application
+         if(command=="pause-gestures"){if(gestureService!=null)gestureService.SetPaused(!gestureService.IsPaused);return;}
+         if(command=="exit"){Shutdown();return;}
+         if(command=="hide"){foreach(var p in panels.Values)p.Hide();settings?.Hide();HideSecondaries();gestures?.HideAll();return;}
++        if(command=="show-settings"&&SeeinMode){OpenSeeinSettings();return;}
+         if(command=="show-settings"){
+             if(settings==null){var view=new SettingsView();if(controlsEnabled)TrackSettings(view);settings=new(Strings.Common_Settings,view,view,Glass,true);WatchFrames(settings);settings.Hidden+=(_,_)=>{var old=settings;if(controlsEnabled&&old!=null){retiredSettings.Add(new WeakReference(old.View));retiredHosts.Add(new WeakReference(old));}settings=null;if(current==old)current=null;old?.Dispose();(Fonts as Pane.Services.FontCatalog)?.ClearCache();ReclaimAfterSettings();};settings.Prepare();}current=settings;
+         }else if(command.StartsWith("show-")&&panels.TryGetValue(command[5..],out var panel)){
+diff --git a/src/Pane.App/Hosting/ShellHost.cs b/src/Pane.App/Hosting/ShellHost.cs
+index 1ca7a25..297ad7e 100644
+--- a/src/Pane.App/Hosting/ShellHost.cs
++++ b/src/Pane.App/Hosting/ShellHost.cs
+@@ -126,6 +126,7 @@ internal sealed class ShellHost : IDisposable, Pane.Services.WinV.IWinVHotkey
+         if(!settings.General.ShowTrayIcon&&tray){Shell_NotifyIconW(2,ref data);tray=false;}
+     }
+     void Register(int id,string name,Hotkey key){
++        if(App.SeeinMode)return;
+         if(key.DoubleTap){RegistrationResult(name,key,false,87);return;}
+         var chord=Pane.Services.HotkeyConversions.ToGesture(key);
+         uint mods=ShellHotkeyBindings.NoRepeat;if(chord.Modifiers.HasFlag(Pane.Gestures.KeyModifiers.Ctrl))mods|=2;if(chord.Modifiers.HasFlag(Pane.Gestures.KeyModifiers.Alt))mods|=1;if(chord.Modifiers.HasFlag(Pane.Gestures.KeyModifiers.Shift))mods|=4;if(chord.Modifiers.HasFlag(Pane.Gestures.KeyModifiers.Win))mods|=8;
+diff --git a/src/Pane.App/Pane.App.csproj b/src/Pane.App/Pane.App.csproj
+index 2fd1b1c..9ccf346 100644
+--- a/src/Pane.App/Pane.App.csproj
++++ b/src/Pane.App/Pane.App.csproj
+@@ -1,6 +1,6 @@
+ <Project Sdk="Microsoft.NET.Sdk">
+   <PropertyGroup>
+-    <OutputType>WinExe</OutputType><RootNamespace>Pane</RootNamespace><ApplicationIcon>Assets\pane.ico</ApplicationIcon>
++    <OutputType>WinExe</OutputType><AssemblyName>seewin</AssemblyName><AssemblyTitle>seewin</AssemblyTitle><FileDescription>seewin · SEEIN 效率工具</FileDescription><RootNamespace>Pane</RootNamespace><ApplicationIcon>Assets\pane.ico</ApplicationIcon>
+     <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+     <TargetPlatformMinVersion>10.0.22000.0</TargetPlatformMinVersion>
+     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+@@ -27,7 +27,7 @@
+   <ItemGroup><Content Include="Services/Launcher/Data/*" Link="LauncherData/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" /></ItemGroup>
+   <ItemGroup><Content Include="Assets/Engines/*.png" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest"/><Content Update="Assets/pane.ico" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest"/><Content Update="Assets/pane-app.svg" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest"/><Content Include="bin/native/Pane.Effect.dll" Link="Pane.Effect.dll" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest"/></ItemGroup>
+   <ItemGroup><Content Include="bin/native/Pane.Native.dll" Link="Pane.Native.dll" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" /></ItemGroup>
+-  <Target Name="BuildNativeEffect" BeforeTargets="PrepareForBuild"><Exec Command="powershell.exe -NoProfile -ExecutionPolicy RemoteSigned -File &quot;$(MSBuildProjectDirectory)/scripts/native.ps1&quot;" /></Target>
++  <Target Name="BuildNativeEffect" BeforeTargets="PrepareForBuild" Condition="'$(SkipNativeBuild)' != 'true'"><Exec Command="powershell.exe -NoProfile -ExecutionPolicy RemoteSigned -File &quot;$(MSBuildProjectDirectory)/scripts/native.ps1&quot;" /></Target>
+   <Target Name="CopyAppResources" AfterTargets="Build">
+     <Copy SourceFiles="$(TargetDir)$(AssemblyName).pri" DestinationFiles="$(TargetDir)resources.pri" />
+   </Target>
+diff --git a/src/Pane.App/Services/FolderJumpService.cs b/src/Pane.App/Services/FolderJumpService.cs
+index 32b0937..092dcbb 100644
+--- a/src/Pane.App/Services/FolderJumpService.cs
++++ b/src/Pane.App/Services/FolderJumpService.cs
+@@ -38,8 +38,8 @@ internal sealed class FolderJumpService : IFolderJump, IDisposable
+             bool keysChanged = settings.Jump != value.Jump || settings.Menu != value.Menu;
+             settings = value; generation++;
+             if (keysChanged || !value.Enabled) SetHotkeyProblem(0);
+-            PaneFolderJumpApply(service, value.Enabled ? 1 : 0, Modifiers(value.Jump), value.Jump.VirtualKey,
+-                Modifiers(value.Menu), value.Menu.VirtualKey, value.AutoJump ? 1 : 0);
++            PaneFolderJumpApply(service, value.Enabled ? 1 : 0, App.SeeinMode?0:Modifiers(value.Jump), App.SeeinMode?(ushort)0:value.Jump.VirtualKey,
++                App.SeeinMode?0:Modifiers(value.Menu), App.SeeinMode?(ushort)0:value.Menu.VirtualKey, value.AutoJump ? 1 : 0);
+         }
+     }
+     static uint Modifiers(Hotkey key) =>
+@@ -59,6 +59,7 @@ internal sealed class FolderJumpService : IFolderJump, IDisposable
+             _ = Task.Run(() => ProblemChanged?.Invoke(this, EventArgs.Empty));
+     }
+ 
++    public void SeeinInvoke(bool menu) => OnTrigger(GetForegroundWindow(),menu?2:1,0,0);
+     void OnTrigger(nint dialog, int command, int x, int y)
+     {
+         if (command == 10)
+diff --git a/src/Pane.App/Services/Launcher/LauncherPlatform.cs b/src/Pane.App/Services/Launcher/LauncherPlatform.cs
+index f257efc..5363f08 100644
+--- a/src/Pane.App/Services/Launcher/LauncherPlatform.cs
++++ b/src/Pane.App/Services/Launcher/LauncherPlatform.cs
+@@ -140,6 +140,7 @@ internal sealed class EverythingSearch:ILauncherFiles,IFileSearchStatus
+         token.ThrowIfCancellationRequested();if(query.Length<2||!await gate.WaitAsync(0,token))return [];
+         try{
+             var page=await new EverythingIpc().QueryAsync(query,0,limit,1,token).ConfigureAwait(false);
++            Set(FileSearchState.Ready,Version);
+             return new LauncherFileRows(page.Items.Select(hit=>new LauncherItem("file:"+hit.Path,hit.Category==FileCategory.Folder?LauncherItemKind.Folder:LauncherItemKind.File,LauncherGroups.Files,hit.Name,Path.GetDirectoryName(hit.Path)??"",new(hit.Category==FileCategory.Folder?"folder":"doc"),FileSearch.Highlights(hit.Name,query))).ToArray(),page.Total);
+         }catch(FileSearchUnavailableException){Set(FileSearchState.Unsupported,null);return [];}
+         finally{gate.Release();}
+diff --git a/src/Pane.App/Services/SelectionService.cs b/src/Pane.App/Services/SelectionService.cs
+index bedb6fd..12a7797 100644
+--- a/src/Pane.App/Services/SelectionService.cs
++++ b/src/Pane.App/Services/SelectionService.cs
+@@ -97,7 +97,7 @@ internal sealed class WindowsSelectionPlatform : ISelectionPlatform
+ }
+ internal sealed class SelectionActions(Action<string,Clipboard.ClipboardWriteMode>? write=null,Func<Clipboard.IPastePlatform>? paste=null) : ISelectionActions
+ {
+-    public Task SearchWebAsync(string text,CancellationToken token){token.ThrowIfCancellationRequested();Process.Start(new ProcessStartInfo("https://www.bing.com/search?q="+Uri.EscapeDataString(text)){UseShellExecute=true})?.Dispose();return Task.CompletedTask;}
++    public Task SearchWebAsync(string text,CancellationToken token){token.ThrowIfCancellationRequested();if(App.SeeinMode)App.SeeinOpenExternal("https://www.bing.com/search?q="+Uri.EscapeDataString(text));else Process.Start(new ProcessStartInfo("https://www.bing.com/search?q="+Uri.EscapeDataString(text)){UseShellExecute=true})?.Dispose();return Task.CompletedTask;}
+     public Task CopyAsync(string text,CancellationToken token)=>Sta.Run(()=>{token.ThrowIfCancellationRequested();Write(text);return true;});
+     public Task ReplaceSelectionAsync(string text,nint window,CancellationToken token)
+     {
+diff --git a/src/Pane.App/Views/LauncherView.xaml.cs b/src/Pane.App/Views/LauncherView.xaml.cs
+index fb6a1ba..d7fded1 100644
+--- a/src/Pane.App/Views/LauncherView.xaml.cs
++++ b/src/Pane.App/Views/LauncherView.xaml.cs
+@@ -424,11 +424,8 @@ public sealed partial class LauncherView : UserControl, IPanelView, IPanelOpenin
+     /// <summary>「关键字 空格 内容」，关键字是设置里的某个搜索站点；内容不能是空的。</summary>
+     static (Settings.SearchEngine Engine, string Text)? KeywordQuery(string q)
+     {
+-        int space = q.IndexOf(' ');
+-        if (space <= 0) return null;
+-        var text = q[(space + 1)..].Trim();
+-        if (text.Length == 0) return null;
+-        return Options.SearchEngines.FirstOrDefault(e => string.Equals(e.Keyword, q[..space], StringComparison.OrdinalIgnoreCase)) is { } engine ? (engine, text) : null;
++        var engine = Pane.Services.Launcher.SearchSites.Parse(Options, q, out var text);
++        return engine is not null && text.Length > 0 ? (engine, text) : null;
+     }
+ 
+     /// <summary>
+@@ -456,10 +453,7 @@ public sealed partial class LauncherView : UserControl, IPanelView, IPanelOpenin
+     /// <summary>输入以「站点关键字 空格」开头（后面可以还没打字）：徽章和「只输入了关键字时列历史」用。</summary>
+     static Settings.SearchEngine? KeywordEngine(string raw)
+     {
+-        var s = raw.TrimStart();
+-        int space = s.IndexOf(' ');
+-        if (space <= 0) return null;
+-        return Options.SearchEngines.FirstOrDefault(e => string.Equals(e.Keyword, s[..space], StringComparison.OrdinalIgnoreCase));
++        return Pane.Services.Launcher.SearchSites.Parse(Options, raw, out _);
+     }
+ 
+     // ---------------- 引擎徽章（issue 43）：关键字搜网页时搜索框左边的放大镜换成站点徽章 ----------------
+@@ -670,6 +664,7 @@ public sealed partial class LauncherView : UserControl, IPanelView, IPanelOpenin
+             // 只输入了「关键字 空格」：列这个站点最近搜过的词；没有记录时一条提示（不执行）
+             webEngine = only;
+             var s = Section(only.Name, LauncherSectionKind.List);
++            Add(s, SeeinSiteChoice(only), LauncherCell.Command);
+             foreach (var text in History?.Recent(only, "", 6) ?? []) AddHistory(s, only, text);
+             if (s.Rows.Count == 0) Add(s, new("web:hint", LauncherItemKind.Command, LauncherGroups.Web, Strings.FormatName(Strings.Launcher_WebHint, only.Name), null, new("search")), LauncherCell.Command);
+         }
+@@ -703,6 +698,8 @@ public sealed partial class LauncherView : UserControl, IPanelView, IPanelOpenin
+             // 服务给的 AI / 网页两组不用了（动作行代替）
+             foreach (var item in result.Items.Where(i => i.Kind == LauncherItemKind.Calculation).Take(1))
+                 Add(Section("", LauncherSectionKind.Calc), item, LauncherCell.Calc);
++            foreach (var site in Pane.Services.Launcher.SearchSites.Matches(Options, q))
++                Add(Section("搜索站点", LauncherSectionKind.List), SeeinSiteChoice(site), LauncherCell.Command);
+             var apps = result.Items.Where(i => i.Kind is LauncherItemKind.App or LauncherItemKind.Command && i.Group is not (LauncherGroups.Settings or LauncherGroups.Timer)).Take(MaxApps).ToList();
+             if (apps.Count > 0)
+             {
+@@ -789,6 +786,7 @@ public sealed partial class LauncherView : UserControl, IPanelView, IPanelOpenin
+             LauncherCell.Command when IsKeywordDirect(item) && DirectQuery(q) is { } d => ActionFoot(d.ActionId, item.Title, d.Text),
+             LauncherCell.Command when item.Group == LauncherGroups.Terminal => (string.Format(Strings.Launcher_RunInTerminal, (object?)(item.Subtitle)), [(["Enter"], Strings.Common_Run), (["Ctrl", "+", "Shift", "+", "Enter"], Strings.Launcher_RunAsAdmin)]),
+             LauncherCell.Command when item.Group == LauncherGroups.Completion => (string.Format(Strings.Launcher_RunTarget, (object?)(item.Title)), [(["Tab"], Strings.Launcher_FillInput), (["Enter"], Strings.Common_Run), (["Ctrl", "+", "Shift", "+", "Enter"], Strings.Launcher_AsAdmin)]),
++            LauncherCell.Command when item.Id.StartsWith("site:", StringComparison.Ordinal) => (item.Subtitle ?? item.Title, [(["Enter"], "选择站点")]),
+             LauncherCell.Command when item.Id == "web:hint" => (item.Title, []),
+             // 直达（098 / issue 52）：打开网址
+             LauncherCell.Command when item.Group == LauncherGroups.Direct => (string.Format(Strings.Launcher_OpenTarget, (object?)(item.Title)), [(["Enter"], Strings.Common_Open)]),
+@@ -1177,6 +1175,12 @@ public sealed partial class LauncherView : UserControl, IPanelView, IPanelOpenin
+         var row = rows[index];
+         var item = row.Item;
+         var q = shownQuery;
++        if (item.Id.StartsWith("site:", StringComparison.Ordinal))
++        {
++            Fill(item.Id[5..] + " ");
++            Input.Focus(FocusState.Programmatic);
++            return;
++        }
+         if (row.Cell == LauncherCell.Menu) { if (!tab) await RunMenu(row); return; }
+ 
+         // 关键字直达（052）：和动作行同样的动作，只是内容去掉了关键字；Tab 照动作行展开成翻译 / 对话窗口
+@@ -1472,6 +1476,7 @@ public sealed partial class LauncherView : UserControl, IPanelView, IPanelOpenin
+             if (r.Cell == LauncherCell.File && string.Equals(FilePath(r.Item), path, StringComparison.OrdinalIgnoreCase)) r.SetSystemIcon(FileIcon(r));
+     });
+ 
++    public void SeeinFill(string text) => Fill(text);
+     void Fill(string text)
+     {
+         Input.Text = text;
+diff --git a/src/Pane.App/scripts/native.ps1 b/src/Pane.App/scripts/native.ps1
+index 94f7589..4b7093a 100644
+--- a/src/Pane.App/scripts/native.ps1
++++ b/src/Pane.App/scripts/native.ps1
+@@ -1,16 +1,18 @@
+ ﻿$ErrorActionPreference='Stop'
+ $root=Split-Path $PSScriptRoot -Parent
++if (!$env:SEEIN_PORTABLE_MSVC) {
+ . (Join-Path $root '../../scripts/find-build-tools.ps1')
+ $vs=& (Find-PaneVsWhere) @('-latest','-products','*','-requires','Microsoft.VisualStudio.Component.VC.Tools.x86.x64','-property','installationPath')
+ if(!$vs){throw '缺少 C++ 构建工具；不安装软件。'}
+ Import-Module (Join-Path $vs 'Common7/Tools/Microsoft.VisualStudio.DevShell.dll')
+ Enter-VsDevShell -VsInstallPath $vs -SkipAutomaticLocation -DevCmdArguments '-arch=x64 -host_arch=x64' | Out-Null
++}
+ $native=Join-Path $root 'bin/native'
+ New-Item -ItemType Directory -Force $native | Out-Null
+-& cl.exe @('/nologo','/utf-8','/std:c++17','/EHsc','/MT','/LD',"$root/Native/Effect.cpp","/Fo$native/",'/link','/PDBALTPATH:%_PDB%',"/OUT:$native/Pane.Effect.dll",'windowsapp.lib','d2d1.lib','dxguid.lib',"/IMPLIB:$native/Pane.Effect.lib")
++& cl.exe @('/nologo','/utf-8','/std:c++20','/EHsc','/MT','/LD',"$root/Native/Effect.cpp","/Fo$native/",'/link','/PDBALTPATH:%_PDB%',"/OUT:$native/Pane.Effect.dll",'windowsapp.lib','d2d1.lib','dxguid.lib',"/IMPLIB:$native/Pane.Effect.lib")
+ if($LASTEXITCODE-ne 0){throw '原生效果构建失败'}
+-& cl.exe @('/nologo','/utf-8','/std:c++17','/EHsc','/MT','/LD',"$root/Native/DesktopCapture.cpp","/Fo$native/",'/link','/PDBALTPATH:%_PDB%',"/OUT:$native/Pane.Capture.dll",'d3d11.lib','dxgi.lib','windowsapp.lib','user32.lib',"/IMPLIB:$native/Pane.Capture.lib")
++& cl.exe @('/nologo','/utf-8','/std:c++20','/EHsc','/MT','/LD',"$root/Native/DesktopCapture.cpp","/Fo$native/",'/link','/PDBALTPATH:%_PDB%',"/OUT:$native/Pane.Capture.dll",'d3d11.lib','dxgi.lib','windowsapp.lib','user32.lib',"/IMPLIB:$native/Pane.Capture.lib")
+ if($LASTEXITCODE-ne 0){throw 'DXGI 截图辅助库构建失败'}
+ 
+-& cl.exe @('/nologo','/utf-8','/std:c++17','/EHsc','/MT','/W4','/WX','/LD',"$root/../Pane.Native/Hook.cpp","$root/../Pane.Native/KeyboardHook.cpp","$root/../Pane.Native/PanelKeys.cpp","$root/../Pane.Native/System.cpp","$root/../Pane.Native/Selection.cpp","$root/../Pane.Native/Launcher.cpp","$root/../Pane.Native/IconCodec.cpp","$root/../Pane.Native/Clipboard.cpp","$root/../Pane.Native/Setup.cpp","$root/../Pane.Native/Fonts.cpp","$root/../Pane.Native/FolderPicker.cpp","$root/../Pane.Native/FolderJump.cpp","$root/../Pane.Native/FileSelection.cpp","/Fo$native/",'/link','/PDBALTPATH:%_PDB%',"/OUT:$native/Pane.Native.dll",'user32.lib','gdi32.lib','windowscodecs.lib','powrprof.lib','propsys.lib','advapi32.lib','urlmon.lib','shell32.lib','shlwapi.lib','ole32.lib','oleaut32.lib','uiautomationcore.lib','uuid.lib','dwrite.lib',"/IMPLIB:$native/Pane.Native.lib")
++& cl.exe @('/nologo','/utf-8','/std:c++20','/EHsc','/MT','/W4','/WX','/LD',"$root/../Pane.Native/Hook.cpp","$root/../Pane.Native/KeyboardHook.cpp","$root/../Pane.Native/PanelKeys.cpp","$root/../Pane.Native/System.cpp","$root/../Pane.Native/Selection.cpp","$root/../Pane.Native/Launcher.cpp","$root/../Pane.Native/IconCodec.cpp","$root/../Pane.Native/Clipboard.cpp","$root/../Pane.Native/Setup.cpp","$root/../Pane.Native/Fonts.cpp","$root/../Pane.Native/FolderPicker.cpp","$root/../Pane.Native/FolderJump.cpp","$root/../Pane.Native/FileSelection.cpp","/Fo$native/",'/link','/PDBALTPATH:%_PDB%',"/OUT:$native/Pane.Native.dll",'user32.lib','gdi32.lib','windowscodecs.lib','powrprof.lib','propsys.lib','advapi32.lib','urlmon.lib','shell32.lib','shlwapi.lib','ole32.lib','oleaut32.lib','uiautomationcore.lib','uuid.lib','dwrite.lib',"/IMPLIB:$native/Pane.Native.lib")
+ if($LASTEXITCODE-ne 0){throw '原生手势与选区模块构建失败'}
+diff --git a/src/Pane.Native/Launcher.cpp b/src/Pane.Native/Launcher.cpp
+index 55d0f26..3271cba 100644
+--- a/src/Pane.Native/Launcher.cpp
++++ b/src/Pane.Native/Launcher.cpp
+@@ -21,7 +21,7 @@ struct Apartment { HRESULT hr=CoInitializeEx(nullptr,COINIT_APARTMENTTHREADED);
+ using AppCallback=void(__cdecl*)(const wchar_t*,const wchar_t*,const wchar_t*,const wchar_t*,const wchar_t*,int);
+ std::wstring property(IShellItem2* item,REFPROPERTYKEY key){PWSTR p=nullptr;std::wstring value;if(SUCCEEDED(item->GetString(key,&p))&&p){value=p;CoTaskMemFree(p);}return value;}
+ std::wstring display(IShellItem* item,SIGDN kind){PWSTR p=nullptr;std::wstring value;if(SUCCEEDED(item->GetDisplayName(kind,&p))&&p){value=p;CoTaskMemFree(p);}return value;}
+-HWND endpoint(){HWND h=FindWindowW(L"EVERYTHING_TASKBAR_NOTIFICATION",nullptr);return h?h:FindWindowW(L"EVERYTHING_TASKBAR_NOTIFICATION_(1.5a)",nullptr);}
++HWND endpoint(){wchar_t instance[128]{};GetEnvironmentVariableW(L"SEEIN_INDEX_INSTANCE",instance,128);std::wstring name=L"EVERYTHING_TASKBAR_NOTIFICATION_(";name+=instance[0]?instance:L"SEEIN";name+=L")";if(HWND owned=FindWindowW(name.c_str(),nullptr))return owned;if(GetEnvironmentVariableW(L"SEEIN_TOOL_PIPE",nullptr,0))return nullptr;HWND h=FindWindowW(L"EVERYTHING_TASKBAR_NOTIFICATION",nullptr);return h?h:FindWindowW(L"EVERYTHING_TASKBAR_NOTIFICATION_(1.5a)",nullptr);}
+ struct Query {HWND target=nullptr;DWORD serial=0,limit=0,total=0;bool done=false,extended=false;std::vector<long long> sizes,dates;std::vector<std::wstring> names,folders;std::vector<int> kinds;};
+ bool text(COPYDATASTRUCT* c,DWORD offset,std::wstring& value){if(offset%2||offset>=c->cbData)return false;auto p=reinterpret_cast<const wchar_t*>(static_cast<const BYTE*>(c->lpData)+offset);size_t n=(c->cbData-offset)/2,i=0;while(i<n&&p[i])++i;if(i==n)return false;value.assign(p,i);return true;}
+ LRESULT CALLBACK replyProc(HWND h,UINT m,WPARAM w,LPARAM l){
+@@ -152,10 +152,12 @@ API int PaneEverythingPage(const wchar_t* query,int offset,int limit,int sort,Fi
+  DestroyWindow(h);if(!q.done)return -1;*total=static_cast<int>((std::min)(q.total,static_cast<DWORD>(INT_MAX)));
+  for(size_t i=0;i<q.names.size();i++)callback(q.names[i].c_str(),q.folders[i].c_str(),q.kinds[i],q.sizes[i],q.dates[i]);return 1;
+ }
++extern "C" HRESULT __stdcall LaunchPaneFromDesktop(const wchar_t*,const wchar_t*,const wchar_t*,BOOL) noexcept;
+ namespace {
+ int launcherOpen(const wchar_t* target,int packaged){
+  Apartment apartment;AllowSetForegroundWindow(ASFW_ANY);
+  if(packaged){ComPtr<IApplicationActivationManager> manager;DWORD pid=0;if(FAILED(CoCreateInstance(CLSID_ApplicationActivationManager,nullptr,CLSCTX_LOCAL_SERVER,IID_PPV_ARGS(&manager))))return 0;CoAllowSetForegroundWindow(manager.Get(),nullptr);auto hr=manager->ActivateApplication(target,nullptr,AO_NONE,&pid);if(SUCCEEDED(hr)&&pid)AllowSetForegroundWindow(pid);return SUCCEEDED(hr);}
++ if(GetEnvironmentVariableW(L"SEEIN_TOOL_PIPE",nullptr,0))return SUCCEEDED(LaunchPaneFromDesktop(target,L"",L"",TRUE));
+  // 文件属性查询也在受限工作线程内，网络路径不可达时不会占住调用者。
+  DWORD attributes=GetFileAttributesW(target);
+  if(attributes!=INVALID_FILE_ATTRIBUTES&&(attributes&FILE_ATTRIBUTE_DIRECTORY)){
