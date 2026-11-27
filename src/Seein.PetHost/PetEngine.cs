@@ -41,7 +41,7 @@ internal sealed class PetEngine : IDisposable
         Home = home;
         Assets = assets;
         Configuration = new(home, assets);
-        Bridge = new(Configuration.DirectoryPath);
+        Bridge = new(Configuration.DirectoryPath, Environment.GetEnvironmentVariable("SEEIN_DAFEIYU_ROOT"));
         Voice = new(Configuration.DirectoryPath);
         Memory = Bridge.Memory;
         _dispatcher = dispatcher;

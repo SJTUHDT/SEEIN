@@ -20,12 +20,12 @@ public sealed class PetBridgeClient : IDisposable
     private string? _activePet;
     public PetMemory Memory { get; }
 
-    public PetBridgeClient(string directory, string dafeiyuRoot = @"C:\dafeiyu", Uri? localEndpoint = null, HttpMessageHandler? transport = null)
+    public PetBridgeClient(string directory, string? dafeiyuRoot = null, Uri? localEndpoint = null, HttpMessageHandler? transport = null)
     {
         _endpoint = localEndpoint ?? new Uri("http://127.0.0.1:26199/v1/");
         if (!_endpoint.IsLoopback || _endpoint.Scheme != "http" || _endpoint.UserInfo.Length > 0 || _endpoint.Query.Length > 0 || _endpoint.Fragment.Length > 0)
             throw new InvalidDataException("桌宠只连接本机大肥鱼桥。");
-        _credential = Path.Combine(Path.GetFullPath(dafeiyuRoot), "private", "pet-bridge-token.txt");
+        _credential = Path.Combine(Path.GetFullPath(dafeiyuRoot ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "dafeiyu")), "private", "pet-bridge-token.txt");
         _http = transport is null ? new HttpClient(new HttpClientHandler { UseProxy = false }) : new HttpClient(transport, false);
         _http.Timeout = Timeout.InfiniteTimeSpan;
         Memory = new(directory);

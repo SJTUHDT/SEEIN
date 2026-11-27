@@ -49,6 +49,7 @@ internal sealed class DesktopPetRuntime
                 PipeTransmissionMode.Byte, PipeOptions.Asynchronous | PipeOptions.CurrentUserOnly);
             var environment = new ProcessStartInfo(executable).Environment;
             environment["DSH_HOME"] = Home;
+            environment["SEEIN_DAFEIYU_ROOT"] = CompanionConnectionSettings.Load().WorkbenchRoot;
             environment["SEEIN_PET_PROFILE"] = Path.Combine(Home, "Electron");
             environment["SEEIN_PET_PIPE"] = $@"\\.\pipe\{pipeName}";
             if (IsNative) environment["SEEIN_PET_PARENT"] = Environment.ProcessId.ToString(System.Globalization.CultureInfo.InvariantCulture);

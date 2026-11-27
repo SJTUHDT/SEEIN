@@ -24,5 +24,6 @@ for file in files():
     if secrets.search(text):errors.append(str(relative)+': credential/private key pattern')
     if re.search(r'C:[\\/]Users[\\/]Administrator[\\/]',text,re.I):errors.append(str(relative)+': developer account path')
     if relative.as_posix()!='scripts/check-public-source.py' and re.search(r'C:/dafeiyu/uv/tools/astrbot/Scripts/python',text,re.I):errors.append(str(relative)+': local build executable')
+    if relative.parts[0] in {'src','scripts'} and relative.as_posix()!='scripts/check-public-source.py' and re.search(r'C:[\\/]dafeiyu(?:[\\/]|["\x27])',text,re.I):errors.append(str(relative)+': fixed local companion path')
 if errors:raise SystemExit('\n'.join(errors))
 print(f'Public source check passed: {count} files')
