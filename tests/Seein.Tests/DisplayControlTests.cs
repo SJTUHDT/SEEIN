@@ -2,6 +2,7 @@ using Seein.Core.Displays;
 
 namespace Seein.Tests;
 
+[Collection(ProcessIntegrationCollection.Name)]
 public sealed class DisplayControlTests
 {
     [Fact]

@@ -6,6 +6,7 @@ using Seein.Service;
 
 namespace Seein.Tests;
 
+[Collection(ProcessIntegrationCollection.Name)]
 public sealed class RgbEngineHostTests
 {
     [Fact]

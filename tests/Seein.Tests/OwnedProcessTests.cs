@@ -4,6 +4,7 @@ using Seein.Core;
 
 namespace Seein.Tests;
 
+[Collection(ProcessIntegrationCollection.Name)]
 public sealed class OwnedProcessTests
 {
     [Theory]
