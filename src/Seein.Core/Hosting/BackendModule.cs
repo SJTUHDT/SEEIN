@@ -39,6 +39,7 @@ public sealed class ModuleMessageBus(IModuleMessageBus bus)
 public sealed class SharedHardware
 {
     public Sensors.HardwareSensorCollector? Sensors {get;set;}
+    public IReadOnlyList<string> InvalidSensorKeys {get;private set;}=[];
     private readonly object _gate=new();
     private readonly Dictionary<string,Func<SensorSnapshot,SensorSnapshot>> _enrichers=[];
     public void Register(string id,Func<SensorSnapshot,SensorSnapshot> enrich){lock(_gate)_enrichers[id]=enrich;}
@@ -48,6 +49,8 @@ public sealed class SharedHardware
         var snapshot=Sensors?.Read()??SensorSnapshot.Empty;
         Func<SensorSnapshot,SensorSnapshot>[] enrichers;lock(_gate)enrichers=_enrichers.Values.ToArray();
         foreach(var enrich in enrichers)snapshot=enrich(snapshot);
+        snapshot=Seein.Core.Sensors.SensorSnapshotSanitizer.Normalize(snapshot,out var invalidKeys);
+        InvalidSensorKeys=invalidKeys;
         return snapshot;
     }
 }

@@ -22,7 +22,7 @@
 
 基于 LBEILC 的 **Pane 0.1.606**，固定提交 `6f8be9632bd4d4e6d27240db5e18ea5923327476`，保留 GPL-3.0 许可。操作窗口使用 WinUI 原生界面，SEEIN 负责设置桥、命名管道、动作、快捷键、子进程与存储集成，并维护搜索站点及搜索栏对齐相关修改。
 
-文件索引使用 Everything 1.4.1.1032；随包保留 voidtools 许可与来源，独立的 SEEIN 命名实例不接管用户自己运行的其他 Everything 实例。插件携带 .NET 10 和 Windows App SDK 依赖，不替换本体 .NET 8。
+文件索引使用 Everything 1.4.1.1032；随包保留 voidtools 许可与来源，独立的 SEEIN 命名实例不接管用户自己运行的其他 Everything 实例。插件携带 .NET 10 和 Windows App SDK 依赖，不替换本体 .NET 10。
 
 当前没有集成鼠标手势、超级面板与 Pane AI 模块。上游存在某个功能不代表 SEEIN 公开包已经支持；能力页只管理实际集成的部分。
 

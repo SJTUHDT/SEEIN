@@ -3,7 +3,7 @@ from pathlib import Path, PurePosixPath
 import hashlib, json, subprocess, sys, zipfile
 
 root=Path(__file__).resolve().parents[1]
-release=root/'artifacts/releases/v2.2.0'
+release=root/'artifacts/releases/v2.2.1'
 upload=release/'upload'
 
 def digest(path):
@@ -27,7 +27,7 @@ def manifest(path,base):
 subprocess.run([sys.executable,str(root/'scripts/check-public-source.py')],check=True)
 assets=manifest(upload/'SHA256SUMS.txt',upload)
 for profile in ['Core','PublicFull']:
-    directory=release/f'Seein-win-x64-2.2.0-{profile}'
+    directory=release/f'Seein-win-x64-2.2.1-{profile}'
     files=manifest(directory/'MANIFEST.sha256',directory)
     print(f'Verified {profile}: {len(files)} installed files',flush=True)
 
@@ -43,7 +43,7 @@ for file in sorted(upload.iterdir()):
         if failure:raise ValueError('ZIP CRC failure: '+failure)
     print('Verified ZIP: '+file.name,flush=True)
 
-with zipfile.ZipFile(upload/'SEEIN-2.2.0-source.zip') as archive:
+with zipfile.ZipFile(upload/'SEEIN-2.2.1-source.zip') as archive:
     for name in archive.namelist():
         if {'.build','.git','artifacts','bin','obj'}.intersection(PurePosixPath(name).parts):
             raise ValueError('Non-source directory in snapshot: '+name)

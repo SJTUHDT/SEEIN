@@ -1,10 +1,10 @@
-# SEEIN 2.2.0
+# SEEIN 2.2.1
 
 **Windows 仪表盘与耗能日历，其他功能由你选择安装。**
 
 SEEIN 把硬件状态、能耗记录和常用桌面能力放在一个界面中。本体提供仪表盘、耗能日历、应用设置、插件与统一快捷键管理；副屏、应用监控、设备和小工具按需下载。没有安装的功能，不会加载对应实现或启动它的辅助进程。
 
-[下载 2.2.0 本体 ZIP](https://github.com/SJTUHDT/SEEIN/releases/download/v2.2.0/SEEIN-2.2.0-win-x64-Core.zip) · [发布与校验文件](https://github.com/SJTUHDT/SEEIN/releases/tag/v2.2.0) · [安装说明](docs/INSTALL.md) · [更新记录](docs/CHANGELOG.md) · [第三方来源](THIRD-PARTY-NOTICES.md)
+[下载 2.2.1 本体 ZIP](https://github.com/SJTUHDT/SEEIN/releases/download/v2.2.1/SEEIN-2.2.1-win-x64-Core.zip) · [发布与校验文件](https://github.com/SJTUHDT/SEEIN/releases/tag/v2.2.1) · [安装说明](docs/INSTALL.md) · [更新记录](docs/CHANGELOG.md) · [第三方来源](THIRD-PARTY-NOTICES.md)
 
 ## 下载本体，再勾选功能
 
@@ -17,7 +17,7 @@ SEEIN 把硬件状态、能耗记录和常用桌面能力放在一个界面中�
 
 取消勾选已安装项表示准备卸载；右侧的「停用／启用」用于保留文件和设置、改变功能状态。变更均通过下方按钮一次提交。共享依赖自动处理，不需要用户手动安装。GitHub 访问不便时，仍可下载同版本 `.seeinplugin` 使用「导入本地插件包」；依赖包需一同准备，详情见安装说明。
 
-![2.2.0 在线插件中心](docs/images/plugin-center-light.png)
+![2.2.1 在线插件中心](docs/images/plugin-center-light.png)
 
 <details><summary>查看深色主题</summary>
 
@@ -38,7 +38,7 @@ SEEIN 把硬件状态、能耗记录和常用桌面能力放在一个界面中�
 
 截图录屏内部的通用、截图、录屏、识别与翻译、导出与存储仍是同一功能包的设置页；效率工具也保留为一个完整功能包。后台网页是已有本机服务的入口，不代表自动安装机器人、模型或 QQ 账号。
 
-精确下载与解压体积见 Release 的 `COMPONENTS.json` 和应用内目录；本体自带 .NET 8，效率工具按需携带自己的 .NET 10。完整源码和第三方源码是开发/许可证附件，普通使用不需要下载或放进安装目录。
+精确下载与解压体积见 Release 的 `COMPONENTS.json` 和应用内目录；本体自带 .NET 10，效率工具按需携带自己的 .NET 10。完整源码和第三方源码是开发/许可证附件，普通使用不需要下载或放进安装目录。
 
 ## 本体：仪表盘与耗能日历
 

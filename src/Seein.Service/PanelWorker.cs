@@ -16,6 +16,7 @@ public sealed class PanelWorker(ILogger<PanelWorker> logger, PanelState state, M
     private readonly object _stateLock = new();
     private readonly object _energyLock = new();
     private readonly SemaphoreSlim _storageGate = new(1, 1);
+    private readonly HashSet<string> _reportedInvalidSensors = new(StringComparer.OrdinalIgnoreCase);
     private PanelPipeServer? _pipe;
     private HardwareSensorCollector? _sensors;
     private EnergyRepository? _energy;
@@ -66,6 +67,8 @@ public sealed class PanelWorker(ILogger<PanelWorker> logger, PanelState state, M
                         if (currentBoot != bootId) { bootId = currentBoot; integrator = new(); _power = null; }
                     }
                     var snapshot = hardware.Read();
+                    foreach(var key in hardware.InvalidSensorKeys)
+                        if(_reportedInvalidSensors.Add(key))logger.LogWarning("Sensor {SensorKey} returned a non-finite value; treating it as unavailable",key);
                     lock (_stateLock)
                     {
                         if (_trayVolume is double volume && now - _trayVolumeTimestamp <= TimeSpan.FromSeconds(5))

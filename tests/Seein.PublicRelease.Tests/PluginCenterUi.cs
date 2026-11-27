@@ -17,12 +17,12 @@ internal static class PluginCenterUi
         void Check(bool pass,string name){if(!pass)throw new InvalidOperationException(name);checks++;}
         foreach(var name in new[]{"Theme.Light.xaml","Controls.xaml"})Application.Current.Resources.MergedDictionaries.Add(new(){Source=new Uri(Path.Combine(root,"src/Seein.Tray/Styles",name))});
         using var definitions=JsonDocument.Parse(File.ReadAllText(Path.Combine(root,"config/plugin-definitions.json")));
-        var entries=definitions.RootElement.EnumerateArray().Select(p=>new PluginListing(p.GetProperty("id").GetString()!,p.GetProperty("name").GetString()!,p.GetProperty("group").GetString()!,p.GetProperty("description").GetString()!,"2.2.0",p.GetProperty("id").GetString()+".seeinplugin",1024*1024,2*1024*1024,new('a',64),p.GetProperty("dependencies").EnumerateArray().Select(x=>x.GetString()!).ToArray(),p.GetProperty("selectable").GetBoolean())).ToArray();
-        var feed=new PluginFeed(1,"v2.2.0","2.2.0",[new("display","副屏与主题"),new("applications","应用监控"),new("devices","设备控制"),new("tools","小工具")],entries);
-        var release=Path.Combine(root,"artifacts/releases/v2.2.0");
+        var entries=definitions.RootElement.EnumerateArray().Select(p=>new PluginListing(p.GetProperty("id").GetString()!,p.GetProperty("name").GetString()!,p.GetProperty("group").GetString()!,p.GetProperty("description").GetString()!,"2.2.1",p.GetProperty("id").GetString()+".seeinplugin",1024*1024,2*1024*1024,new('a',64),p.GetProperty("dependencies").EnumerateArray().Select(x=>x.GetString()!).ToArray(),p.GetProperty("selectable").GetBoolean())).ToArray();
+        var feed=new PluginFeed(1,"v2.2.1","2.2.1",[new("display","副屏与主题"),new("applications","应用监控"),new("devices","设备控制"),new("tools","小工具")],entries);
+        var release=Path.Combine(root,"artifacts/releases/v2.2.1");
         if(args.Contains("--packages"))
         {
-            var full=Path.Combine(release,"Seein-win-x64-2.2.0-PublicFull");var core=Path.Combine(release,"Seein-win-x64-2.2.0-Core");
+            var full=Path.Combine(release,"Seein-win-x64-2.2.1-PublicFull");var core=Path.Combine(release,"Seein-win-x64-2.2.1-Core");
             using var source=new PluginFeedClient(output,File.ReadAllText(Path.Combine(full,"App/module-publisher.pem")));
             feed=source.Read(Path.Combine(release,"plugin-catalog.json"),Path.Combine(release,"plugin-catalog.sig"));
             var modules=new ModuleCatalog(full,Path.Combine(output,"nonexistent.json")).Read();Check(modules.Count==18&&modules.All(m=>m.Enabled&&m.Error is null),"18 signed packages verified");Check(feed.Packages.Count(p=>p.Selectable)==14,"14 independent choices");Check(new ModuleCatalog(core,Path.Combine(output,"nonexistent.json")).Read().Count==0,"core has no optional modules");
@@ -32,7 +32,7 @@ internal static class PluginCenterUi
                 foreach(var m in modules)
                 {
                     var directory=Path.Combine(unpack.FullName,m.Manifest.Id);
-                    var imported=ModulePackage.ExtractVerified(Path.Combine(release,"Plugins-PublicFull",m.Manifest.Id+"-2.2.0.seeinplugin"),directory,key,HostVersion.Current);Check(imported.Id==m.Manifest.Id,"verified import "+m.Manifest.Id);
+                    var imported=ModulePackage.ExtractVerified(Path.Combine(release,"Plugins-PublicFull",m.Manifest.Id+"-2.2.1.seeinplugin"),directory,key,HostVersion.Current);Check(imported.Id==m.Manifest.Id,"verified import "+m.Manifest.Id);
                     if(m.Manifest.Desktop is {} entry)
                     {
                         var context=new ModuleLoadContext(m.Directory,entry.Assembly);var module=context.Create<IDesktopModule>(entry);

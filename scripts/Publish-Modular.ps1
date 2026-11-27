@@ -1,5 +1,5 @@
 [CmdletBinding()]
-param([ValidateSet('Core','PublicFull')][string]$Profile='PublicFull',[string]$Version='2.2.0',[switch]$Force,[switch]$KeepExpanded)
+param([ValidateSet('Core','PublicFull')][string]$Profile='PublicFull',[string]$Version='2.2.1',[switch]$Force,[switch]$KeepExpanded)
 $ErrorActionPreference='Stop'
 $project=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $release=Join-Path $project "artifacts/releases/v$Version"
@@ -7,7 +7,7 @@ $work=Join-Path $project ('.build/publish/transaction-'+[guid]::NewGuid().ToStri
 $stage=Join-Path $work 'package'
 $destination=Join-Path $release "Seein-win-x64-$Version-$Profile"
 if((Test-Path -LiteralPath $destination) -and !$Force){throw 'Release already exists; use -Force to replace it.'}
-if($Version -ne '2.2.0'){throw 'This publisher targets the 2.2.0 feature distribution.'}
+if($Version -ne '2.2.1'){throw 'This publisher targets the 2.2.1 feature distribution.'}
 . (Join-Path $PSScriptRoot 'BuildEnvironment.ps1')
 $dotnet=Get-SeeinDotnet
 Initialize-SeeinDependencies -ForPublish:$($Profile -ne 'Core')
@@ -27,10 +27,10 @@ function MergeBase([string]$Source,[string]$Target){
 $app=Join-Path $stage 'App'
 Publish (Join-Path $project 'src/Seein.Tray/Seein.Tray.csproj') $app $true
 foreach($name in 'Service','Bootstrap'){$output=Join-Path $work $name;Publish (Join-Path $project "src/Seein.$name/Seein.$name.csproj") $output $true;MergeBase $output $app}
-# A tiny shared launcher keeps all .NET 8 hosts on the one self-contained runtime in App.
+# A tiny shared launcher keeps all .NET 10 hosts on the one self-contained runtime in App.
 foreach($hostName in 'Seein.Tray.exe','seedisplay.exe','seepet.exe'){Copy-Item -LiteralPath (Join-Path $app 'Seein.Bootstrap.exe') -Destination (Join-Path $app $hostName) -Force}
 Remove-Item -LiteralPath (Join-Path $app 'Seein.Bootstrap.exe')
-Set-Content -LiteralPath (Join-Path $app 'SEEIN.modular') -Value '2.2.0' -Encoding ascii
+Set-Content -LiteralPath (Join-Path $app 'SEEIN.modular') -Value '2.2.1' -Encoding ascii
 $tool=Join-Path $work 'packager';Publish (Join-Path $project 'src/Seein.PackageTool/Seein.PackageTool.csproj') $tool $true
 $packager=Join-Path $tool 'Seein.PackageTool.exe'
 $key=Join-Path $env:LOCALAPPDATA 'SeeinPublicBuild/keys/module-publisher.dpapi'
@@ -103,7 +103,7 @@ foreach($module in $definitions){
     $desktop=if($module.desktopAssembly){@{assembly=$module.desktopAssembly;type=$module.desktopType}}else{$null}
     $service=if($module.serviceAssembly){@{assembly=$module.serviceAssembly;type=$module.serviceType}}else{$null}
     $dependencies=@($module.Dependencies|ForEach-Object{@{id=$_;minimumVersion=$Version}})
-    $metadata=@{id=$module.Id;name=$module.Name;version=$Version;apiVersion=1;minimumHostVersion='2.2.0';desktop=$desktop;service=$service;dependencies=$dependencies;files=@();private=$false}
+    $metadata=@{id=$module.Id;name=$module.Name;version=$Version;apiVersion=1;minimumHostVersion='2.2.1';desktop=$desktop;service=$service;dependencies=$dependencies;files=@();private=$false}
     $meta=Join-Path $work ($module.Id+'.json');$metadata|ConvertTo-Json -Depth 5|Set-Content -LiteralPath $meta -Encoding utf8
     & $packager pack $moduleRoot $meta (Join-Path $packages ($module.Id+'-'+$Version+'.seeinplugin')) $key
     if($LASTEXITCODE){throw "Plugin signing failed: $($module.Id)"}

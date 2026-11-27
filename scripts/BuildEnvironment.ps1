@@ -1,7 +1,7 @@
 $ErrorActionPreference='Stop'
 $script:SeeinProject=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 function Get-SeeinDotnet {
-    param([int]$Major=8)
+    param([int]$Major=10)
     $override=if($Major -eq 10){$env:SEEIN_DOTNET10}else{$env:SEEIN_DOTNET}
     if($override -and (Test-Path -LiteralPath $override)){return $override}
     $local=Join-Path $script:SeeinProject $(if($Major -eq 10){'.build/tools/dotnet10/dotnet.exe'}else{'.build/dotnet/dotnet.exe'})

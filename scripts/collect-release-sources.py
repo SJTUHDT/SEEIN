@@ -4,11 +4,11 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import hashlib, json, urllib.request, urllib.error, shutil, tarfile, subprocess, zipfile
 
 root=Path(__file__).resolve().parents[1]
-out=root/'artifacts/releases/v2.2.0/sources';out.mkdir(parents=True,exist_ok=True)
+out=root/'artifacts/releases/v2.2.1/sources';out.mkdir(parents=True,exist_ok=True)
 downloads=root/'.build/source-downloads';downloads.mkdir(parents=True,exist_ok=True)
 qt=[('6.12.0','qtbase'),('6.12.0','qtsvg'),('6.12.0','qttools'),('6.12.0','qttranslations'),('6.8.3','qtbase'),('6.8.3','qt5compat')]
 def request(url):
-    return urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'SEEIN-Release/2.2.0'}),timeout=60)
+    return urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'SEEIN-Release/2.2.1'}),timeout=60)
 def fetch_qt(item):
     version,module=item;name=f'{module}-everywhere-src-{version}.tar.xz'
     for area in ['official_releases','archive']:
@@ -48,7 +48,7 @@ inputs=[]
 for p in (root/'.build/tools/vcpkg/downloads').iterdir():
     if not p.is_file():continue
     if p.name.endswith(('.tar.gz','.tar.xz','.tar.bz2','.tar.zst','.patch')) or p.name.startswith(('libpng-','libwebp-','libjpeg-','openjpeg-','libyuv-')):inputs.append(p)
-with tarfile.open(out/'NativeDependencySources-2.2.0.tar.gz','w:gz') as archive:
+with tarfile.open(out/'NativeDependencySources-2.2.1.tar.gz','w:gz') as archive:
     for p in sorted(inputs):archive.add(p,arcname=p.name,recursive=False)
     vcpkg=root/'.build/tools/vcpkg';revision=json.loads((root/'vendor/tools/sources.lock.json').read_text())['vcpkg']
     target=downloads/'vcpkg-source.tar'

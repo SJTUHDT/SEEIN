@@ -2,11 +2,11 @@
 
 ## 首次安装
 
-1. 从本仓库 2.2.0 Release 下载 `SEEIN-2.2.0-win-x64-Core.zip`，用 `SHA256SUMS.txt` 核对，再解压。
+1. 从本仓库 2.2.1 Release 下载 `SEEIN-2.2.1-win-x64-Core.zip`，用 `SHA256SUMS.txt` 核对，再解压。
 2. 在管理员 PowerShell 7 中运行根目录的 `Install.ps1 -PackageRoot '<解压目录>'`。默认安装到系统 Program Files\Seein；换盘使用 `-InstallParent 'D:\Program Files'`。更新时选择原位置，勿直接覆盖运行中的 DLL。
 3. 从开始菜单或托盘打开 SEEIN，到「应用设置 → 插件管理」勾选功能，点击「下载安装并重启」。
 
-本体自带 .NET 8。内嵌网页需系统 WebView2 Evergreen Runtime；选择效率工具才下载其 .NET 10 与 Windows App SDK 依赖。
+本体自带 .NET 10。内嵌网页需系统 WebView2 Evergreen Runtime；选择效率工具才下载其 .NET 10 与 Windows App SDK 依赖。
 
 ## 在线安装
 

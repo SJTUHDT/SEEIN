@@ -2,7 +2,7 @@
 from pathlib import Path
 import hashlib, json, os, shutil, subprocess, zipfile, xml.etree.ElementTree as ET
 
-root=Path(__file__).resolve().parents[1]; release=root/'artifacts/releases/v2.2.0'
+root=Path(__file__).resolve().parents[1]; release=root/'artifacts/releases/v2.2.1'
 assets=release/'upload';assets.mkdir(parents=True,exist_ok=True)
 def sha(file):
     with file.open('rb') as stream:return hashlib.file_digest(stream,'sha256').hexdigest()
@@ -44,7 +44,7 @@ for project in (root/'src').rglob('obj/project.assets.json'):
 
 parts=[]
 for profile in ['Core']:
-    directory=release/f'Seein-win-x64-2.2.0-{profile}'
+    directory=release/f'Seein-win-x64-2.2.1-{profile}'
     if not directory.is_dir():raise RuntimeError('Missing build profile '+profile)
     # Include complete public docs and notices in every program ZIP, then refresh
     # its installer manifest so the extra files are verified too.
@@ -54,24 +54,24 @@ for profile in ['Core']:
     shutil.copytree(licenses,directory/'licenses',dirs_exist_ok=True)
     manifest=directory/'MANIFEST.sha256'
     manifest.write_text(''.join(sha(file)+' *'+file.relative_to(directory).as_posix()+'\n' for file in sorted(directory.rglob('*')) if file.is_file() and file!=manifest),encoding='utf8')
-    name=f'SEEIN-2.2.0-win-x64-{"Full" if profile=="PublicFull" else "Core"}.zip'
+    name=f'SEEIN-2.2.1-win-x64-{"Full" if profile=="PublicFull" else "Core"}.zip'
     zip_tree(directory,assets/name)
     parts.append({'profile':profile,'archive':name,'archiveBytes':(assets/name).stat().st_size,'logicalBytes':sum(f.stat().st_size for f in directory.rglob('*') if f.is_file())})
 
 modules=[]
-for directory in sorted((release/'Seein-win-x64-2.2.0-PublicFull/Plugins').iterdir()):
+for directory in sorted((release/'Seein-win-x64-2.2.1-PublicFull/Plugins').iterdir()):
     if not directory.is_dir():continue
     manifest=json.loads((directory/'module.json').read_text(encoding='utf-8-sig'))
     if manifest.get('private'):raise RuntimeError('Non-public module in release')
-    module_id=manifest['id'];file=release/'Plugins-PublicFull'/f'{module_id}-2.2.0.seeinplugin'
+    module_id=manifest['id'];file=release/'Plugins-PublicFull'/f'{module_id}-2.2.1.seeinplugin'
     shutil.copy2(file,assets/file.name)
     modules.append({'id':module_id,'name':manifest['name'],'version':manifest['version'],'apiVersion':manifest['apiVersion'],'logicalBytes':sum(f.stat().st_size for f in directory.rglob('*') if f.is_file()),'archiveBytes':file.stat().st_size,'fileCount':len(manifest['files'])})
 
 for file in [release/'ToolSources.zip',release/'plugin-catalog.json',release/'plugin-catalog.sig',*(release/'sources').glob('*')]:
     if file.is_file():shutil.copy2(file,assets/file.name)
-zip_tree(licenses,assets/'ThirdPartyLicenses-2.2.0.zip')
-zip_tree(root,assets/'SEEIN-2.2.0-source.zip',list(source_files()))
-inventory={'version':'2.2.0','platform':'win-x64','baseLicense':'GPL-3.0-only','profiles':parts,'modules':modules,'nugetPackages':sorted(packages.values(),key=lambda p:p['name'].lower()),'nativeSourceLock':json.loads((root/'vendor/tools/sources.lock.json').read_text()),'scope':'Fourteen optional public features with four shared support packages; no runtime user data.'}
+zip_tree(licenses,assets/'ThirdPartyLicenses-2.2.1.zip')
+zip_tree(root,assets/'SEEIN-2.2.1-source.zip',list(source_files()))
+inventory={'version':'2.2.1','platform':'win-x64','baseLicense':'GPL-3.0-only','profiles':parts,'modules':modules,'nugetPackages':sorted(packages.values(),key=lambda p:p['name'].lower()),'nativeSourceLock':json.loads((root/'vendor/tools/sources.lock.json').read_text()),'scope':'Fourteen optional public features with four shared support packages; no runtime user data.'}
 (assets/'COMPONENTS.json').write_text(json.dumps(inventory,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
 if (root/'docs/ACCEPTANCE.md').exists():shutil.copy2(root/'docs/ACCEPTANCE.md',assets/'ACCEPTANCE.md')
 for file in assets.iterdir():
