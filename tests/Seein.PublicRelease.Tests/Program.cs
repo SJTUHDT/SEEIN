@@ -23,6 +23,7 @@ internal static class Program
         var app=new Application();
         try
         {
+            if(args.Contains("--v220"))return PluginCenterUi.Run(root,args);
             foreach(var file in new[]{"Theme.Light.xaml","Controls.xaml"})app.Resources.MergedDictionaries.Add(new(){Source=new Uri(Path.Combine(root,"src/Seein.Tray/Styles",file))});
             using(var router=new RouterControlView())
             {

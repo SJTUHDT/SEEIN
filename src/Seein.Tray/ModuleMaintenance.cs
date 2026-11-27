@@ -1,5 +1,6 @@
 using Seein.Core;
 using Seein.Modularity;
+using Seein.Contracts;
 using System.Diagnostics;
 using System.IO;
 using System.ServiceProcess;
@@ -17,32 +18,50 @@ internal static class ModuleMaintenance
             if (!File.Exists(Path.Combine(app, "SEEIN.modular"))) throw new InvalidOperationException("请先安装 2.1.0 模块化版本。");
             ModuleTransaction.Recover(root, Path.Combine(AppPaths.SystemDefault.DataRoot, "modules.json"));
             using var maintenanceLock = new FileStream(Path.Combine(root, ".module-maintenance.lock"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
-            var change = JsonSerializer.Deserialize<ModuleChange>(File.ReadAllText(requestPath), ModulePackage.Json) ?? throw new InvalidDataException("插件操作无效。");
-            using var transaction = new ModuleTransaction(root, Path.Combine(AppPaths.SystemDefault.DataRoot, "modules.json"), change);
-            var expectedService=transaction.Imported?.Service??new ModuleCatalog(root,Path.Combine(AppPaths.SystemDefault.DataRoot,"modules.json")).Read().FirstOrDefault(m=>m.Manifest.Id==transaction.Id)?.Manifest.Service;
-            using var index=transaction.Id=="efficiency"?new IndexModuleLifecycle(root):null;
+            var requestBytes=File.ReadAllBytes(requestPath);if(requestBytes.Length>1024*1024)throw new InvalidDataException("安装请求过大。");
+            using var request=JsonDocument.Parse(requestBytes);
+            var changes=request.RootElement.TryGetProperty("changes",out _)?JsonSerializer.Deserialize<ModuleChangeSet>(requestBytes,ModulePackage.Json)!:new ModuleChangeSet([JsonSerializer.Deserialize<ModuleChange>(requestBytes,ModulePackage.Json)!]);
+            using var transaction = new ModuleBatchTransaction(root, Path.Combine(AppPaths.SystemDefault.DataRoot, "modules.json"), changes);
+            var before=new ModuleCatalog(root,Path.Combine(AppPaths.SystemDefault.DataRoot,"modules.json")).Read();
+            var changed=transaction.Changes.Select(c=>c.Id!).ToHashSet();var graph=before.ToDictionary(m=>m.Manifest.Id,m=>m.Manifest);
+            bool Affected(ModuleManifest module,HashSet<string> seen){if(!seen.Add(module.Id))return false;return changed.Contains(module.Id)||module.Dependencies.Any(d=>graph.TryGetValue(d.Id,out var dependency)&&Affected(dependency,seen));}
+            var touchesService=transaction.Imported.Any(m=>m.Service is not null)||before.Any(m=>m.Manifest.Service is not null&&Affected(m.Manifest,[]));
+            using var index=transaction.Changes.Any(c=>c.Id=="efficiency")?new IndexModuleLifecycle(root):null;
             var tray = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(Environment.ProcessPath)).Where(p => { try { return p.Id != Environment.ProcessId && string.Equals(p.MainModule?.FileName, Environment.ProcessPath, StringComparison.OrdinalIgnoreCase); } catch { return false; } }).ToArray();
             try { EventWaitHandle.OpenExisting(@"Local\Seein.Tray.Exit" + AppPaths.InstanceSuffix).Set(); } catch (WaitHandleCannotBeOpenedException) { }
             foreach (var process in tray) { using (process) await process.WaitForExitAsync().WaitAsync(TimeSpan.FromSeconds(35)); }
             using var service = new ServiceController("SeeinService"); var wasRunning = service.Status != ServiceControllerStatus.Stopped;
             try
             {
-                if (wasRunning) { service.Stop(); service.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(45)); }
+                if (wasRunning&&touchesService) { service.Stop(); service.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(45)); }
                 index?.StopOwned();transaction.Apply();SharedDependencyStore.Reconcile(root);
                 if(index is not null){var enabled=new ModuleCatalog(root,Path.Combine(AppPaths.SystemDefault.DataRoot,"modules.json")).Read().Any(m=>m.Manifest.Id=="efficiency"&&m.Enabled);await index.ApplyAsync(enabled);}
-                if (wasRunning) { service.Start(); service.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(30)); }
-                if(wasRunning&&expectedService is not null&&change.Operation is "import" or "enable")await WaitForModuleAsync(transaction.Id);
-                transaction.Commit();if(index is not null&&change.Operation=="uninstall")await index.CompleteRemovalAsync(); File.AppendAllText(log, $"{DateTimeOffset.Now:O} {change.Operation} {transaction.Id}: applied\n");
+                if (wasRunning&&touchesService) { service.Start(); service.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(30)); }
+                var active=new ModuleCatalog(root,Path.Combine(AppPaths.SystemDefault.DataRoot,"modules.json")).Read();
+                foreach(var module in active.Where(m=>m.Enabled&&m.Manifest.Service is not null&&transaction.Changes.Any(c=>c.Id==m.Manifest.Id)))if(wasRunning)await WaitForModuleAsync(module.Manifest.Id);
+                if(index is not null&&transaction.Changes.Any(c=>c.Id=="efficiency"&&c.Operation=="uninstall"))await index.CompleteRemovalAsync();transaction.Commit();
+                var incoming=new DirectoryInfo(Path.GetDirectoryName(Path.GetFullPath(requestPath))!);
+                if(incoming.Name.Equals("incoming",StringComparison.OrdinalIgnoreCase)&&incoming.Parent is not null)
+                {
+                    var cache=Path.Combine(incoming.Parent.FullName,"PluginDownloads")+Path.DirectorySeparatorChar;
+                    foreach(var change in transaction.Changes.Where(c=>c.Operation=="import"&&c.Package is not null))
+                    {
+                        var package=Path.GetFullPath(change.Package!);
+                        if(package.StartsWith(cache,StringComparison.OrdinalIgnoreCase)&&System.Text.RegularExpressions.Regex.IsMatch(Path.GetFileName(package),@"\A[a-f0-9]{64}\.seeinplugin\z"))
+                            try{File.Delete(package);}catch(Exception cleanup)when(cleanup is IOException or UnauthorizedAccessException){File.AppendAllText(log,"Cache cleanup deferred: "+cleanup.Message+"\n");}
+                    }
+                }
+                File.AppendAllText(log, $"{DateTimeOffset.Now:O} batch {string.Join(',',transaction.Changes.Select(c=>c.Id))}: applied\n");
             }
             catch
             {
-                service.Refresh(); if (service.Status != ServiceControllerStatus.Stopped) { service.Stop(); service.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(45)); }
-                transaction.Rollback(); SharedDependencyStore.Reconcile(root);if(index is not null)await index.RestoreAsync(); if (wasRunning) { service.Start(); service.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(30)); }
+                service.Refresh(); if (touchesService&&service.Status != ServiceControllerStatus.Stopped) { service.Stop(); service.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(45)); }
+                transaction.Rollback(); SharedDependencyStore.Reconcile(root);if(index is not null)await index.RestoreAsync(); if (wasRunning&&touchesService) { service.Start(); service.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(30)); }
                 throw;
             }
-            StartTray();
+            File.WriteAllText(requestPath+".result",JsonSerializer.Serialize(new{success=true,message="插件安装完成。"}));StartTray();
         }
-        catch (Exception ex) { File.AppendAllText(log, $"{DateTimeOffset.Now:O} failed: {ex}\n"); StartTray(); }
+        catch (Exception ex) { File.AppendAllText(log, $"{DateTimeOffset.Now:O} failed: {ex}\n");try{File.WriteAllText(requestPath+".result",JsonSerializer.Serialize(new{success=false,message=ex.Message}));}catch(IOException){}StartTray(); }
         static async Task WaitForModuleAsync(string id)
         {
             using var deadline=new CancellationTokenSource(TimeSpan.FromSeconds(35));

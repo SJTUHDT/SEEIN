@@ -50,6 +50,8 @@ public static class ModulePackage
         File.WriteAllBytes(Path.Combine(directory,"module.json"),bytes);
         using var rsa=RSA.Create();rsa.ImportFromPem(privateKey);
         File.WriteAllBytes(Path.Combine(directory,"module.sig"),rsa.SignData(bytes,HashAlgorithmName.SHA256,RSASignaturePadding.Pss));
-        ZipFile.CreateFromDirectory(directory,output,CompressionLevel.Optimal,false);
+        using var zip=ZipFile.Open(output,ZipArchiveMode.Create);
+        foreach(var file in Directory.EnumerateFiles(directory,"*",SearchOption.AllDirectories).OrderBy(p=>p,StringComparer.Ordinal))
+            zip.CreateEntryFromFile(file,Path.GetRelativePath(directory,file).Replace('\\','/'),CompressionLevel.Optimal);
     }
 }

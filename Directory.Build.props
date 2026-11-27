@@ -11,9 +11,9 @@
     <Deterministic>true</Deterministic>
     <Product>SEEIN</Product>
     <Company>SEEIN</Company>
-    <Version>2.1.0</Version>
-    <FileVersion>2.1.0.0</FileVersion>
-    <InformationalVersion>2.1.0</InformationalVersion>
+    <Version>2.2.0</Version>
+    <FileVersion>2.2.0.0</FileVersion>
+    <InformationalVersion>2.2.0</InformationalVersion>
     <Authors>SEEIN</Authors>
   </PropertyGroup>
 </Project>

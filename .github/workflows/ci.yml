@@ -31,3 +31,6 @@ jobs:
           }
           dotnet run --project tests/Seein.PublicRelease.Tests -c Release -- "${{ github.workspace }}"
           if ($LASTEXITCODE) { throw 'Public first-run tests failed' }
+          dotnet run --project tests/Seein.PublicRelease.Tests -c Release -- "${{ github.workspace }}" --v220
+          if ($LASTEXITCODE) { throw 'Plugin center UI tests failed' }
+          ./tests/core-upgrade.test.ps1

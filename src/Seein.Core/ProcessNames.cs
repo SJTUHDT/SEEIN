@@ -21,12 +21,14 @@ public static class ProcessNames
     {
         var app=Path.GetFullPath(appRoot??AppContext.BaseDirectory);
         var root=Directory.GetParent(app.TrimEnd(Path.DirectorySeparatorChar))!.FullName;
+        if(id=="companion"&&Directory.Exists(Path.Combine(root,"Plugins","companion-pet")))id="companion-pet";
         var candidate=Path.Combine(root,"Plugins",id);
+        if(!Directory.Exists(candidate)&&(id.StartsWith("devices-",StringComparison.Ordinal)||id.StartsWith("companion-",StringComparison.Ordinal)))candidate=Path.Combine(root,"Plugins",id.StartsWith("devices-",StringComparison.Ordinal)?"devices":"companion");
         return Directory.Exists(candidate)?candidate:app;
     }
     private static string? OwnerModule(string role)=>role switch
     {
-        "rgb"=>"devices","webPet"=>"companion","capture" or "ocr" or "crash" or "updater"=>"capture",
+        "rgb"=>"devices-rgb","webPet"=>"companion-pet","capture" or "ocr" or "crash" or "updater"=>"capture",
         "efficiency" or "index"=>"efficiency","fps"=>"display",_=>null
     };
     public static string Executable(string role,string? appRoot=null)
@@ -59,7 +61,7 @@ public static class ProcessNames
         static bool Matches(string relative,string? module)
         {
             if((module is null||module.Equals("capture",StringComparison.OrdinalIgnoreCase))&&relative.StartsWith(@"tools\snow\assets\ocr\runtimes\",StringComparison.OrdinalIgnoreCase)&&Path.GetFileName(relative).Equals(FileName("ocr"),StringComparison.OrdinalIgnoreCase))return true;
-            return Catalog.Any(pair=>(module is null||string.Equals(OwnerModule(pair.Key),module,StringComparison.OrdinalIgnoreCase))&&
+            return Catalog.Any(pair=>(module is null||string.Equals(OwnerModule(pair.Key),module,StringComparison.OrdinalIgnoreCase)||module=="devices"&&OwnerModule(pair.Key)?.StartsWith("devices-",StringComparison.Ordinal)==true||module=="companion"&&OwnerModule(pair.Key)?.StartsWith("companion-",StringComparison.Ordinal)==true)&&
                 (relative.Equals(pair.Value.Path.Replace('/','\\'),StringComparison.OrdinalIgnoreCase)||pair.Value.Legacy.Any(alias=>relative.Equals(Path.Combine(Path.GetDirectoryName(pair.Value.Path)??"",alias).Replace('/','\\'),StringComparison.OrdinalIgnoreCase))));
         }
     }

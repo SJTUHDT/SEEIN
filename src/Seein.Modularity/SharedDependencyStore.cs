@@ -20,6 +20,7 @@ public static class SharedDependencyStore
             {
                 var temporary=file.Path+".link-"+Guid.NewGuid().ToString("N");
                 try{if(CreateHardLink(temporary,pool,0))File.Move(temporary,file.Path,true);}
+                catch(Exception ex)when(ex is IOException or UnauthorizedAccessException){/* A running backend may hold this DLL. Its identical original stays valid; retry dedup on a later maintenance. */}
                 finally{if(File.Exists(temporary))File.Delete(temporary);}
             }
             refs[group.Key]=group.Select(f=>f.Owner).Distinct().Order().ToArray();

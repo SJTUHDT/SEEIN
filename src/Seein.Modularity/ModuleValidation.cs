@@ -49,6 +49,8 @@ public static partial class ModuleValidation
     public static IReadOnlyList<ModuleManifest> Order(IEnumerable<ModuleManifest> modules)
     {
         var map=modules.ToDictionary(m=>m.Id,StringComparer.Ordinal);
+        foreach(var legacy in PluginFeed.Legacy)if(map.ContainsKey(legacy.Key)&&legacy.Value.Any(map.ContainsKey))
+            throw new InvalidDataException("旧整包与子功能不能同时启用，请在插件中心统一迁移："+legacy.Key);
         var output=new List<ModuleManifest>();var visited=new HashSet<string>();var active=new HashSet<string>();
         void Visit(ModuleManifest m)
         {

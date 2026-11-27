@@ -1,7 +1,7 @@
 using Seein.Contracts;
 using System.Text.Json;
 namespace Seein.Modularity;
-public sealed record ModuleChange(string Operation,string? Id=null,string? Package=null);
+public sealed record ModuleChange(string Operation,string? Id=null,string? Package=null,bool? Enabled=null);
 public sealed class ModuleTransaction : IDisposable
 {
     private readonly string _root,_settings,_transaction,_plugins;
@@ -24,7 +24,7 @@ public sealed class ModuleTransaction : IDisposable
             if(change.Operation=="import")
             {
                 _incoming=Path.Combine(_transaction,"incoming");
-                Imported=ModulePackage.ExtractVerified(change.Package??throw new InvalidDataException("未选择插件包。"),_incoming,File.ReadAllText(Path.Combine(_root,"App","module-publisher.pem")),new Version(2,1,0));
+                Imported=ModulePackage.ExtractVerified(change.Package??throw new InvalidDataException("未选择插件包。"),_incoming,File.ReadAllText(Path.Combine(_root,"App","module-publisher.pem")),HostVersion.Current);
                 _id=Imported.Id;_after[_id]=new(true);
             }
             else
@@ -40,7 +40,7 @@ public sealed class ModuleTransaction : IDisposable
             {
                 var module=installed.Single(m=>m.Manifest.Id==_id);
                 // Disabled dependency diagnostics may be repaired by enabling this module; its files still must verify.
-                candidates.Add(ModulePackage.ReadVerified(module.Directory,File.ReadAllText(Path.Combine(_root,"App","module-publisher.pem")),new Version(2,1,0)));
+                candidates.Add(ModulePackage.ReadVerified(module.Directory,File.ReadAllText(Path.Combine(_root,"App","module-publisher.pem")),HostVersion.Current));
             }
             if(Imported is not null)candidates.Add(Imported);
             ModuleValidation.Order(candidates);ModuleValidation.SharedAssemblies(candidates);
@@ -84,6 +84,7 @@ public sealed class ModuleTransaction : IDisposable
             var journal=Path.Combine(directory,"journal.json");if(!File.Exists(journal))continue;
             if(File.Exists(Path.Combine(directory,"committed"))){Directory.Delete(directory,true);continue;}
             using var document=JsonDocument.Parse(File.ReadAllText(journal));var data=document.RootElement;
+            if(data.TryGetProperty("changes",out _)){ModuleBatchTransaction.RecoverDirectory(root,settingsPath,directory);continue;}
             var id=data.GetProperty("id").GetString()!;var operation=data.GetProperty("operation").GetString();
             if(!System.Text.RegularExpressions.Regex.IsMatch(id,@"\A[a-z][a-z0-9-]{0,63}\z")||!string.Equals(Path.GetFullPath(data.GetProperty("settings").GetString()!),Path.GetFullPath(settingsPath),StringComparison.OrdinalIgnoreCase))throw new InvalidDataException("插件恢复日志路径无效。");
             var previous=Path.Combine(directory,"previous");var current=Path.Combine(root,"Plugins",id);var incoming=Path.Combine(directory,"incoming");

@@ -1,0 +1,1316 @@
+[
+  {
+    "file": "dashboard.png",
+    "width": 1240,
+    "height": 840,
+    "rectangles": [],
+    "replacements": [],
+    "sha256": "92c0e7d5b6699302aab3d480b0efa38148402a086cca25d36e1d7acee8acf064"
+  },
+  {
+    "file": "theme-library.png",
+    "width": 1240,
+    "height": 840,
+    "rectangles": [],
+    "replacements": [],
+    "sha256": "6ff751118a1d95e923606deabe771192b5b1eb1937deacde087243bd74278b35"
+  },
+  {
+    "file": "energy-calendar.png",
+    "width": 1240,
+    "height": 840,
+    "rectangles": [],
+    "replacements": [],
+    "sha256": "152df0773897b0dcb1bc52637453f49cde811573256f316633dc8cb05c3779ae"
+  },
+  {
+    "file": "energy-day.png",
+    "width": 1240,
+    "height": 840,
+    "rectangles": [],
+    "replacements": [],
+    "sha256": "2435ff3f4cd23b738390e9c651feb8f5b4b902f99cae2694f593776d5f65c1be"
+  },
+  {
+    "file": "app-time.png",
+    "width": 1240,
+    "height": 840,
+    "rectangles": [],
+    "replacements": [
+      {
+        "rect": [
+          99,
+          316,
+          230,
+          335
+        ],
+        "text": "应用 01",
+        "icon": false
+      },
+      {
+        "rect": [
+          99,
+          335,
+          230,
+          354
+        ],
+        "text": "应用 02",
+        "icon": false
+      },
+      {
+        "rect": [
+          99,
+          354,
+          230,
+          373
+        ],
+        "text": "应用 03",
+        "icon": false
+      },
+      {
+        "rect": [
+          99,
+          373,
+          230,
+          392
+        ],
+        "text": "应用 04",
+        "icon": false
+      },
+      {
+        "rect": [
+          99,
+          392,
+          230,
+          411
+        ],
+        "text": "应用 05",
+        "icon": false
+      },
+      {
+        "rect": [
+          99,
+          411,
+          230,
+          430
+        ],
+        "text": "应用 06",
+        "icon": false
+      },
+      {
+        "rect": [
+          99,
+          430,
+          230,
+          449
+        ],
+        "text": "应用 07",
+        "icon": false
+      },
+      {
+        "rect": [
+          99,
+          449,
+          230,
+          468
+        ],
+        "text": "应用 08",
+        "icon": false
+      },
+      {
+        "rect": [
+          150,
+          548,
+          300,
+          568
+        ],
+        "text": "应用 01",
+        "icon": false
+      },
+      {
+        "rect": [
+          110,
+          550,
+          133,
+          573
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          150,
+          594,
+          300,
+          614
+        ],
+        "text": "应用 02",
+        "icon": false
+      },
+      {
+        "rect": [
+          110,
+          596,
+          133,
+          619
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          150,
+          640,
+          300,
+          660
+        ],
+        "text": "应用 03",
+        "icon": false
+      },
+      {
+        "rect": [
+          110,
+          642,
+          133,
+          665
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          150,
+          685,
+          300,
+          705
+        ],
+        "text": "应用 04",
+        "icon": false
+      },
+      {
+        "rect": [
+          110,
+          687,
+          133,
+          710
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          150,
+          731,
+          300,
+          751
+        ],
+        "text": "应用 05",
+        "icon": false
+      },
+      {
+        "rect": [
+          110,
+          733,
+          133,
+          756
+        ],
+        "text": null,
+        "icon": true
+      }
+    ],
+    "sha256": "dcf34155af75a10f58047d4c7e426dfa820951828ebc54e6688056d69cc5bd25"
+  },
+  {
+    "file": "app-power.png",
+    "width": 1240,
+    "height": 840,
+    "rectangles": [],
+    "replacements": [
+      {
+        "rect": [
+          507,
+          330,
+          704,
+          355
+        ],
+        "text": "应用 09",
+        "icon": false
+      },
+      {
+        "rect": [
+          465,
+          330,
+          490,
+          355
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          507,
+          374,
+          704,
+          399
+        ],
+        "text": "应用 07",
+        "icon": false
+      },
+      {
+        "rect": [
+          465,
+          374,
+          490,
+          399
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          507,
+          418,
+          704,
+          443
+        ],
+        "text": "应用 06",
+        "icon": false
+      },
+      {
+        "rect": [
+          465,
+          418,
+          490,
+          443
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          507,
+          462,
+          704,
+          487
+        ],
+        "text": "应用 10",
+        "icon": false
+      },
+      {
+        "rect": [
+          465,
+          462,
+          490,
+          487
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          507,
+          506,
+          704,
+          531
+        ],
+        "text": "应用 11",
+        "icon": false
+      },
+      {
+        "rect": [
+          465,
+          506,
+          490,
+          531
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          507,
+          550,
+          704,
+          575
+        ],
+        "text": "应用 01",
+        "icon": false
+      },
+      {
+        "rect": [
+          465,
+          550,
+          490,
+          575
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          507,
+          594,
+          704,
+          619
+        ],
+        "text": "应用 04",
+        "icon": false
+      },
+      {
+        "rect": [
+          465,
+          594,
+          490,
+          619
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          507,
+          638,
+          704,
+          663
+        ],
+        "text": "应用 12",
+        "icon": false
+      },
+      {
+        "rect": [
+          465,
+          638,
+          490,
+          663
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          507,
+          682,
+          704,
+          707
+        ],
+        "text": "应用 05",
+        "icon": false
+      },
+      {
+        "rect": [
+          465,
+          682,
+          490,
+          707
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          507,
+          726,
+          704,
+          751
+        ],
+        "text": "应用 02",
+        "icon": false
+      },
+      {
+        "rect": [
+          465,
+          726,
+          490,
+          751
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          122,
+          611,
+          184,
+          629
+        ],
+        "text": "应用 09",
+        "icon": false
+      },
+      {
+        "rect": [
+          122,
+          631,
+          222,
+          649
+        ],
+        "text": "应用 07",
+        "icon": false
+      },
+      {
+        "rect": [
+          122,
+          651,
+          176,
+          669
+        ],
+        "text": "应用 06",
+        "icon": false
+      },
+      {
+        "rect": [
+          122,
+          672,
+          176,
+          690
+        ],
+        "text": "应用 10",
+        "icon": false
+      },
+      {
+        "rect": [
+          122,
+          692,
+          222,
+          710
+        ],
+        "text": "应用 11",
+        "icon": false
+      },
+      {
+        "rect": [
+          122,
+          712,
+          164,
+          730
+        ],
+        "text": "应用 01",
+        "icon": false
+      }
+    ],
+    "sha256": "68128fad1b1a562cb4794559df23edcbcb79b0a3682161084c5c7cdcac5a9092"
+  },
+  {
+    "file": "app-load.png",
+    "width": 1240,
+    "height": 840,
+    "rectangles": [],
+    "replacements": [
+      {
+        "rect": [
+          123,
+          261,
+          263,
+          283
+        ],
+        "text": "应用 13",
+        "icon": false
+      },
+      {
+        "rect": [
+          102,
+          261,
+          121,
+          282
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          123,
+          295,
+          263,
+          317
+        ],
+        "text": "进程 01",
+        "icon": false
+      },
+      {
+        "rect": [
+          102,
+          295,
+          121,
+          316
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          123,
+          329,
+          263,
+          351
+        ],
+        "text": "应用 14",
+        "icon": false
+      },
+      {
+        "rect": [
+          102,
+          329,
+          121,
+          350
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          123,
+          365,
+          263,
+          387
+        ],
+        "text": "应用 07",
+        "icon": false
+      },
+      {
+        "rect": [
+          102,
+          365,
+          121,
+          386
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          123,
+          398,
+          263,
+          420
+        ],
+        "text": "进程 02",
+        "icon": false
+      },
+      {
+        "rect": [
+          102,
+          398,
+          121,
+          419
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          123,
+          432,
+          263,
+          454
+        ],
+        "text": "进程 03",
+        "icon": false
+      },
+      {
+        "rect": [
+          102,
+          432,
+          121,
+          453
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          123,
+          577,
+          263,
+          599
+        ],
+        "text": "应用 13",
+        "icon": false
+      },
+      {
+        "rect": [
+          102,
+          577,
+          121,
+          598
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          123,
+          612,
+          263,
+          634
+        ],
+        "text": "应用 07",
+        "icon": false
+      },
+      {
+        "rect": [
+          102,
+          612,
+          121,
+          633
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          123,
+          646,
+          263,
+          668
+        ],
+        "text": "应用 14",
+        "icon": false
+      },
+      {
+        "rect": [
+          102,
+          646,
+          121,
+          667
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          123,
+          681,
+          263,
+          703
+        ],
+        "text": "应用 11",
+        "icon": false
+      },
+      {
+        "rect": [
+          102,
+          681,
+          121,
+          702
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          123,
+          715,
+          263,
+          737
+        ],
+        "text": "应用 04",
+        "icon": false
+      },
+      {
+        "rect": [
+          102,
+          715,
+          121,
+          736
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          833,
+          261,
+          973,
+          284
+        ],
+        "text": "应用 04",
+        "icon": false
+      },
+      {
+        "rect": [
+          808,
+          261,
+          827,
+          283
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          833,
+          295,
+          973,
+          318
+        ],
+        "text": "应用 02",
+        "icon": false
+      },
+      {
+        "rect": [
+          808,
+          295,
+          827,
+          317
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          833,
+          329,
+          973,
+          352
+        ],
+        "text": "应用 15",
+        "icon": false
+      },
+      {
+        "rect": [
+          808,
+          329,
+          827,
+          351
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          833,
+          365,
+          973,
+          388
+        ],
+        "text": "应用 12",
+        "icon": false
+      },
+      {
+        "rect": [
+          808,
+          365,
+          827,
+          387
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          833,
+          398,
+          973,
+          421
+        ],
+        "text": "应用 05",
+        "icon": false
+      },
+      {
+        "rect": [
+          808,
+          398,
+          827,
+          420
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          833,
+          432,
+          973,
+          455
+        ],
+        "text": "应用 16",
+        "icon": false
+      },
+      {
+        "rect": [
+          808,
+          432,
+          827,
+          454
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          833,
+          466,
+          973,
+          489
+        ],
+        "text": "应用 13",
+        "icon": false
+      },
+      {
+        "rect": [
+          808,
+          466,
+          827,
+          488
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          833,
+          500,
+          973,
+          523
+        ],
+        "text": "应用 07",
+        "icon": false
+      },
+      {
+        "rect": [
+          808,
+          500,
+          827,
+          522
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          833,
+          535,
+          973,
+          558
+        ],
+        "text": "进程 03",
+        "icon": false
+      },
+      {
+        "rect": [
+          808,
+          535,
+          827,
+          557
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          833,
+          569,
+          973,
+          592
+        ],
+        "text": "应用 17",
+        "icon": false
+      },
+      {
+        "rect": [
+          808,
+          569,
+          827,
+          591
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          833,
+          603,
+          973,
+          626
+        ],
+        "text": "进程 04",
+        "icon": false
+      },
+      {
+        "rect": [
+          808,
+          603,
+          827,
+          625
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          833,
+          638,
+          973,
+          661
+        ],
+        "text": "应用 18",
+        "icon": false
+      },
+      {
+        "rect": [
+          808,
+          638,
+          827,
+          660
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          833,
+          672,
+          973,
+          695
+        ],
+        "text": "应用 03",
+        "icon": false
+      },
+      {
+        "rect": [
+          808,
+          672,
+          827,
+          694
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          833,
+          706,
+          973,
+          729
+        ],
+        "text": "应用 19",
+        "icon": false
+      },
+      {
+        "rect": [
+          808,
+          706,
+          827,
+          728
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          833,
+          740,
+          973,
+          763
+        ],
+        "text": "进程 05",
+        "icon": false
+      },
+      {
+        "rect": [
+          808,
+          740,
+          827,
+          762
+        ],
+        "text": null,
+        "icon": true
+      }
+    ],
+    "sha256": "60479b231933b35486453f0baead0e503d3ac102078845471716533e1bf2e007"
+  },
+  {
+    "file": "device-playback.png",
+    "width": 1240,
+    "height": 840,
+    "rectangles": [],
+    "replacements": [],
+    "sha256": "509e337414350d797dff16baecb03047e59064aae74da9e3a60625449bb2b5c3"
+  },
+  {
+    "file": "tools.png",
+    "width": 1240,
+    "height": 840,
+    "rectangles": [],
+    "replacements": [],
+    "sha256": "2bd45247deec3f6900253bd6540a6dc9f5f9c7add6653ac7fbe571b6997fc7df"
+  },
+  {
+    "file": "application-settings.png",
+    "width": 1240,
+    "height": 840,
+    "rectangles": [],
+    "replacements": [
+      {
+        "rect": [
+          196,
+          361,
+          558,
+          380
+        ],
+        "text": "应用 01",
+        "icon": false
+      },
+      {
+        "rect": [
+          170,
+          367,
+          194,
+          392
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          196,
+          380,
+          558,
+          398
+        ],
+        "text": "示例路径：C:\\Apps\\App01\\app01.exe",
+        "icon": false
+      },
+      {
+        "rect": [
+          196,
+          408,
+          558,
+          427
+        ],
+        "text": "应用 02",
+        "icon": false
+      },
+      {
+        "rect": [
+          170,
+          414,
+          194,
+          439
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          196,
+          427,
+          558,
+          445
+        ],
+        "text": "示例路径：C:\\Apps\\App02\\app02.exe",
+        "icon": false
+      },
+      {
+        "rect": [
+          196,
+          453,
+          558,
+          472
+        ],
+        "text": "应用 04",
+        "icon": false
+      },
+      {
+        "rect": [
+          170,
+          459,
+          194,
+          484
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          196,
+          472,
+          558,
+          490
+        ],
+        "text": "示例路径：C:\\Apps\\App04\\app04.exe",
+        "icon": false
+      },
+      {
+        "rect": [
+          196,
+          499,
+          558,
+          518
+        ],
+        "text": "应用 03",
+        "icon": false
+      },
+      {
+        "rect": [
+          170,
+          505,
+          194,
+          530
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          196,
+          518,
+          558,
+          536
+        ],
+        "text": "示例路径：C:\\Apps\\App03\\app03.exe",
+        "icon": false
+      },
+      {
+        "rect": [
+          196,
+          546,
+          558,
+          565
+        ],
+        "text": "应用 05",
+        "icon": false
+      },
+      {
+        "rect": [
+          170,
+          552,
+          194,
+          577
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          196,
+          565,
+          558,
+          583
+        ],
+        "text": "示例路径：C:\\Apps\\App05\\app05.exe",
+        "icon": false
+      },
+      {
+        "rect": [
+          196,
+          592,
+          558,
+          611
+        ],
+        "text": "应用 20",
+        "icon": false
+      },
+      {
+        "rect": [
+          170,
+          598,
+          194,
+          623
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          196,
+          611,
+          558,
+          629
+        ],
+        "text": "示例路径：C:\\Apps\\App20\\app20.exe",
+        "icon": false
+      },
+      {
+        "rect": [
+          196,
+          638,
+          558,
+          657
+        ],
+        "text": "应用 07",
+        "icon": false
+      },
+      {
+        "rect": [
+          170,
+          644,
+          194,
+          669
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          196,
+          657,
+          558,
+          675
+        ],
+        "text": "示例路径：C:\\Apps\\App07\\app07.exe",
+        "icon": false
+      },
+      {
+        "rect": [
+          196,
+          685,
+          558,
+          704
+        ],
+        "text": "应用 21",
+        "icon": false
+      },
+      {
+        "rect": [
+          170,
+          691,
+          194,
+          716
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          196,
+          704,
+          558,
+          722
+        ],
+        "text": "示例路径：C:\\Apps\\App21\\app21.exe",
+        "icon": false
+      },
+      {
+        "rect": [
+          196,
+          732,
+          558,
+          751
+        ],
+        "text": "应用 14",
+        "icon": false
+      },
+      {
+        "rect": [
+          170,
+          738,
+          194,
+          763
+        ],
+        "text": null,
+        "icon": true
+      },
+      {
+        "rect": [
+          196,
+          751,
+          558,
+          769
+        ],
+        "text": "示例路径：C:\\Apps\\App14\\app14.exe",
+        "icon": false
+      }
+    ],
+    "sha256": "f9ec99b6039d15997df4eb8bc3c06d746b40beff6be0e3a03f1da0523e82bc02"
+  }
+]

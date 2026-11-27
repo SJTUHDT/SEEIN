@@ -75,7 +75,7 @@ foreach ($file in $payloadFiles) {
     if ($actualHash -ne $manifestEntries[$relative]) { throw "Package hash mismatch: $relative" }
 }
 $modular=Test-Path -LiteralPath (Join-Path $sourceRoot 'App/SEEIN.modular')
-$roleModules=@{rgb='devices';capture='capture';efficiency='efficiency';index='efficiency';fps='display'}
+$roleModules=@{rgb='devices-rgb';capture='capture';efficiency='efficiency';index='efficiency';fps='display'}
 function Resolve-PayloadProcess([string]$Root,[string]$Role){
     $module=$roleModules[$Role]
     $folder=if($modular -and $module){Join-Path $Root ('Plugins/'+$module)}else{Join-Path $Root 'App'}
@@ -244,6 +244,12 @@ New-Item -ItemType Directory -Path $transactionRoot -ErrorAction Stop | Out-Null
 try {
     Copy-DirectoryContents -Source (Join-Path $sourceRoot 'App') -Destination (Join-Path $stageRoot 'App')
     if($modular -and (Test-Path -LiteralPath (Join-Path $sourceRoot 'Plugins'))){Copy-DirectoryContents -Source (Join-Path $sourceRoot 'Plugins') -Destination (Join-Path $stageRoot 'Plugins')}
+    if($modular -and $hadInstall -and (Get-Content -LiteralPath (Join-Path $sourceRoot 'PROFILE') -Raw).Trim() -eq 'Core'){
+        . (Join-Path $sourceRoot 'Preserve-InstalledPlugins.ps1')
+        Copy-SeeinInstalledPlugins -InstalledRoot $installRoot -StageRoot $stageRoot
+    }
+    foreach($folder in @('docs','licenses')){if(Test-Path -LiteralPath (Join-Path $sourceRoot $folder)){Copy-DirectoryContents -Source (Join-Path $sourceRoot $folder) -Destination (Join-Path $stageRoot $folder)}}
+    foreach($file in @('README.md','LICENSE','THIRD-PARTY-NOTICES.md','PROFILE')){if(Test-Path -LiteralPath (Join-Path $sourceRoot $file)){Copy-Item -LiteralPath (Join-Path $sourceRoot $file) -Destination $stageRoot}}
     Copy-Item -LiteralPath (Join-Path $sourceRoot 'VERSION') -Destination $stageRoot
     Copy-Item -LiteralPath $sourceUninstaller -Destination $stageRoot
     $runtimeTouched = $true

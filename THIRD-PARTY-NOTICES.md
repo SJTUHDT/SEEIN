@@ -23,12 +23,12 @@ SEEIN 自有代码采用 GPL-3.0-only。以下组件、素材与字体保留原�
 
 - 上游：https://github.com/PC2005-cloud/dsh-pet/tree/4e589f6dacabbd3170e91e7a213b2a7afff1a09b/dsh-pet ，0.4.9，MIT，Copyright (c) 2026 PC2005-cloud。
 - 素材固定发行 ZIP SHA-256：fec1d27d59fc0c9a883e77eff2facbf5676c15ffd6011b1436351cbc34f06c1e。
-- 使用动画、图片、声音、字体和默认配置，并移植拖拽、菜单和行为；原许可随 Plugins/companion/pet-assets/LICENSE-dsh-pet.txt 保留。素材、字体及第三方角色的原有声明仍适用，未标为 SEEIN 自有作品。
+- 使用动画、图片、声音、字体和默认配置，并移植拖拽、菜单和行为；原许可随 Plugins/companion-pet/pet-assets/LICENSE-dsh-pet.txt 保留。素材、字体及第三方角色的原有声明仍适用，未标为 SEEIN 自有作品。
 - 当前桌宠为 SEEIN 原生 WPF 子进程，不发行原 Electron/Chromium 应用。其新实现及移植差异见桌宠文档。
 
 ## FFmpeg、libvpx、Qt 与原生依赖
 
-- 桌宠 FFmpeg n8.1：a65b3bfe9dacc3b20597ef199d0afdd8bc8128e2，禁用 GPL/nonfree 的动态 LGPL-2.1-or-later 构建。配置、许可证及哈希在 Plugins/companion/pet-codecs，源包和配方在发行 sources 附件。
+- 桌宠 FFmpeg n8.1：a65b3bfe9dacc3b20597ef199d0afdd8bc8128e2，禁用 GPL/nonfree 的动态 LGPL-2.1-or-later 构建。配置、许可证及哈希在 Plugins/companion-pet/pet-codecs，源包和配方在发行 sources 附件。
 - libvpx 1.17.0：82615ff0733cd4063838c352bc2e2ab225f37ade，BSD-style license 与专利许可；LICENSE/PATENTS/AUTHORS 随 DLL 保留。winpthreads 保留其 MIT/BSD 声明。
 - FFmpeg.AutoGen 8.1.0：https://github.com/Ruslan-B/FFmpeg.AutoGen ，MIT。
 - 截图 FFmpeg 9.0 构建包含 GPL 组件（包括 x264），按该构建的 GPL 与原生依赖声明提供完整对应源码。它与桌宠精简 LGPL 库隔离，不混用 ABI。
@@ -38,7 +38,7 @@ SEEIN 自有代码采用 GPL-3.0-only。以下组件、素材与字体保留原�
 ## OpenRGB 与硬件接口
 
 - OpenRGB 1.1：https://codeberg.org/OpenRGB/OpenRGB ，提交 8e16de27858cf2be6af54a33ce003df74cb9fd3e，GPL-2.0-or-later。
-- 官方引擎仅更名为 Plugins/devices/rgb-engine/seergb.exe，SHA-256 e26ae71162795a8abcfb90c05c1572a00ba06ca63b886aca57392a0138963b1e；许可证随目录保留，对应 OpenRGB-1.1-source.zip 随发行提供。
+- 官方引擎仅更名为 Plugins/devices-rgb/rgb-engine/seergb.exe，SHA-256 e26ae71162795a8abcfb90c05c1572a00ba06ca63b886aca57392a0138963b1e；许可证随目录保留，对应 OpenRGB-1.1-source.zip 随发行提供。
 - SEEIN 使用本机回环 SDK，并实现已验证设备的场景、原生效果及软件控制集成；不是 OpenRGB 官方发行的替代品牌。
 - AMD ADLX 绑定参考 GPUOpen SDK 头文件提交 32b5a740d42295c5dfe9026b9f52683da0f3af91，只动态使用用户驱动自带 amdadlx64.dll，不发行 AMD 驱动二进制。
 - PresentMon 2.6.0：Intel/GameTechDev 项目，官方程序位于 Plugins/display/tools/seefps.exe，原许可证同目录保留，对应来源在组件清单中列出。

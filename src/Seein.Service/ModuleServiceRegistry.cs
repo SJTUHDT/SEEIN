@@ -43,19 +43,19 @@ public sealed class ModuleServiceRegistry(IServiceProvider provider, ILogger<Mod
                 }
                 Slot[] slots; lock (_slots) slots = _slots.ToArray();
                 // Each module starts independently; slow optional-module startup cannot block sampling.
-                var ordered = ModuleValidation.Order(slots.Select(s => s.Installed.Manifest));
+                var ordered = ModuleValidation.Order(installed.Where(m=>m.Enabled).Select(s=>s.Manifest)).Where(m=>slots.Any(s=>s.Installed.Manifest.Id==m.Id));
                 var starts = new Dictionary<string, Task>();
                 foreach (var manifest in ordered)
                 {
                     var slot = slots.Single(s => s.Installed.Manifest.Id == manifest.Id);
-                    var dependencies = manifest.Dependencies.Select(d => starts[d.Id]).ToArray();
+                    var dependencies = manifest.Dependencies.Where(d=>starts.ContainsKey(d.Id)).Select(d => starts[d.Id]).ToArray();
                     starts[manifest.Id] = Task.Run(() => StartSlotAsync(slot, dependencies), CancellationToken.None);
                 }
                 await Task.WhenAll(starts.Values);
                 async Task StartSlotAsync(Slot slot, Task[] dependencies)
 
                 {
-                    try { await Task.WhenAll(dependencies); if (slot.Installed.Manifest.Dependencies.Any(d => !slots.Single(s => s.Installed.Manifest.Id == d.Id).Ready)) throw new InvalidOperationException("Required module did not start."); await slot.Module.StartAsync(new ModuleServices(slot.Installed.Directory, provider), linked.Token); slot.Ready = true; logger.LogInformation("Module {Module} ready", slot.Installed.Manifest.Id); }
+                    try { await Task.WhenAll(dependencies); if (slot.Installed.Manifest.Dependencies.Any(d => slots.Any(s=>s.Installed.Manifest.Id==d.Id&&!s.Ready))) throw new InvalidOperationException("Required module did not start."); await slot.Module.StartAsync(new ModuleServices(slot.Installed.Directory, provider), linked.Token); slot.Ready = true; logger.LogInformation("Module {Module} ready", slot.Installed.Manifest.Id); }
                     catch (Exception ex) { slot.Error=ex.Message;logger.LogError(ex, "Module {Module} startup failed", slot.Installed.Manifest.Id); try { using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(10)); await slot.Module.StopAsync(timeout.Token); await slot.Module.DisposeAsync(); } catch (Exception cleanup) { logger.LogError(cleanup, "Module startup cleanup failed"); } }
                 }
             }
@@ -73,7 +73,7 @@ public sealed class ModuleServiceRegistry(IServiceProvider provider, ILogger<Mod
     {
         _stop.Cancel();
         if (_starting is not null) try { await _starting.WaitAsync(token); } catch (OperationCanceledException) when (token.IsCancellationRequested) { throw; }
-        Slot[] slots; lock (_slots) { var ordered = ModuleValidation.Order(_slots.Where(s => s.Ready).Select(s => s.Installed.Manifest)); slots = ordered.Reverse().Select(m => _slots.Single(s => s.Installed.Manifest.Id == m.Id)).ToArray(); }
+        Slot[] slots; lock (_slots) { slots = _slots.Where(s=>s.Ready).AsEnumerable().Reverse().ToArray(); }
         foreach (var slot in slots)
         {
             try { await slot.Module.StopAsync(token); }

@@ -17,8 +17,8 @@ public static class Program
         var helper=Path.GetFileNameWithoutExtension(Environment.ProcessPath);
         try
         {
-            if(helper=="seepet")return RunModule("companion","seepet.dll","Seein.PetHost.Program","Main",[args]);
-            if(helper=="seedisplay"||args.Contains("--display-host"))return RunModule("devices","Seein.Desktop.Devices.dll","Seein.Tray.DisplayNativeHost","Run",null);
+            if(helper=="seepet")return RunModule("companion-pet","seepet.dll","Seein.PetHost.Program","Main",[args]);
+            if(helper=="seedisplay"||args.Contains("--display-host"))return RunModule("devices-monitor","Seein.Desktop.Monitor.dll","Seein.Tray.DisplayNativeHost","Run",null);
             var tray=AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(AppContext.BaseDirectory,"Seein.Tray.dll"));
             tray.GetType("Seein.Tray.App",true)!.GetMethod("Main",BindingFlags.Public|BindingFlags.Static)!.Invoke(null,null);return 0;
         }
@@ -30,8 +30,10 @@ public static class Program
     private static int RunModule(string id,string assembly,string type,string method,object?[]? parameters)
     {
         var root=Directory.GetParent(AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar))!.FullName;
-        var module=new ModuleCatalog(root,Path.Combine(AppPaths.SystemDefault.DataRoot,"modules.json")).Read().SingleOrDefault(m=>m.Manifest.Id==id&&m.Enabled&&m.Error is null)
+        var modules=new ModuleCatalog(root,Path.Combine(AppPaths.SystemDefault.DataRoot,"modules.json")).Read();
+        var module=modules.SingleOrDefault(m=>m.Manifest.Id==id&&m.Enabled&&m.Error is null)??modules.SingleOrDefault(m=>m.Manifest.Id==(id=="companion-pet"?"companion":"devices")&&m.Enabled&&m.Error is null)
             ??throw new InvalidDataException("所需插件未安装或未启用。");
+        if(id=="devices-monitor"&&module.Manifest.Id=="devices")assembly="Seein.Desktop.Devices.dll";
         var context=new ModuleLoadContext(module.Directory,assembly);
         var result=context.LoadFromAssemblyPath(Path.Combine(module.Directory,assembly)).GetType(type,true)!.GetMethod(method,BindingFlags.Public|BindingFlags.Static)!.Invoke(null,parameters);
         return result is int code?code:0;

@@ -3,6 +3,12 @@ using System.Text.Json;
 using Seein.Contracts;
 using Seein.Modularity;
 if(args.Length==0)return 2;
+if(args[0]=="sign-file")
+{
+    var bytes=ProtectedData.Unprotect(File.ReadAllBytes(args[2]),null,DataProtectionScope.CurrentUser);using var rsa=RSA.Create();
+    try{rsa.ImportPkcs8PrivateKey(bytes,out _);}finally{CryptographicOperations.ZeroMemory(bytes);}
+    File.WriteAllBytes(args[3],rsa.SignData(File.ReadAllBytes(args[1]),HashAlgorithmName.SHA256,RSASignaturePadding.Pss));return 0;
+}
 if(args[0]=="key")
 {
     var path=Path.GetFullPath(args[1]);Directory.CreateDirectory(Path.GetDirectoryName(path)!);
@@ -15,11 +21,11 @@ if(args[0]=="pack")
 {
     var directory=Path.GetFullPath(args[1]);var metadata=JsonSerializer.Deserialize<ModuleManifest>(File.ReadAllText(args[2]),ModulePackage.Json)!;
     var files=Directory.EnumerateFiles(directory,"*",SearchOption.AllDirectories).OrderBy(p=>p,StringComparer.Ordinal).Select(p=>new ModuleFile(Path.GetRelativePath(directory,p).Replace('\\','/'),Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(p))),new FileInfo(p).Length)).ToArray();
-    var manifest=metadata with{Files=files};ModuleValidation.Manifest(manifest,new Version(2,1,0));
+    var manifest=metadata with{Files=files};ModuleValidation.Manifest(manifest,HostVersion.Current);
     var bytes=ProtectedData.Unprotect(File.ReadAllBytes(args[4]),null,DataProtectionScope.CurrentUser);
     using var rsa=RSA.Create();try{rsa.ImportPkcs8PrivateKey(bytes,out _);}finally{CryptographicOperations.ZeroMemory(bytes);}
     ModulePackage.Pack(directory,manifest,rsa.ExportPkcs8PrivateKeyPem(),args[3]);
-    ModulePackage.ReadVerified(directory,rsa.ExportSubjectPublicKeyInfoPem(),new Version(2,1,0));return 0;
+    ModulePackage.ReadVerified(directory,rsa.ExportSubjectPublicKeyInfoPem(),HostVersion.Current);return 0;
 }
 if(args[0]=="verify")
 {

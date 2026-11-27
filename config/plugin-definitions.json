@@ -1,0 +1,272 @@
+[
+  {
+    "id": "tools-common",
+    "name": "截图与效率工具适配层",
+    "group": "",
+    "description": "共享快捷键、设置与工具生命周期",
+    "project": "src/Seein.Desktop.Tools/Seein.Desktop.Tools.csproj",
+    "desktopAssembly": null,
+    "desktopType": null,
+    "serviceAssembly": null,
+    "serviceType": null,
+    "dependencies": [],
+    "selectable": false,
+    "private": false
+  },
+  {
+    "id": "companion-common",
+    "name": "大肥鱼连接组件",
+    "group": "",
+    "description": "本机连接设置与工作台服务适配",
+    "project": "src/Modules/Features/Seein.Companion.Connection/Seein.Companion.Connection.csproj",
+    "desktopAssembly": null,
+    "desktopType": null,
+    "serviceAssembly": null,
+    "serviceType": null,
+    "dependencies": [],
+    "selectable": false,
+    "private": false
+  },
+  {
+    "id": "webview-runtime",
+    "name": "内嵌网页组件",
+    "group": "",
+    "description": "WebView2 SDK 适配；浏览器运行时由系统提供",
+    "project": "src/Modules/Features/Seein.WebView.Runtime/Seein.WebView.Runtime.csproj",
+    "desktopAssembly": null,
+    "desktopType": null,
+    "serviceAssembly": null,
+    "serviceType": null,
+    "dependencies": [],
+    "selectable": false,
+    "private": false
+  },
+  {
+    "id": "companion-web",
+    "name": "大肥鱼网页适配层",
+    "group": "",
+    "description": "共享后台网页、认证资料与界面样式",
+    "project": "src/Modules/Features/Seein.Companion.Web/Seein.Companion.Web.csproj",
+    "desktopAssembly": null,
+    "desktopType": null,
+    "serviceAssembly": null,
+    "serviceType": null,
+    "dependencies": [
+      "companion-common",
+      "webview-runtime"
+    ],
+    "selectable": false,
+    "private": false
+  },
+  {
+    "id": "display",
+    "name": "副屏与主题库",
+    "group": "display",
+    "description": "副屏连接、主题库、编辑器及媒体/FPS",
+    "project": "src/Modules/Display/Desktop/Seein.Desktop.Display.csproj",
+    "desktopAssembly": "Seein.Desktop.Display.dll",
+    "desktopType": "Seein.Tray.DisplayDesktop",
+    "serviceAssembly": "Seein.Modules.Display.dll",
+    "serviceType": "Seein.Modules.DisplayBackend",
+    "dependencies": [],
+    "selectable": true,
+    "private": false
+  },
+  {
+    "id": "applications",
+    "name": "应用监控与应用库",
+    "group": "applications",
+    "description": "应用时长、功耗、占用与应用列表",
+    "project": "src/Modules/Applications/Desktop/Seein.Desktop.Applications.csproj",
+    "desktopAssembly": "Seein.Desktop.Applications.dll",
+    "desktopType": "Seein.Tray.ApplicationsDesktop",
+    "serviceAssembly": "Seein.Modules.Applications.dll",
+    "serviceType": "Seein.Modules.ApplicationsBackend",
+    "dependencies": [],
+    "selectable": true,
+    "private": false
+  },
+  {
+    "id": "devices-monitor",
+    "name": "显示器设置",
+    "group": "devices",
+    "description": "DDC/CI、输入源切换与快捷键",
+    "project": "src/Modules/Features/Seein.Desktop.Monitor/Seein.Desktop.Monitor.csproj",
+    "desktopAssembly": "Seein.Desktop.Monitor.dll",
+    "desktopType": "Seein.Tray.DeviceFeatureDesktop",
+    "serviceAssembly": null,
+    "serviceType": null,
+    "dependencies": [],
+    "selectable": true,
+    "private": false
+  },
+  {
+    "id": "devices-playback",
+    "name": "采集播放",
+    "group": "devices",
+    "description": "UVC 视频与 USB 音频播放",
+    "project": "src/Modules/Features/Seein.Desktop.Playback/Seein.Desktop.Playback.csproj",
+    "desktopAssembly": "Seein.Desktop.Playback.dll",
+    "desktopType": "Seein.Tray.DeviceFeatureDesktop",
+    "serviceAssembly": null,
+    "serviceType": null,
+    "dependencies": [],
+    "selectable": true,
+    "private": false
+  },
+  {
+    "id": "devices-rgb",
+    "name": "灯效控制",
+    "group": "devices",
+    "description": "OpenRGB、场景与逐灯校色",
+    "project": "src/Modules/Features/Seein.Desktop.Rgb/Seein.Desktop.Rgb.csproj",
+    "desktopAssembly": "Seein.Desktop.Rgb.dll",
+    "desktopType": "Seein.Tray.DeviceFeatureDesktop",
+    "serviceAssembly": "Seein.Modules.Rgb.dll",
+    "serviceType": "Seein.Modules.FeatureBackend",
+    "dependencies": [],
+    "selectable": true,
+    "private": false
+  },
+  {
+    "id": "devices-fan",
+    "name": "风扇控制",
+    "group": "devices",
+    "description": "温度曲线、冷排与显卡风扇",
+    "project": "src/Modules/Features/Seein.Desktop.Fan/Seein.Desktop.Fan.csproj",
+    "desktopAssembly": "Seein.Desktop.Fan.dll",
+    "desktopType": "Seein.Tray.DeviceFeatureDesktop",
+    "serviceAssembly": "Seein.Modules.Fan.dll",
+    "serviceType": "Seein.Modules.FeatureBackend",
+    "dependencies": [],
+    "selectable": true,
+    "private": false
+  },
+  {
+    "id": "devices-router",
+    "name": "中兴路由器",
+    "group": "devices",
+    "description": "原厂管理网页和本机加密自动登录",
+    "project": "src/Modules/Features/Seein.Desktop.Router/Seein.Desktop.Router.csproj",
+    "desktopAssembly": "Seein.Desktop.Router.dll",
+    "desktopType": "Seein.Tray.DeviceFeatureDesktop",
+    "serviceAssembly": null,
+    "serviceType": null,
+    "dependencies": [
+      "webview-runtime"
+    ],
+    "selectable": true,
+    "private": false
+  },
+  {
+    "id": "devices-lamp",
+    "name": "米家挂灯",
+    "group": "devices",
+    "description": "亮度、色温、预设与统一快捷键",
+    "project": "src/Modules/Features/Seein.Desktop.Lamp/Seein.Desktop.Lamp.csproj",
+    "desktopAssembly": "Seein.Desktop.Lamp.dll",
+    "desktopType": "Seein.Tray.DeviceFeatureDesktop",
+    "serviceAssembly": null,
+    "serviceType": null,
+    "dependencies": [],
+    "selectable": true,
+    "private": false
+  },
+  {
+    "id": "capture",
+    "name": "截图录屏",
+    "group": "tools",
+    "description": "Snow Shot：截图、标注、录屏、OCR 与 PDF",
+    "project": "src/Modules/Capture/Seein.Desktop.Capture.csproj",
+    "desktopAssembly": "Seein.Desktop.Capture.dll",
+    "desktopType": "Seein.Tray.CaptureDesktop",
+    "serviceAssembly": null,
+    "serviceType": null,
+    "dependencies": [
+      "tools-common"
+    ],
+    "selectable": true,
+    "private": false
+  },
+  {
+    "id": "efficiency",
+    "name": "效率工具",
+    "group": "tools",
+    "description": "Pane / Everything：启动器、剪贴板与文件搜索",
+    "project": "src/Modules/Efficiency/Seein.Desktop.Efficiency.csproj",
+    "desktopAssembly": "Seein.Desktop.Efficiency.dll",
+    "desktopType": "Seein.Tray.EfficiencyDesktop",
+    "serviceAssembly": null,
+    "serviceType": null,
+    "dependencies": [
+      "tools-common"
+    ],
+    "selectable": true,
+    "private": false
+  },
+  {
+    "id": "companion-pet",
+    "name": "桌宠",
+    "group": "tools",
+    "description": "原生桌宠、行为设置与大肥鱼对话桥",
+    "project": "src/Modules/Features/Seein.Desktop.Pet/Seein.Desktop.Pet.csproj",
+    "desktopAssembly": "Seein.Desktop.Pet.dll",
+    "desktopType": "Seein.Tray.PetFeatureDesktop",
+    "serviceAssembly": null,
+    "serviceType": null,
+    "dependencies": [
+      "companion-common",
+      "webview-runtime"
+    ],
+    "selectable": true,
+    "private": false
+  },
+  {
+    "id": "companion-workbench",
+    "name": "大肥鱼工作台",
+    "group": "tools",
+    "description": "连接已有的本机服务，不包含机器人安装和账号",
+    "project": "src/Modules/Features/Seein.Desktop.Workbench/Seein.Desktop.Workbench.csproj",
+    "desktopAssembly": "Seein.Desktop.Workbench.dll",
+    "desktopType": "Seein.Tray.CompanionWebDesktop",
+    "serviceAssembly": null,
+    "serviceType": null,
+    "dependencies": [
+      "companion-web"
+    ],
+    "selectable": true,
+    "private": false
+  },
+  {
+    "id": "companion-astrbot",
+    "name": "AstrBot 后台",
+    "group": "tools",
+    "description": "连接已有的本机服务，不包含机器人安装和账号",
+    "project": "src/Modules/Features/Seein.Desktop.AstrBot/Seein.Desktop.AstrBot.csproj",
+    "desktopAssembly": "Seein.Desktop.AstrBot.dll",
+    "desktopType": "Seein.Tray.CompanionWebDesktop",
+    "serviceAssembly": null,
+    "serviceType": null,
+    "dependencies": [
+      "companion-web"
+    ],
+    "selectable": true,
+    "private": false
+  },
+  {
+    "id": "companion-qq",
+    "name": "QQ 后台",
+    "group": "tools",
+    "description": "连接已有的本机服务，不包含机器人安装和账号",
+    "project": "src/Modules/Features/Seein.Desktop.Qq/Seein.Desktop.Qq.csproj",
+    "desktopAssembly": "Seein.Desktop.Qq.dll",
+    "desktopType": "Seein.Tray.CompanionWebDesktop",
+    "serviceAssembly": null,
+    "serviceType": null,
+    "dependencies": [
+      "companion-web"
+    ],
+    "selectable": true,
+    "private": false
+  }
+]

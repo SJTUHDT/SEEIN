@@ -33,7 +33,8 @@ internal sealed class IndexModuleLifecycle : IDisposable
     {
         if(_owned)
         {
-            await RunAsync("sc.exe",["config",ServiceName,"binPath=",_image!,"start=",_start==2?"auto":_start==4?"disabled":"demand"]);
+            using var existing=Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services\Everything");
+            await RunAsync("sc.exe",[existing is null?"create":"config",ServiceName,"binPath=",_image!,"start=",_start==2?"auto":_start==4?"disabled":"demand"]);
             if(_running){using var service=new ServiceController(ServiceName);service.Start();service.WaitForStatus(ServiceControllerStatus.Running,TimeSpan.FromSeconds(30));}
         }
         else if(!_existed&&Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services\Everything") is { } created)

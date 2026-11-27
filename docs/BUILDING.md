@@ -52,7 +52,7 @@ pwsh -File scripts/publish.ps1 -Profile PublicFull
 
 ## 签名与发布
 
-`scripts/publish.ps1` 支持 Core、PublicFull。输出位于 `artifacts/releases/v2.1.0`，包含展开的应用和签名插件包。`scripts/package-release.py` 生成最终 ZIP、源码快照、组件清单、许可证和 SHA-256 总清单。
+`scripts/publish.ps1` 支持 Core、PublicFull。输出位于 `artifacts/releases/v2.2.0`，包含展开的应用和签名插件包。`scripts/package-release.py` 生成最终 ZIP、源码快照、组件清单、许可证和 SHA-256 总清单。
 
 签名私钥在当前 Windows 用户的 `%LOCALAPPDATA%\SeeinPublicBuild\keys` 下，经 DPAPI 加密，不进入仓库或发行附件。自建发行会创建自己的密钥、公钥和插件；修改第三方动态库时保留各自许可和可替换方式。不要索取或复制官方私钥。
 

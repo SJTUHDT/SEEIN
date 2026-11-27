@@ -1,13 +1,13 @@
 [CmdletBinding()]
-param([ValidateSet('Core','PublicFull')][string]$Profile='PublicFull',[string]$Version='2.1.0',[switch]$Force,[switch]$KeepExpanded)
+param([ValidateSet('Core','PublicFull')][string]$Profile='PublicFull',[string]$Version='2.2.0',[switch]$Force,[switch]$KeepExpanded)
 $ErrorActionPreference='Stop'
 $project=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $release=Join-Path $project "artifacts/releases/v$Version"
-$work=Join-Path $project ('.build/modular210/publish-'+[guid]::NewGuid().ToString('N'))
+$work=Join-Path $project ('.build/publish/transaction-'+[guid]::NewGuid().ToString('N'))
 $stage=Join-Path $work 'package'
 $destination=Join-Path $release "Seein-win-x64-$Version-$Profile"
 if((Test-Path -LiteralPath $destination) -and !$Force){throw 'Release already exists; use -Force to replace it.'}
-if($Version -ne '2.1.0'){throw 'This publisher targets the 2.1.0 module API.'}
+if($Version -ne '2.2.0'){throw 'This publisher targets the 2.2.0 feature distribution.'}
 . (Join-Path $PSScriptRoot 'BuildEnvironment.ps1')
 $dotnet=Get-SeeinDotnet
 Initialize-SeeinDependencies -ForPublish:$($Profile -ne 'Core')
@@ -30,7 +30,7 @@ foreach($name in 'Service','Bootstrap'){$output=Join-Path $work $name;Publish (J
 # A tiny shared launcher keeps all .NET 8 hosts on the one self-contained runtime in App.
 foreach($hostName in 'Seein.Tray.exe','seedisplay.exe','seepet.exe'){Copy-Item -LiteralPath (Join-Path $app 'Seein.Bootstrap.exe') -Destination (Join-Path $app $hostName) -Force}
 Remove-Item -LiteralPath (Join-Path $app 'Seein.Bootstrap.exe')
-Set-Content -LiteralPath (Join-Path $app 'SEEIN.modular') -Value '2.1.0' -Encoding ascii
+Set-Content -LiteralPath (Join-Path $app 'SEEIN.modular') -Value '2.2.0' -Encoding ascii
 $tool=Join-Path $work 'packager';Publish (Join-Path $project 'src/Seein.PackageTool/Seein.PackageTool.csproj') $tool $true
 $packager=Join-Path $tool 'Seein.PackageTool.exe'
 $key=Join-Path $env:LOCALAPPDATA 'SeeinPublicBuild/keys/module-publisher.dpapi'
@@ -39,20 +39,13 @@ $key=Join-Path $env:LOCALAPPDATA 'SeeinPublicBuild/keys/module-publisher.dpapi'
 $keyDir=Get-Item -LiteralPath (Split-Path $key);$acl=Get-Acl -LiteralPath $keyDir.FullName;$acl.SetAccessRuleProtection($true,$false)
 foreach($sid in @([Security.Principal.WindowsIdentity]::GetCurrent().User.Value,'S-1-5-18','S-1-5-32-544')){$acl.AddAccessRule([Security.AccessControl.FileSystemAccessRule]::new([Security.Principal.SecurityIdentifier]::new($sid),'FullControl','ContainerInherit,ObjectInherit','None','Allow'))};Set-Acl -LiteralPath $keyDir.FullName -AclObject $acl
 $packages=Join-Path $work 'plugin-packages';New-Item -ItemType Directory -Path $packages|Out-Null
-$definitions=@(
-    @{Id='display';Name='副屏与主题库';Project='src/Modules/Display/Desktop/Seein.Desktop.Display.csproj';Desktop='Display';Service='Display'},
-    @{Id='applications';Name='应用监控与应用库';Project='src/Modules/Applications/Desktop/Seein.Desktop.Applications.csproj';Desktop='Applications';Service='Applications'},
-    @{Id='devices';Name='设备控制';Project='src/Modules/Devices/Desktop/Seein.Desktop.Devices.csproj';Desktop='Devices';Service='Devices'},
-    @{Id='companion';Name='桌宠与大肥鱼';Project='src/Modules/Companion/Desktop/Seein.Desktop.Companion.csproj';Desktop='Companion'},
-    @{Id='capture';Name='截图录屏与 OCR';Project='src/Modules/Capture/Seein.Desktop.Capture.csproj';Desktop='Capture'},
-    @{Id='efficiency';Name='效率工具与文件搜索';Project='src/Modules/Efficiency/Seein.Desktop.Efficiency.csproj';Desktop='Efficiency'}
-)
+$definitions=@(Get-Content -LiteralPath (Join-Path $project 'config/plugin-definitions.json') -Raw -Encoding UTF8|ConvertFrom-Json)
 if($Profile -eq 'Core'){$definitions=@()}
 foreach($module in $definitions){
     $moduleRoot=Join-Path $stage ('Plugins/'+$module.Id)
     $source=if([IO.Path]::IsPathFullyQualified($module.Project)){$module.Project}else{Join-Path $project $module.Project}
     Publish $source $moduleRoot
-    if($module.Id -eq 'companion'){
+    if($module.Id -eq 'companion-pet'){
         $pet=Join-Path $work 'PetHost';Publish (Join-Path $project 'src/Seein.PetHost/Seein.PetHost.csproj') $pet
         MergeBase $pet $moduleRoot
         & (Join-Path $PSScriptRoot 'Prepare-NativePet.ps1') -Destination $moduleRoot|Out-Null
@@ -66,7 +59,7 @@ foreach($module in $definitions){
         New-Item -ItemType Directory -Path (Join-Path $moduleRoot 'tools') -Force|Out-Null;Copy-Item -LiteralPath $fps -Destination (Join-Path $moduleRoot 'tools/seefps.exe')
         Copy-Item -LiteralPath (Join-Path (Split-Path $fps) 'LICENSE.txt') -Destination (Join-Path $moduleRoot 'tools/PresentMon.LICENSE.txt')
     }
-    if($module.Id -eq 'devices'){
+    if($module.Id -eq 'devices-rgb'){
         CopyTree (Join-Path $project '.build/runtime/openrgb') (Join-Path $moduleRoot 'rgb-engine')
         $legacy=Join-Path $moduleRoot 'rgb-engine/Seein.RgbEngine.exe';if(Test-Path -LiteralPath $legacy){Move-Item -LiteralPath $legacy -Destination (Join-Path $moduleRoot 'rgb-engine/seergb.exe')}
         if((Get-FileHash -LiteralPath (Join-Path $moduleRoot 'rgb-engine/seergb.exe')).Hash -ne 'E26AE71162795A8ABCFB90C05C1572A00BA06CA63B886ACA57392A0138963B1E'){throw 'RGB helper hash mismatch.'}
@@ -90,16 +83,45 @@ foreach($module in $definitions){
         $relative=[IO.Path]::GetRelativePath($moduleRoot,$file.FullName);$baseFile=Join-Path $app $relative
         if($file.Extension -eq '.pdb' -or ($file.Extension -eq '.dll' -and (Test-Path -LiteralPath $baseFile) -and (Get-FileHash -LiteralPath $file.FullName).Hash -eq (Get-FileHash -LiteralPath $baseFile).Hash)){Remove-Item -LiteralPath $file.FullName}
     }
-    $desktop=@{assembly="Seein.Desktop.$($module.Desktop).dll";type="Seein.Tray.$($module.Desktop)Desktop"}
-    $service=if($module.Service){@{assembly="Seein.Modules.$($module.Service).dll";type="Seein.Modules.$($module.Service)Backend"}}else{$null}
-    $metadata=@{id=$module.Id;name=$module.Name;version=$Version;apiVersion=1;minimumHostVersion='2.1.0';desktop=$desktop;service=$service;dependencies=@();files=@();private=[bool]$module.Private}
+    foreach($dependency in $module.Dependencies){
+        $depRoot=Join-Path $stage ('Plugins/'+$dependency)
+        foreach($file in Get-ChildItem -LiteralPath $moduleRoot -File -Recurse){
+            $relative=[IO.Path]::GetRelativePath($moduleRoot,$file.FullName);$sharedFile=Join-Path $depRoot $relative
+            if($file.Extension -eq '.dll' -and (Test-Path -LiteralPath $sharedFile) -and (Get-FileHash -LiteralPath $file.FullName).Hash -eq (Get-FileHash -LiteralPath $sharedFile).Hash){Remove-Item -LiteralPath $file.FullName}
+        }
+    }
+    if($module.Id -in 'capture','efficiency'){
+        # Both reference exactly one shared adapter and its dependencies.
+        $adapter=Join-Path $moduleRoot 'Seein.Desktop.Tools.dll';if(Test-Path -LiteralPath $adapter){Remove-Item -LiteralPath $adapter}
+    }
+    if($module.Id -in 'companion-workbench','companion-astrbot','companion-qq'){
+        foreach($support in @('companion-common','webview-runtime')){
+            $depRoot=Join-Path $stage ('Plugins/'+$support)
+            foreach($file in Get-ChildItem -LiteralPath $moduleRoot -File -Recurse){$relative=[IO.Path]::GetRelativePath($moduleRoot,$file.FullName);$match=Join-Path $depRoot $relative;if($file.Extension -eq '.dll' -and (Test-Path -LiteralPath $match) -and (Get-FileHash -LiteralPath $file.FullName).Hash -eq (Get-FileHash -LiteralPath $match).Hash){Remove-Item -LiteralPath $file.FullName}}
+        }
+    }
+    $desktop=if($module.desktopAssembly){@{assembly=$module.desktopAssembly;type=$module.desktopType}}else{$null}
+    $service=if($module.serviceAssembly){@{assembly=$module.serviceAssembly;type=$module.serviceType}}else{$null}
+    $dependencies=@($module.Dependencies|ForEach-Object{@{id=$_;minimumVersion=$Version}})
+    $metadata=@{id=$module.Id;name=$module.Name;version=$Version;apiVersion=1;minimumHostVersion='2.2.0';desktop=$desktop;service=$service;dependencies=$dependencies;files=@();private=$false}
     $meta=Join-Path $work ($module.Id+'.json');$metadata|ConvertTo-Json -Depth 5|Set-Content -LiteralPath $meta -Encoding utf8
     & $packager pack $moduleRoot $meta (Join-Path $packages ($module.Id+'-'+$Version+'.seeinplugin')) $key
     if($LASTEXITCODE){throw "Plugin signing failed: $($module.Id)"}
 }
+if($Profile -ne 'Core'){
+    $entries=@(foreach($module in $definitions){
+        $package=Join-Path $packages ($module.Id+'-'+$Version+'.seeinplugin');$folder=Join-Path $stage ('Plugins/'+$module.Id)
+        @{id=$module.Id;name=$module.Name;group=$module.Group;description=$module.Description;version=$Version;asset=[IO.Path]::GetFileName($package);downloadBytes=(Get-Item -LiteralPath $package).Length;installedBytes=[long](Get-ChildItem -LiteralPath $folder -Recurse -File|Measure-Object Length -Sum).Sum;sha256=(Get-FileHash -LiteralPath $package).Hash.ToLowerInvariant();dependencies=@($module.Dependencies);selectable=[bool]$module.Selectable}
+    })
+    $catalog=@{schema=1;release='v'+$Version;minimumHostVersion=$Version;groups=@(@{id='display';name='副屏与主题'},@{id='applications';name='应用监控'},@{id='devices';name='设备控制'},@{id='tools';name='小工具'});packages=$entries}
+    $catalog|ConvertTo-Json -Depth 8|Set-Content -LiteralPath (Join-Path $release 'plugin-catalog.json') -Encoding utf8
+    & $packager sign-file (Join-Path $release 'plugin-catalog.json') $key (Join-Path $release 'plugin-catalog.sig');if($LASTEXITCODE){throw 'Catalog signing failed.'}
+}
+foreach($name in @('plugin-catalog.json','plugin-catalog.sig')){if(Test-Path -LiteralPath (Join-Path $release $name)){Copy-Item -LiteralPath (Join-Path $release $name) -Destination $app -Force}}
 Get-ChildItem -LiteralPath $app -Recurse -Filter '*.pdb' -File|Remove-Item
 Copy-Item -LiteralPath (Join-Path $project 'scripts/Install.ps1'),(Join-Path $project 'scripts/Uninstall.ps1'),(Join-Path $project 'README.md'),(Join-Path $project 'THIRD-PARTY-NOTICES.md') -Destination $stage
 Set-Content -LiteralPath (Join-Path $stage 'VERSION') -Value $Version -Encoding ascii
+Copy-Item -LiteralPath (Join-Path $project 'scripts/Preserve-InstalledPlugins.ps1') -Destination $stage
 Set-Content -LiteralPath (Join-Path $stage 'PROFILE') -Value $Profile -Encoding ascii
 # Corresponding source archives are release sidecars, not installed runtime files.
 if($Profile -ne 'Core'){

@@ -8,15 +8,41 @@ public sealed class ModuleLoadContext : AssemblyLoadContext
 {
     private readonly string directory;
     private readonly AssemblyDependencyResolver _resolver;
+    private readonly List<string> _dependencies=[];
+    private static readonly Dictionary<string,string> SharedPaths=new(StringComparer.OrdinalIgnoreCase);
+    static ModuleLoadContext(){Default.Resolving+=(_,name)=>{lock(SharedGate)return name.Name is not null&&SharedPaths.TryGetValue(name.Name,out var path)?Default.LoadFromAssemblyPath(path):null;};}
     public ModuleLoadContext(string directory,string entryAssembly):base(isCollectible:false)
     {
         this.directory=directory;_resolver=new(Path.Combine(directory,entryAssembly));
         var entryName=Path.GetFileNameWithoutExtension(entryAssembly);
         Default.Resolving+=(_,name)=>name.Name==entryName?LoadFromAssemblyName(name):null;
+        var manifestPath=Path.Combine(directory,"module.json");
+        if(File.Exists(manifestPath))
+        {
+            var plugins=Directory.GetParent(directory)!.FullName;var root=Directory.GetParent(plugins)!.FullName;
+            var key=File.ReadAllText(Path.Combine(root,"App","module-publisher.pem"));var seen=new HashSet<string>();
+            void Register(string id)
+            {
+                if(!seen.Add(id))return;var path=Path.Combine(plugins,id);
+                var manifest=ModulePackage.ReadVerified(path,key,HostVersion.Current);
+                foreach(var child in manifest.Dependencies)Register(child.Id);
+                _dependencies.Add(path);
+                lock(SharedGate)foreach(var file in manifest.Files.Where(f=>f.Path.EndsWith(".dll",StringComparison.OrdinalIgnoreCase)&&!f.Path.Contains('/')))
+                {
+                    var name=Path.GetFileNameWithoutExtension(file.Path);var full=Path.Combine(path,file.Path);
+                    if(SharedPaths.TryGetValue(name,out var old)&&!System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(old)).SequenceEqual(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(full))))throw new InvalidDataException("共享组件版本冲突："+name);
+                    SharedPaths[name]=full;
+                }
+            }
+            var own=System.Text.Json.JsonSerializer.Deserialize<ModuleManifest>(File.ReadAllText(manifestPath),ModulePackage.Json)!;
+            foreach(var d in own.Dependencies)Register(d.Id);
+        }
     }
     private static readonly object SharedGate=new();
     protected override Assembly? Load(AssemblyName name)
     {
+        if(name.Name is not null&&_dependencies.Any(d=>File.Exists(Path.Combine(d,name.Name+".dll"))))lock(SharedGate)
+            return Default.Assemblies.FirstOrDefault(a=>a.GetName().Name==name.Name)??Default.LoadFromAssemblyPath(SharedPaths[name.Name]);
         // Windows caches COM wrappers by CLSID. Separate copies of NAudio's COM coclasses
         // cannot safely cast the same MMDeviceEnumerator RCW across module load contexts.
         // Audio endpoints and capture/playback therefore share the host's NAudio identity.
@@ -50,7 +76,9 @@ public sealed class ModuleLoadContext : AssemblyLoadContext
     protected override nint LoadUnmanagedDll(string name)
     {
         var resolved=_resolver.ResolveUnmanagedDllToPath(name);
-        if(resolved is not null)return LoadUnmanagedDllFromPath(resolved);
+        if(resolved is not null&&File.Exists(resolved))return LoadUnmanagedDllFromPath(resolved);
+        foreach(var dependency in _dependencies)foreach(var leaf in new[]{name,name+".dll","lib"+name+".dll"})
+            if(!leaf.Contains('/')&&!leaf.Contains('\\'))foreach(var relative in new[]{leaf,Path.Combine("runtimes","win-x64","native",leaf)})if(File.Exists(Path.Combine(dependency,relative)))return LoadUnmanagedDllFromPath(Path.Combine(dependency,relative));
         foreach(var candidate in new[]{name,name+".dll","lib"+name+".dll"})
             if(!candidate.Contains('/')&&!candidate.Contains('\\')&&File.Exists(Path.Combine(directory,candidate)))return LoadUnmanagedDllFromPath(Path.Combine(directory,candidate));
         return 0;
@@ -76,7 +104,7 @@ public sealed class ModuleCatalog(string installRoot,string settingsPath)
             if(Path.GetFileName(directory).StartsWith('.'))continue;
             try
             {
-                var manifest=verify ? ModulePackage.ReadVerified(directory,publicKey,new Version(2,1,0))
+                var manifest=verify ? ModulePackage.ReadVerified(directory,publicKey,HostVersion.Current)
                     : System.Text.Json.JsonSerializer.Deserialize<ModuleManifest>(File.ReadAllText(Path.Combine(directory,"module.json")),ModulePackage.Json)!;
                 if(Path.GetFileName(directory)!=manifest.Id)throw new InvalidDataException("插件目录与标识不一致。");
                 result.Add(new(manifest,directory,stateError is null&&(!states.TryGetValue(manifest.Id,out var state)||state.Enabled),stateError));
@@ -88,6 +116,9 @@ public sealed class ModuleCatalog(string installRoot,string settingsPath)
             }
         }
         var enabled=result.Where(m=>m.Enabled).ToDictionary(m=>m.Manifest.Id,StringComparer.Ordinal);
+        foreach(var legacy in PluginFeed.Legacy)if(enabled.ContainsKey(legacy.Key))foreach(var id in legacy.Value)
+            if(enabled.TryGetValue(id,out var overlapping)){var index=result.IndexOf(overlapping);result[index]=overlapping with{Enabled=false,Error="旧整包仍已启用，请通过插件中心统一迁移。"};}
+        enabled=result.Where(m=>m.Enabled).ToDictionary(m=>m.Manifest.Id,StringComparer.Ordinal);
         foreach(var module in enabled.Values)
         {
             try

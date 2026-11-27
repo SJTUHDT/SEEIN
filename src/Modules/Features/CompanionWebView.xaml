@@ -1,0 +1,27 @@
+<UserControl x:Class="Seein.Tray.CompanionWebView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Seein.Tray" xmlns:shared="clr-namespace:Seein.Tray;assembly=Seein.Desktop.Shared" Foreground="{DynamicResource TextBrush}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <DockPanel Margin="0,0,0,10">
+            <Button DockPanel.Dock="Right" Content="连接设置" Click="ConnectionSettings_Click" Margin="8,0,0,0" />
+            <Button DockPanel.Dock="Right" Content="重新连接" Click="Reconnect_Click" Margin="8,0,0,0" />
+            <WrapPanel x:Name="Sections" KeyboardNavigation.TabNavigation="Local">
+                <Button x:Name="WorkbenchTab" Content="工作台" Click="Workbench_Click" Margin="0,0,6,0"
+                        Style="{StaticResource SidebarNavigationButtonStyle}" />
+                <Button x:Name="AstrBotTab" Content="AstrBot 后台" Click="AstrBot_Click" Margin="0,0,6,0"
+                        Style="{StaticResource SidebarNavigationButtonStyle}" />
+                <Button x:Name="SnowLumaTab" Content="SnowLuma 后台" Click="SnowLuma_Click" Margin="0,0,6,0"
+                        Style="{StaticResource SidebarNavigationButtonStyle}" />
+            </WrapPanel>
+        </DockPanel>
+        <Grid Grid.Row="1" ClipToBounds="True">
+            <Grid x:Name="BrowserHost" />
+            <shared:PageLoadPanel x:Name="ConnectionCard" />
+        </Grid>
+    </Grid>
+</UserControl>
